@@ -1199,13 +1199,16 @@ segment:
 
 void l2cap_chan_sdu_sent(struct bt_conn *conn, void *user_data)
 {
-    struct bt_l2cap_chan *chan = user_data;
+	uint16_t cid = POINTER_TO_UINT(user_data);
+	struct bt_l2cap_chan *chan;
 
-    BT_DBG("conn %p chan %p", conn, chan);
+    BT_DBG("conn %p CID 0x%04x", conn, cid);
+	chan = bt_l2cap_le_lookup_tx_cid(conn, cid);
 
-    if (chan->ops->sent) {
-        chan->ops->sent(chan);
-    }
+	if (!chan) {
+		/* Received SDU sent callback for disconnected channel */
+		return;
+	}
 }
 
 static int l2cap_chan_le_send(struct bt_l2cap_le_chan *ch, struct net_buf *buf,
@@ -1241,7 +1244,8 @@ static int l2cap_chan_le_send(struct bt_l2cap_le_chan *ch, struct net_buf *buf,
      */
     if ((buf == seg || !buf->len) && ch->chan.ops->sent) {
         bt_l2cap_send_cb(ch->chan.conn, ch->tx.cid, seg,
-                 l2cap_chan_sdu_sent, &ch->chan);
+                 l2cap_chan_sdu_sent,
+                 UINT_TO_POINTER(ch->tx.cid));
     } else {
         bt_l2cap_send(ch->chan.conn, ch->tx.cid, seg);
     }

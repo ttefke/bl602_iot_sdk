@@ -29,8 +29,8 @@ extern "C" {
 /* Helper to pass a int as a pointer or vice-versa.
  * Those are available for 32 bits architectures:
  */
-#define POINTER_TO_UINT(x) ((u32_t) (x))
-#define UINT_TO_POINTER(x) ((void *) (x))
+#define POINTER_TO_UINT(x) ((uintptr_t) (x))
+#define UINT_TO_POINTER(x) ((void *) (uintptr_t)(x))
 #define POINTER_TO_INT(x)  ((s32_t) (x))
 #define INT_TO_POINTER(x)  ((void *) (x))
 

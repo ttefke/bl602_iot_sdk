@@ -89,6 +89,7 @@
 
 #define START_PAYLOAD_MAX      20
 #define CONT_PAYLOAD_MAX       23
+#define RX_BUFFER_MAX     65
 
 #define START_LAST_SEG(gpc)    (gpc >> 2)
 #define CONT_SEG_INDEX(gpc)    (gpc >> 2)
@@ -102,7 +103,8 @@
 #define CLOSE_REASON_TIMEOUT   0x01
 #define CLOSE_REASON_FAILED    0x02
 
-#define XACT_SEG_DATA(_seg) (&link.rx.buf->data[20 + ((_seg - 1) * 23)])
+#define XACT_SEG_OFFSET(_seg) (20 + ((_seg - 1) * 23))
+#define XACT_SEG_DATA(_seg) (&link.rx.buf->data[XACT_SEG_OFFSET(_seg)])
 #define XACT_SEG_RECV(_seg) (link.rx.seg &= ~(1 << (_seg)))
 
 #define XACT_NVAL              0xff
@@ -184,7 +186,7 @@ struct prov_rx {
 #define PROV_BUF_HEADROOM 5
 #else
 #define PROV_BUF_HEADROOM 0
-NET_BUF_SIMPLE_DEFINE_STATIC(rx_buf, 65);
+NET_BUF_SIMPLE_DEFINE_STATIC(rx_buf, RX_BUFFER_MAX);
 #endif
 
 #define PROV_BUF(name, len) \
@@ -1379,6 +1381,11 @@ static void gen_prov_cont(struct prov_rx *rx, struct net_buf_simple *buf)
         BT_WARN("Ignoring already received segment");
         return;
     }
+
+	if (XACT_SEG_OFFSET(seg) + buf->len > RX_BUFFER_MAX) {
+    	BT_WARN("Rx buffer overflow. Malformed generic prov frame?");
+		return;
+	}
 
     memcpy(XACT_SEG_DATA(seg), buf->data, buf->len);
     XACT_SEG_RECV(seg);

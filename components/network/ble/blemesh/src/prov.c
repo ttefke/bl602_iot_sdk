@@ -398,7 +398,7 @@ static int bearer_ctl_send(u8_t op, void *data, u8_t data_len)
     return 0;
 }
 
-static u8_t last_seg(u8_t len)
+static u8_t last_seg(uint16_t len)
 {
     if (len <= START_PAYLOAD_MAX) {
         return 0;
@@ -1439,6 +1439,13 @@ static void gen_prov_start(struct prov_rx *rx, struct net_buf_simple *buf)
         prov_send_fail_msg(PROV_ERR_NVAL_FMT);
         return;
     }
+
+	if (START_LAST_SEG(rx->gpc) != last_seg(link.rx.buf->len)) {
+		BT_ERR("Invalid SegN (%u, calculated %u)", START_LAST_SEG(rx->gpc),
+		       last_seg(link.rx.buf->len));
+		prov_failed(PROV_ERR_NVAL_FMT);
+		return;
+	}
 
     link.rx.seg = (1 << (START_LAST_SEG(rx->gpc) + 1)) - 1;
     link.rx.last_seg = START_LAST_SEG(rx->gpc);

@@ -12,6 +12,9 @@ COMPONENT_PRIV_INCLUDEDIRS :=
 
 COMPONENT_SRCDIRS := src/api src/core src/core/ipv4 src/netif lwip-port/FreeRTOS lwip-port src/apps/altcp_tls
 
+ifeq ($(CONFIG_INCLUDE_HTTPD),1)
+COMPONENT_SRCDIRS +=  src/apps/http
+endif
 
 ##
 #CPPFLAGS +=

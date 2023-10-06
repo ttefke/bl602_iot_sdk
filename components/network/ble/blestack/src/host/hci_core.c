@@ -713,7 +713,11 @@ static void hci_acl(struct net_buf *buf)
 
     BT_DBG("buf %p", buf);
 
-    BT_ASSERT(buf->len >= sizeof(*hdr));
+    if (buf->len < sizeof(*hdr)) {
+		BT_ERR("Invalid HCI ACL packet size (%u)", buf->len);
+		net_buf_unref(buf);
+		return;
+	}
 
     hdr = net_buf_pull_mem(buf, sizeof(*hdr));
     len = sys_le16_to_cpu(hdr->len);
@@ -4109,7 +4113,11 @@ static void hci_event(struct net_buf *buf)
 {
     struct bt_hci_evt_hdr *hdr;
 
-    BT_ASSERT(buf->len >= sizeof(*hdr));
+    if (buf->len < sizeof(*hdr)) {
+		BT_ERR("Invalid HCI event size (%u)", buf->len);
+		net_buf_unref(buf);
+		return;
+	}
 
     hdr = net_buf_pull_mem(buf, sizeof(*hdr));
     BT_DBG("event 0x%02x", hdr->evt);
@@ -5267,7 +5275,12 @@ int bt_recv_prio(struct net_buf *buf)
     bt_monitor_send(bt_monitor_opcode(buf), buf->data, buf->len);
 
     BT_ASSERT(bt_buf_get_type(buf) == BT_BUF_EVT);
-    BT_ASSERT(buf->len >= sizeof(*hdr));
+
+    if (buf->len < sizeof(*hdr)) {
+		BT_ERR("Invalid HCI event size (%u)", buf->len);
+		net_buf_unref(buf);
+		return -EINVAL;
+	}
 
     hdr = net_buf_pull_mem(buf, sizeof(*hdr));
     BT_ASSERT(bt_hci_evt_is_prio(hdr->evt));

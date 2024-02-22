@@ -2610,7 +2610,7 @@ static u16_t parse_include(struct bt_conn *conn, const void *pdu,
                struct bt_gatt_discover_params *params,
                u16_t length)
 {
-    const struct bt_att_read_type_rsp *rsp = pdu;
+    const struct bt_att_read_type_rsp *rsp;
     u16_t handle = 0U;
     struct bt_gatt_include value;
     union {
@@ -2618,6 +2618,13 @@ static u16_t parse_include(struct bt_conn *conn, const void *pdu,
         struct bt_uuid_16 u16;
         struct bt_uuid_128 u128;
     } u;
+
+    if (length < sizeof(*rsp)) {
+		BT_WARN("Parse err");
+		goto done;
+	}
+
+	rsp = pdu;
 
     /* Data can be either in UUID16 or UUID128 */
     switch (rsp->len) {
@@ -2709,13 +2716,20 @@ static u16_t parse_characteristic(struct bt_conn *conn, const void *pdu,
                   struct bt_gatt_discover_params *params,
                   u16_t length)
 {
-    const struct bt_att_read_type_rsp *rsp = pdu;
+    const struct bt_att_read_type_rsp *rsp;
     u16_t handle = 0U;
     union {
         struct bt_uuid uuid;
         struct bt_uuid_16 u16;
         struct bt_uuid_128 u128;
     } u;
+
+    if (length < sizeof(*rsp)) {
+		BT_WARN("Parse err");
+		goto done;
+	}
+
+	rsp = pdu;
 
     /* Data can be either in UUID16 or UUID128 */
     switch (rsp->len) {
@@ -3159,7 +3173,14 @@ static void parse_read_by_uuid(struct bt_conn *conn,
                    struct bt_gatt_read_params *params,
                    const void *pdu, u16_t length)
 {
-    const struct bt_att_read_type_rsp *rsp = pdu;
+    const struct bt_att_read_type_rsp *rsp;
+
+	if (length < sizeof(*rsp)) {
+		BT_WARN("Parse err");
+		return;
+	}
+
+	rsp = pdu;
 
     /* Parse values found */
     for (length--, pdu = rsp->data; length;

@@ -5223,7 +5223,7 @@ int bt_send(struct net_buf *buf)
     return bt_dev.drv->send(buf);
 }
 
-int bt_recv(struct net_buf *buf)
+static int bt_recv_unsafe(struct net_buf *buf)
 {
     bt_monitor_send(bt_monitor_opcode(buf), buf->data, buf->len);
 
@@ -5251,6 +5251,18 @@ int bt_recv(struct net_buf *buf)
         net_buf_unref(buf);
         return -EINVAL;
     }
+}
+
+int bt_recv(struct net_buf *buf)
+{
+	int err;
+    unsigned int key;
+
+    key = irq_lock();
+	err = bt_recv_unsafe(buf);
+	irq_unlock(key);
+
+	return err;
 }
 
 static const struct event_handler prio_events[] = {

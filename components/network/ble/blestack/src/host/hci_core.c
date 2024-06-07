@@ -3367,6 +3367,12 @@ static void hci_encrypt_change(struct net_buf *buf)
         return;
     }
 
+	if (conn->encrypt == evt->encrypt) {
+		BT_WARN("No change to encryption state (encrypt 0x%02x)", evt->encrypt);
+		bt_conn_unref(conn);
+		return;
+	}
+
     conn->encrypt = evt->encrypt;
 
 #if defined(CONFIG_BT_SMP)

@@ -23,6 +23,8 @@ int init_grove_dls() {
         return result;
     }
 
+    vTaskDelay(100 / portTICK_PERIOD_MS);
+
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
         (char*) power_down, ONE_BYTE, GROVE_DLS_1_1_SUBADDRESS_LENGTH,
         GROVE_DLS_1_1_TIMING_ADDRESS);
@@ -31,6 +33,8 @@ int init_grove_dls() {
         printf("Initialization error in stage 2\r\n");
         return result;
     }
+
+    vTaskDelay(100 / portTICK_PERIOD_MS);
 
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
         (char*) power_down, ONE_BYTE, GROVE_DLS_1_1_SUBADDRESS_LENGTH,
@@ -41,6 +45,8 @@ int init_grove_dls() {
         return result;
     }
 
+    vTaskDelay(100 / portTICK_PERIOD_MS);
+    
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
         (char*) power_down, ONE_BYTE, GROVE_DLS_1_1_SUBADDRESS_LENGTH,
         GROVE_DLS_1_1_CONTROL_ADDRESS);

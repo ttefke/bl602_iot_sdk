@@ -35,6 +35,7 @@
 #include <clic.h>
 #include <blog.h>
 #include "bl_irq.h"
+#include "bl_sys.h"
 #include <panic.h>
 
 void bl_irq_enable(unsigned int source)
@@ -333,10 +334,14 @@ void exception_entry(uint32_t mcause, uint32_t mepc, uint32_t mtval, uintptr_t *
             mtval
         );
         __dump_exception_code_str(mcause & 0xFFFF);
+#ifdef REBOOT_ON_EXCEPTION
+        bl_sys_reset_system();
+#else
         backtrace_now((int (*)(const char *fmt, ...))printf, regs);
         while (1) {
             /*Deap loop now*/
         }
+#endif
     }
 }
 

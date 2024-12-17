@@ -87,10 +87,12 @@ void task_http(void *pvParameters)
         cJSON_AddNumberToObject(request_data, "lux", lux);
 
         /* send data */
-        send_http_request((unsigned char *)cJSON_PrintUnformatted(request_data));
+        unsigned char* json_data = (unsigned char *) cJSON_PrintUnformatted(request_data);
+        send_http_request(json_data);
 
         /* free memory, increase message id and wait for one second */
         cJSON_Delete(request_data);
+        free(json_data);
         message_id++;
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }

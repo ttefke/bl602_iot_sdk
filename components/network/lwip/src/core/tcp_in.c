@@ -557,6 +557,9 @@ tcp_input(struct pbuf *p, struct netif *inp)
 #endif /* TCP_DEBUG */
 #endif /* TCP_INPUT_DEBUG */
       }
+    } else {
+      /* aborted */
+      goto aborted;
     }
     /* Jump target if pcb has been aborted in a callback (by calling tcp_abort()).
        Below this line, 'pcb' may not be dereferenced! */
@@ -881,7 +884,13 @@ tcp_process(struct tcp_pcb *pcb)
           /* might happen if tcp_output fails in tcp_rexmit_rto()
              in which case the segment is on the unsent list */
           rseg = pcb->unsent;
-          LWIP_ASSERT("no segment to free", rseg != NULL);
+          /* In rare some cases, rseg can be null (there are no unacknowledged packets).
+            * If this is the case, abort the connection
+            * Dec 17, 2024 */
+          if (rseg == NULL) {
+            tcp_abort(pcb);
+            return ERR_ABRT;
+          }
           pcb->unsent = rseg->next;
         } else {
           pcb->unacked = rseg->next;

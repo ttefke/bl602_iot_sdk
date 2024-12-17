@@ -49,4 +49,5 @@ CONFIG_BT_MESH_GATT_PROXY := 1
 endif
 
 #blog enable components format :=blog_testc cli vfs helper
-LOG_ENABLED_COMPONENTS:=blog_testc hal_drv loopset looprt bloop
+LOG_ENABLED_COMPONENTS:=blog_testc loopset looprt bloop
+#hal_drv

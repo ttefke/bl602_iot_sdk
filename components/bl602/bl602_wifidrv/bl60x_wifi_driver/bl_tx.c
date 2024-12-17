@@ -129,13 +129,13 @@ int bl_txdatacfm(void *pthis, void *host_id)
 #endif
         /*we don't pbuf_free here, because we will resend this packet*/
         if (((txhdr_pos_w + 1) & TXHDR_HODLER_MSK) != (txhdr_pos_r & TXHDR_HODLER_MSK)) {
-#if 1
+#if 0
             puts(" push back\r\n");
 #endif
             txhdr_hodler[txhdr_pos_w & TXHDR_HODLER_MSK] = txhdr;
             txhdr_pos_w++;
         } else {
-#if 1
+#if 0
             puts(" NOT push back when no mem\r\n");
 #endif
             pbuf_free(p);

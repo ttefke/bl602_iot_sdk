@@ -13,7 +13,6 @@
 #include <hal_hwtimer.h>
 
 #include <blog.h>
-#include <lwip/tcpip.h>
 
 /* Define heap regions */
 extern uint8_t _heap_start;
@@ -38,6 +37,9 @@ void bfl_main(void)
 
   static StackType_t wifi_stack[1024];
   static StaticTask_t wifi_task;
+  
+  static StackType_t tcp_stack[1024];
+  static StaticTask_t tcp_task;
 
   static StackType_t http_stack[768];
   static StaticTask_t http_task;
@@ -65,17 +67,17 @@ void bfl_main(void)
   extern void task_grove_dls(void *pvParameters);
   xTaskCreateStatic(task_grove_dls, (char*)"grove dls", 512, NULL, 15, grove_stack, &grove_task_dls);
 
-  printf("[SYSTEM] Starting http task\r\n");
-  extern void task_http(void *pvParameters);
-  xTaskCreateStatic(task_http, (char*)"http", 768, NULL, 10, http_stack, &http_task);
-
   printf("[SYSTEM] Starting WiFi task\r\n");
   extern void task_wifi(void *pvParameters);
-  xTaskCreateStatic(task_wifi, (char*)"wifi", 1024, NULL, 16, wifi_stack, &wifi_task);
+  xTaskCreateStatic(task_wifi, (char*)"wifi", 1024, NULL, 17, wifi_stack, &wifi_task);
 
-  /* Start TCP/IP stack */
   printf("[SYSTEM] Starting TCP/IP stack\r\n");
-  tcpip_init(NULL, NULL);
+  extern void task_tcp(void *pvParameters);
+  xTaskCreateStatic(task_tcp, (char*)"tcp", 1024, NULL, 18, tcp_stack, &tcp_task);
+
+  printf("[SYSTEM] Starting http task\r\n");
+  extern void task_http(void *pvParameters);
+  xTaskCreateStatic(task_http, (char*)"http", 768, NULL, 16, http_stack, &http_task);
   
   /* Start scheduler */
   printf("[SYSTEM] Starting scheduler\r\n");

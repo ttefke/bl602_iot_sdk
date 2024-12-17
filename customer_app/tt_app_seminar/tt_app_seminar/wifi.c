@@ -65,6 +65,7 @@ static void _configure_wifi(void)
 static void _connect_sta_wifi()
 {
   wifi_interface_t wifi_interface = wifi_mgmr_sta_enable();
+  memset(&wifi_interface, 0, sizeof(wifi_interface));
 
   wifi_mgmr_sta_connect(wifi_interface, WIFI_SSID, WIFI_PW, NULL, NULL, 0, 0);
   printf("[WIFI] Connected to a network\r\n");

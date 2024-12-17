@@ -15,6 +15,7 @@ CFLAGS += -DWITH_SUAS_GROVE_DLS_1_1
 
 CFLAGS += -DLWIP_ALTCP_TLS
 CFLAGS += -DLWIP_ALTCP_TLS_MBEDTLS
+CFLAGS += -DREBOOT_ON_EXCEPTION
 
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)

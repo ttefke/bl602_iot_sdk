@@ -10,4 +10,6 @@
 #define GATEWAY_ROUTE_LUX "/lux"
 
 #define DEVICE_ID 1
+
+#define NETWORK_CONNECTION_DELAY 60
 #endif

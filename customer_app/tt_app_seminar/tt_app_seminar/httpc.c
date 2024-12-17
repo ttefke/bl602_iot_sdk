@@ -14,9 +14,7 @@ static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_con
     /* evaluate data transfer result */
     httpc_state_t **req = (httpc_state_t **)arg;
 
-    if (httpc_result == HTTPC_RESULT_OK) {
-        printf("[HTTPC] Data transfer finished successfully\r\n");
-    } else {
+    if (httpc_result != HTTPC_RESULT_OK) {
         printf("[HTTPC] Data transfer failed.\r\n");
     }
 
@@ -57,7 +55,6 @@ void send_http_request(unsigned char data[])
 
     /* create and send request */       
     static httpc_state_t *request;
-    printf("[HTTPC] Sending HTTP request\r\n");
     httpc_get_file_dns(
         GATEWAY_IP_ADDRESS,
         GATEWAY_PORT,
@@ -76,7 +73,7 @@ void task_http(void *pvParameters)
     extern volatile unsigned long lux;
 
     /* delay sending data until WiFi is available */
-    vTaskDelay(35 * 1000 / portTICK_PERIOD_MS);
+    vTaskDelay((NETWORK_CONNECTION_DELAY + 3) * 1000 / portTICK_PERIOD_MS);
 
     while (1)
     {

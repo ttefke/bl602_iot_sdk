@@ -181,7 +181,7 @@ void task_wifi(void *pvParameters)
   hal_wifi_start_firmware_task();
 
   /* Delay this task for IP turnover in case of unwanted restart */
-  vTaskDelay(30 * 1000 / portTICK_PERIOD_MS);
+  vTaskDelay(NETWORK_CONNECTION_DELAY * 1000 / portTICK_PERIOD_MS);
   aos_post_event(EV_WIFI, CODE_WIFI_ON_INIT_DONE, 0);
 
   printf("[WIFI] Firmware loaded\r\n");

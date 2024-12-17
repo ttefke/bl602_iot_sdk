@@ -50,7 +50,7 @@ void task_grove_dls(void *pvParameters) {
     }
     
     // wait until wifi is available
-    vTaskDelay(30 * 1000 / portTICK_PERIOD_MS);
+    vTaskDelay(NETWORK_CONNECTION_DELAY * 1000 / portTICK_PERIOD_MS);
 
     // endless loop to get data twice per second
     while (1) {

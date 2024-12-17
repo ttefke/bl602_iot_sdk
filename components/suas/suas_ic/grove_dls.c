@@ -71,7 +71,7 @@ int8_t getLux() {
     
     if (result != 0) {
         printf("Error preparing to read data\r\n");
-        return -1;
+        goto error;
     }
 
     vTaskDelay(14 / portTICK_PERIOD_MS);
@@ -81,7 +81,7 @@ int8_t getLux() {
     
     if (result != 0) {
         printf("Error reading 0L register\r\n");
-        return -1;
+        goto error;
     }
 
     result = hal_i2c_read_block(GROVE_DLS_1_1_DEVICE_ADDRESS, readings + 1,
@@ -89,7 +89,7 @@ int8_t getLux() {
     
     if (result != 0) {
         printf("Error reading 0H register\r\n");
-        return -1;
+        goto error;
     }
 
     result = hal_i2c_read_block(GROVE_DLS_1_1_DEVICE_ADDRESS, readings + 2,
@@ -97,7 +97,7 @@ int8_t getLux() {
 
     if (result != 0) {
         printf("Error reading 1L register\r\n");
-        return -1;
+        goto error;
     }
 
     result = hal_i2c_read_block(GROVE_DLS_1_1_DEVICE_ADDRESS, readings + 3,
@@ -105,7 +105,7 @@ int8_t getLux() {
         
     if (result != 0) {
         printf("Error reading 1H register\r\n");
-        return -1;
+        goto error;
     }
 
     ch0 = (readings[0] << 8) | readings[1];
@@ -120,9 +120,14 @@ int8_t getLux() {
     
     if (result != 0) {
         printf("Error finishing to read data\r\n");
-        return -1;
+        goto error;
     }
     return 0;
+
+error:
+    free(readings);
+    readings = NULL;
+    return -1;
 }
 
 uint16_t readIRLuminosity() {

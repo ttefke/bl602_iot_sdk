@@ -1,6 +1,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <stdio.h>
+#include <bl_sys.h>
 
 /* Functions required by FreeRTOS */
 
@@ -67,12 +68,20 @@ void vApplicationIdleHook(void)
 void vApplicationMallocFailedHook(void)
 {
   printf("malloc failed, currently left memory in bytes: %d\r\n", xPortGetFreeHeapSize());
+#ifdef REBOOT_ON_EXCEPTION
+  bl_sys_reset_system();
+#else
   while (1) {}
+#endif
 }
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
 {
   printf("Stack overflow checked\r\n");
   printf("Task name: %s\r\n", pcTaskName);
+#ifdef REBOOT_ON_EXCEPTION
+  bl_sys_reset_system();
+#else
   while (1) {}
+#endif
 }

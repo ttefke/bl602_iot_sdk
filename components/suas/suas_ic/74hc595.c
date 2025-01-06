@@ -48,13 +48,13 @@ void store_data_74hc595(struct config_74hc595 *config, uint8_t data)
         /* Store bit */
         bl_gpio_output_set(config->pin_data_signal, lsb);
         bl_gpio_output_set(config->pin_shift_clock, 1);
-        bl_timer_delay_us(100);
+        bl_timer_delay_us(2);
         bl_gpio_output_set(config->pin_shift_clock, 0);
     }
 
     /* Copy data to output register */
     bl_gpio_output_set(config->pin_store_clock, 1);
-    bl_timer_delay_us(100);
+    bl_timer_delay_us(2);
     bl_gpio_output_set(config->pin_store_clock, 0);
 
     /* Enable output */
@@ -73,7 +73,7 @@ void clear_74hc595(struct config_74hc595 *config)
     if (config->with_master_reset)
     {
         bl_gpio_output_set(config->pin_master_reset, 0);
-        bl_timer_delay_us(100);
+        bl_timer_delay_us(2);
         bl_gpio_output_set(config->pin_master_reset, 1);
     }
     else

@@ -9,6 +9,9 @@ volatile uint32_t uxTopUsedPriority __attribute__((used)) = configMAX_PRIORITIES
 
 void vAssertCalled(void)
 {
+#ifdef REBOOT_ON_EXCEPTION
+  bl_sys_reset_system();
+#else
   volatile uint32_t ulSetTo1ToExitFunction = 0;
   
   taskDISABLE_INTERRUPTS();
@@ -16,6 +19,7 @@ void vAssertCalled(void)
   while(ulSetTo1ToExitFunction != 1) {
     __asm volatile("NOP");
   }
+#endif
 }
 
 void vApplicationGetIdleTaskMemory(StaticTask_t **ppxIdleTaskTCBBuffer, StackType_t **ppxIdleTaskStackBuffer, uint32_t *pulIdleTaskStackSize)

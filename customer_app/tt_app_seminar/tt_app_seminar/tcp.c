@@ -2,6 +2,7 @@
 #include <task.h>
 #include <lwip/tcpip.h>
 #include <stdio.h>
+#include <bl_sys.h>
 
 #include "conf.h"
 
@@ -13,7 +14,10 @@ void task_tcp(void *pvParameters) {
         /* wait forever */
         vTaskDelay(60 * 1000 / portTICK_PERIOD_MS);
     }
-
+#ifdef REBOOT_ON_EXCEPTION
+    bl_sys_reset_system();
+#else
     printf("Should never happen - TCP task exited\r\n");
+#endif
     vTaskDelete(NULL);
 }

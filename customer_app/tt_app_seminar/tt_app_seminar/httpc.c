@@ -6,6 +6,7 @@
 #include <http_client.h>
 #include <wifi_mgmr_ext.h>
 #include <cJSON.h>
+#include <bl_sys.h>
 
 #include "conf.h"
 
@@ -25,6 +26,7 @@ static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_con
 static err_t cb_httpc_headers_done_fn(httpc_state_t *connection, void *arg, struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
 {
     /* headers are ignored */
+    pbuf_free(hdr);
     return ERR_OK;
 }
 
@@ -95,6 +97,10 @@ void task_http(void *pvParameters)
     }
     
     /* while loop should never exit */
+#ifdef REBOOT_ON_EXCEPTION
+    bl_sys_reset_system();
+#else
     printf("Deleting task - should not happen\r\n");
+#endif
     vTaskDelete(NULL);
 }

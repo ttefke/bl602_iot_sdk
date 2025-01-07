@@ -6,6 +6,7 @@
 #include <loopset_i2c.h>
 #include <hal_i2c.h>
 #include <grove_dls.h>
+#include <bl_sys.h>
 
 #include "conf.h"
 
@@ -45,8 +46,12 @@ void task_grove_dls(void *pvParameters) {
     printf("Initializing Grove Digital Light Sensor\r\n");
 
     if (init_grove_dls() != 0) {
+#ifdef REBOOT_ON_EXCEPTION
+        bl_sys_reset_system();
+#else
         // retry once if initialization fails
         init_grove_dls();
+#endif
     }
     
     // wait until wifi is available
@@ -58,6 +63,10 @@ void task_grove_dls(void *pvParameters) {
         vTaskDelay(500 / portTICK_PERIOD_MS);
     }
 
+#ifdef REBOOT_ON_EXCEPTION
+    bl_sys_reset_system();
+#else
     printf("Should never happen - exiting loop\r\n");
+#endif
     vTaskDelete(NULL);
 }

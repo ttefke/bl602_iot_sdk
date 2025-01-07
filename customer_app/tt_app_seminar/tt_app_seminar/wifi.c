@@ -6,6 +6,7 @@
 #include <hal_sys.h>
 #include <hal_wifi.h>
 #include <hal_uart.h>
+#include <bl_sys.h>
 
 #include <aos/yloop.h>
 #include <event_device.h>
@@ -95,7 +96,7 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
     wifi_mgmr_cli_scanlist();
     break;
   case CODE_WIFI_ON_EMERGENCY_MAC:
-    hal_reboot();
+    bl_sys_reset_system();
     break;
   case CODE_WIFI_ON_PROV_SSID:
     if (ssid)
@@ -190,6 +191,10 @@ void task_wifi(void *pvParameters)
   aos_loop_run();
 
   /* will hopefully never happen */
+#ifdef REBOOT_ON_EXCEPTION
+    bl_sys_reset_system();
+#else
   printf("[WIFI] Exiting WiFi task - should never happen\r\n");
+#endif
   vTaskDelete(NULL);
 }

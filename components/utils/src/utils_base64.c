@@ -34,11 +34,15 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "iot_import.h"
-#include "iot_export.h"
+//#include "iot_import.h"
+//#include "iot_export.h"
 
-#include "iotx_utils_internal.h"
+//#include "iotx_utils_internal.h"
 #include "utils_base64.h"
+
+#include <inttypes.h>
+#include <stdio.h>
+
 
 static int8_t g_encodingTable[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
                                    'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -69,23 +73,23 @@ static void build_decoding_table()
     signal = 1;
     return;
 }
-
-iotx_err_t utils_base64encode(const uint8_t *data, uint32_t inputLength, uint32_t outputLenMax,
+int8_t utils_base64encode(const uint8_t *data, uint32_t inputLength, uint32_t outputLenMax,
                               uint8_t *encodedData, uint32_t *outputLength)
 {
     uint32_t i = 0;
     uint32_t j = 0;
 
     if (NULL == encodedData) {
-        utils_err("pointer of encodedData is NULL!");
-        return FAIL_RETURN;
+        printf("pointer of encodedData is NULL!\r\n");
+        return -1;
     }
 
     *outputLength = 4 * ((inputLength + 2) / 3);
 
     if (outputLenMax < *outputLength) {
-        utils_err("the length of output memory is not enough!");
-        return FAIL_RETURN;
+        printf("the length of output memory is not enough!\r\n");
+        printf("max length: %" PRIu32 ", actual length: %" PRIu32 "\r\n", outputLenMax, *outputLength);
+        return -1;
     }
 
     for (i = 0, j = 0; i < inputLength;) {
@@ -105,10 +109,10 @@ iotx_err_t utils_base64encode(const uint8_t *data, uint32_t inputLength, uint32_
         encodedData[*outputLength - 1 - i] = '=';
     }
 
-    return SUCCESS_RETURN;
+    return 1;
 }
 
-iotx_err_t utils_base64decode(const uint8_t *data, uint32_t inputLength, uint32_t outputLenMax,
+int8_t utils_base64decode(const uint8_t *data, uint32_t inputLength, uint32_t outputLenMax,
                               uint8_t *decodedData, uint32_t *outputLength)
 {
     uint32_t i = 0;
@@ -117,8 +121,8 @@ iotx_err_t utils_base64decode(const uint8_t *data, uint32_t inputLength, uint32_
     build_decoding_table();
 
     if (inputLength % 4 != 0) {
-        utils_err("the input length is error!");
-        return FAIL_RETURN;
+        printf("the input length is error!\r\n");
+        return -1;
     }
 
     *outputLength = inputLength / 4 * 3;
@@ -133,8 +137,8 @@ iotx_err_t utils_base64decode(const uint8_t *data, uint32_t inputLength, uint32_
     }
 
     if (outputLenMax < *outputLength) {
-        utils_err("the length of output memory is not enough!");
-        return FAIL_RETURN;
+        printf("the length of output memory is not enough!\r\n");
+        return -1;
     }
 
     uint32_t sextet_a = 0;
@@ -164,7 +168,7 @@ iotx_err_t utils_base64decode(const uint8_t *data, uint32_t inputLength, uint32_
         }
     }
 
-    return SUCCESS_RETURN;
+    return 1;
 }
 
 #endif

@@ -1,13 +1,14 @@
 # Component Makefile
 #
 ## These include paths would be exported to project level
-COMPONENT_ADD_INCLUDEDIRS +=
+COMPONENT_ADD_INCLUDEDIRS += include
 
 ## not be exported to project level
 COMPONENT_PRIV_INCLUDEDIRS :=
 
 ## This component's src
 COMPONENT_SRCS := src/utils_hex.c \
+                  src/utils_base64.c \
                   src/utils_crc.c \
                   src/utils_sha256.c \
                   src/utils_fec.c \

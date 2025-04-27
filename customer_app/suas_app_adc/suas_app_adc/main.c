@@ -11,6 +11,9 @@
 // DMA library
 #include <bl_dma.h>
 
+// Our ADC header
+#include "adc.h"
+
 /* Define heap regions */
 extern uint8_t _heap_start;
 extern uint8_t _heap_size;
@@ -47,10 +50,6 @@ void bfl_main(void)
   static StaticTask_t adc_task;
   
   /* Start up ADC task */
-  
-  /* This function is defined in adc.c but add prototype here so that the compiler knows we define this in another file.
-  You could also use a header file for this */
-  extern void task_adc(void *pvParameters); 
 
   /* Create the task */
   xTaskCreateStatic(

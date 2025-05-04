@@ -1,0 +1,42 @@
+digraph {
+    labelloc="t";
+    label="Callgraph of functions defined in suas_app_i2c";
+    fontsize=20;
+
+    subgraph cluster_main {
+        label="main.c";
+        main [label="bfl_main()\nProgram entry"];
+    }
+
+    subgraph cluster_grove_dls_handler {
+        label="grove_dls_handler.c";
+        handler [label="grove_handler()\nTwo stages:\n1. Configure sensor\n2. Read data repeatedly"];
+        interrupt [label="event_cb_i2c_interrupt()\n(first stage, set interrupts)"];
+    }
+
+    subgraph cluster_grove_dls {
+        label="grove_dls.c";
+        init [label="init_grove_dls()\n(first stage, initialize sensor)"];
+        "getLux()";
+        ir [label="readIRLuminosity()\n(second stage,\nread sensor)"];
+        fs [label="readFSLuminosity()\n(second stage,\nread sensor)"];
+        vl [label="readVisibleLux()\n(second stage,\nread sensor)"];
+        "calculateLux()";
+    }
+
+    subgraph cluster_freertos {
+        label="freertos.c";
+        "Provides functions linked into the application:\nvAssertCalled()\nvApplicationGetIdleTaskMemory()\nvApplicationGetTimerTaskMemory()\nvApplicationIdleHook()\nvApplicationMallocFailedHook()\nvApplicationStackOverflowHook()" [labeljust=l,shape=rect];
+    }
+
+    main -> handler [label="Creates task",style="dashed"];
+    handler -> interrupt [label="1. Register handler",style="dashed"];
+    handler -> init [label="2. Initialize sensor"];
+    handler -> ir [label="3. Read infrared luminosity"];
+    handler -> fs [label="3. Read full spectrum luminosity"];
+    handler -> vl [label="3. Read visible luminosity"];
+    ir -> "getLux()";
+    fs -> "getLux()";
+    vl -> "getLux()";
+    vl -> "calculateLux()";
+}

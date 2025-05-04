@@ -31,7 +31,7 @@ void grove_handler(void *pvParameters) {
     // Register I2C interrupt (event) filter; callback function
     aos_register_event_filter(EV_I2C, event_cb_i2c_interrupt, NULL);
 
-    // Register I2C channel: Channel 0, frequency 500 kbps
+    // Register I2C channel: Channel 0 (pin 3: SDA, pin 4: SCL), frequency 500 kbps
     hal_i2c_init(0, 500);
 
     // Initialize sensor (see separate function below)

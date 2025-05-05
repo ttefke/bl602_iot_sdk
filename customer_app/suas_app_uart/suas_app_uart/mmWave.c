@@ -45,7 +45,7 @@ void read_sensor(void *pvParameters)
     // Second character is 'F' -> OFF/no human presence
     if (data[1] == 0x46) {
       printf("Nobody present\r\n");
-    // Someone is present (second character is 'N') -> read distance
+    // Someone is present (second character is 'N')
     } else if (data[1] == 0x4E) {
       printf("Human presence detected\r\n");
     }

@@ -1,0 +1,82 @@
+digraph {
+    labelloc="t";
+    label="Callgraph of functions defined in suas_app_spi";
+    fontsize=20;
+
+    subgraph cluster_main {
+        label="main.c";
+        aos_loop [label="aos_loop_proc()\n Register AOS device tree"];
+        get_dts_addr [label="get_dts_addr()\nGet addresses from device tree"];
+        main [label="bfl_main()\nProgram entry"];
+    }
+
+    subgraph cluster_spi_adapter {
+        label="spi_adapter.c";
+        spi_write_registers [label="spi_write_registers()\nWrite multiple bytes to one register"];
+        spi_write_register [label="spi_write_register()\nWrite one byte to one register"];
+        spi_read_register [label="spi_read_register()\nRead one byte from one register"];
+        spi_read_registers [label="spi_read_registers()\nRead one register multiple times"];
+        spi_transfer [label="spi_transfer()\nMain SPI transfer function"];
+    }
+
+    subgraph cluster_spi {
+        label="spi.c";
+        spi_proc [label="spi_proc()\nProcess handle"];
+        rc522_init [label="rc522_init()\nInit card reader"];
+        rc522_is_new_card_present [label="rc522_is_new_card_present()\nCheck for card presence"];
+        rc522_reset [label="rc522_reset()\nReset card reader"];
+        rc522_antenna_on [label="rc522_antenna_on()\nTurn on antenna"];
+        rc522_is_new_card_present [label="rc522_is_new_card_present()\n Check for card presence"];
+        rf522_request_a [label="rf522_request_a()\nWrapper function"];
+        rf522_reqa_or_wupa [label="rf522_reqa_or_wupa()\n Send command to card"];
+        rf522_clear_register_bit_mask [label="rf522_clear_register_bit_mask()\n Clear register bit mask"];
+        rf522_transceive_data_ [label="rf522_transceive_data_()\nWrapper function"];
+        rf522_transceive_data [label="rf522_transceive_data()\nWrapper function"];
+        rf522_communicate_with_picc [label="rf522_communicate_with_picc()\nCommunicate with card"];
+        rf522_set_register_bit_mask [label="rf522_set_register_bit_mask()\nSet register bit mask"];
+        rf522_calculate_crc [label="rf522_calculate_crc()\nDetect errors during data transmission"];
+    }
+
+    subgraph cluster_freertos {
+        label="freertos.c";
+        "Provides functions linked into the application:\nvAssertCalled()\nvApplicationGetIdleTaskMemory()\nvApplicationGetTimerTaskMemory()\nvApplicationIdleHook()\nvApplicationMallocFailedHook()\nvApplicationStackOverflowHook()" [labeljust=l,shape=rect];
+    }
+
+    main -> aos_loop [label="Creates task",style="dashed"];
+    main -> spi_proc [label="Creates task",style="dashed"];
+    aos_loop -> get_dts_addr [label="Uses"];
+    spi_write_registers -> spi_transfer [label="Uses"];
+    spi_write_register -> spi_transfer [label="Uses"];
+    spi_read_register -> spi_transfer [label="Uses"];
+    spi_read_registers -> spi_transfer [label="Uses"];
+    spi_proc -> rc522_init [label="Calls"];
+    spi_proc -> rc522_is_new_card_present [label="Calls"];
+
+    rc522_init -> rc522_reset [label="Calls"];
+    rc522_reset -> spi_write_register [label="Calls"];
+    rc522_reset -> spi_read_register [label="Calls"];
+    rc522_init -> spi_read_register [label="Calls"];
+    rc522_init -> rc522_antenna_on [label="Calls"];
+    rc522_antenna_on -> spi_read_register [label="Calls"];
+    rc522_antenna_on -> spi_write_register [label="Calls"];
+    rc522_is_new_card_present -> spi_write_register [label="Calls"];
+    rc522_is_new_card_present -> rf522_request_a [label="Calls"];
+    rf522_request_a -> rf522_reqa_or_wupa [label="Wraps"];
+    rf522_reqa_or_wupa -> rf522_clear_register_bit_mask [label="Calls"];
+    rf522_reqa_or_wupa -> rf522_transceive_data_ [label="Calls"];
+    rf522_clear_register_bit_mask -> spi_read_register [label="Calls"];
+    rf522_clear_register_bit_mask -> spi_write_register [label="Calls"];
+    rf522_transceive_data_ -> rf522_transceive_data [label="Wraps"];
+    rf522_transceive_data -> rf522_communicate_with_picc [label="Wraps"];
+    rf522_set_register_bit_mask -> spi_read_register [label="Calls"];
+    rf522_set_register_bit_mask -> spi_write_register [label="Calls"];
+    rf522_communicate_with_picc -> rf522_set_register_bit_mask [label="Calls"];
+    rf522_communicate_with_picc -> spi_write_register [label="Calls"];
+    rf522_communicate_with_picc -> spi_write_registers [label="Calls"];
+    rf522_communicate_with_picc -> spi_read_register [label="Calls"];
+    rf522_communicate_with_picc -> spi_read_registers [label="Calls"];
+    rf522_communicate_with_picc -> rf522_calculate_crc [label="Calls"];
+    rf522_calculate_crc -> spi_write_register [label="Calls"];
+    rf522_calculate_crc -> spi_write_registers [label="Calls"];
+    rf522_calculate_crc -> spi_read_register [label="Calls"];
+}

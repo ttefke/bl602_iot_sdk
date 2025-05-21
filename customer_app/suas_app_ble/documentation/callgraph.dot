@@ -1,0 +1,72 @@
+digraph {
+    labelloc="t";
+    label="Callgraph of most important functions defined in suas_app_ble";
+    fontsize=20;
+
+    subgraph cluster_main {
+        label="main.c";
+        main [label="bfl_main()\nProgram entry"];
+        keep_alive_entry [label="keep_alive_entry()\nKeep-Alive thread"];
+        aos_loop_proc [label="aos_loop_proc()\r\nEvent thread"];
+        event_cb_key_event [label="event_cb_key_event()\nKey callback function"];
+        event_cb_ble_event [label="event_cb_ble_event()\nBLE event callback function"];
+    }
+
+    subgraph cluster_central {
+        label="central.c";
+        ble_central_write [label="ble_central_write()\nSend message to peripheral device"];
+        ble_central_notify_function [label="ble_central_notify_function()\nCallback for received notifications"];
+        ble_central_discovery_function [label="ble_central_discovery_function()\nDiscover offered services"];
+        ble_central_connected [label="ble_central_connected()\nDevice connected"];
+        ble_central_disconnected [label="ble_central_disconnected()\nDevice disconnected"];
+        data_cb [label="data_cb()\nParse received data"];
+        ble_central_device_found [label="ble_central_device_found()\nFound possible peripheral callback"];
+        ble_central_start_scanning [label="ble_central_start_scanning()\n Start scanning for peripherals"];
+        ble_central_init [label="ble_central_init()\nBluetooth started callback"];
+        start_central_application [label="start_central_application()\nSet up device as central and client"];
+    }
+
+    subgraph cluster_peripheral {
+        label="peripheral.c";
+        ble_peripheral_send_notification [label="ble_peripheral_send_notification()\nSend notification to client"];
+        ble_blf_recv [label="ble_blf_recv()\nReceived data from client callback function"];
+        ble_bl_ccc_cfg_changed [label="ble_bl_ccc_cfg_changed()\nReflect changes in client characteristic configuration"];
+        ble_peripheral_start_advertising [label="ble_peripheral_start_advertising()\nStart advertising"]
+        ble_peripheral_init [label="ble_peripheral_init()\nBluetooth stack started callback"];
+        ble_peripheral_connected [label="ble_peripheral_connected()\nConnected to device"];
+        ble_peripheral_disconnected [label="ble_peripheral_disconnected()\nDevice disconnected"];
+        ble_stack_start [label="ble_stack_start()\nStart bluetooth stack"];
+        start_peripheral_application [label="start_peripheral_application()\nSet up device as peripheral and server"];
+    }
+
+    subgraph cluster_freertos {
+        label="freertos.c";
+        "Provides functions linked into the application:\nuser_vAssertCalled()\nvAssertCalled()\nvApplicationGetIdleTaskMemory()\nvApplicationGetTimerTaskMemory()\nvApplicationIdleHook()\nvApplicationMallocFailedHook()\nvApplicationStackOverflowHook()" [labeljust=l,shape=rect];
+    }
+
+    main -> keep_alive_entry [label="Creates task",style="dashed"];
+    main -> aos_loop_proc [label="Creates task",style="dashed"];
+    aos_loop_proc -> event_cb_key_event [label="Register callback", style="dashed"];
+    aos_loop_proc -> event_cb_ble_event [label="Register callback", style="dashed"];
+    event_cb_ble_event -> ble_central_start_scanning [label="Attempt to reconnect after disconnect"];
+    event_cb_ble_event -> ble_peripheral_start_advertising [label="Attempt to reconnect after disconnect"];
+    event_cb_key_event -> start_peripheral_application [label="Configure as peripheral device"];
+    event_cb_key_event -> start_central_application [label="Configure as central device"];
+    event_cb_key_event -> ble_central_write [label="Invoke ATT write command"];
+    event_cb_key_event -> ble_peripheral_send_notification [label="Invoke ATT notification"];
+    start_peripheral_application -> ble_stack_start;
+    ble_stack_start -> ble_peripheral_init [label="Set as callback function",style="dashed"];
+    ble_stack_start -> ble_peripheral_connected [label="Set as callback function",style="dashed"];
+    ble_stack_start -> ble_peripheral_disconnected [label="Set as callback function",style="dashed"];
+    ble_peripheral_init -> ble_peripheral_start_advertising;
+    start_peripheral_application -> ble_bl_ccc_cfg_changed [label="Register GATT server"];
+    start_peripheral_application -> ble_blf_recv [label="Register GATT server"];
+    start_central_application -> ble_central_init [label="Set as callback function", style="dashed"];
+    start_central_application -> ble_central_connected [label="Set as callback function", style="dashed"];
+    start_central_application -> ble_central_disconnected [label="Set as callback function", style="dashed"];
+    ble_central_init -> ble_central_start_scanning;
+    ble_central_start_scanning -> ble_central_device_found [label="Set as callback function", style="dashed"];
+    ble_central_device_found -> data_cb [label="Set as callback function", style="dashed"];
+    ble_central_connected -> ble_central_discovery_function [label="Set as callback function", style="dashed"];
+    ble_central_discovery_function -> ble_central_notify_function [label="Set as callback function", style="dashed"];
+}

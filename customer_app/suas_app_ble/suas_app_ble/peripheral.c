@@ -125,10 +125,10 @@ void ble_bl_ccc_cfg_changed(const struct bt_gatt_attr *attr, u16_t value) {
     // Enable notifications if requested
     if (value == BT_GATT_CCC_NOTIFY) {
         notify_flag = true;
-        printf("[PERIPHERAL] Enabled notify\r\n");
+        printf("[PERIPHERAL] Enabled notifications\r\n");
     } else {
         notify_flag = false;
-        printf("[PERIPHERAL] Disabled notify\r\n");
+        printf("[PERIPHERAL] Disabled notifications\r\n");
     }
 }
 
@@ -157,9 +157,9 @@ void ble_peripheral_start_advertising() {
 /* Bluetooth stack started callback */
 void ble_peripheral_init(int err) {
     if (err != 0) {
-        printf("[PERIPHERAL] Failed to start Bluetooth stack\r\n");
+        printf("[PERIPHERAL] Bluetooth initialization failed\r\n");
     } else {
-        printf("[PERIPHERAL] Bluetooth initialized\r\n");
+        printf("[PERIPHERAL] Bluetooth initialization successed\r\n");
 
         // Start advertising
         ble_peripheral_start_advertising();
@@ -228,8 +228,8 @@ void start_peripheral_application() {
     int err = bt_gatt_service_register(&ble_bl_server);
 
     if (err == 0) {
-        printf("[PERIPHERAL] Service started\r\n");
+        printf("[PERIPHERAL] GATT server started\r\n");
     } else {
-        printf("[PERIPHERAL] Error happened during service registration\r\n");
+        printf("[PERIPHERAL] Error happened during GATT server registration\r\n");
     }
 }

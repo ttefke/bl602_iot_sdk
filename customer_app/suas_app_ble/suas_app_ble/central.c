@@ -76,7 +76,7 @@ uint8_t ble_central_notify_function(struct bt_conn *conn,
 /* Callback function indicating MTU exchange */
 void ble_exchange_mtu_cb(struct bt_conn *conn, u8_t err,
     struct bt_gatt_exchange_params *params) {
-    printf("[CENTRAL] MTU exchange %s, MTU size: %d\r\n", err == 0U ? "sucessful": "failed",
+    printf("[CENTRAL] MTU exchange %s, new MTU size: %d\r\n", err == 0U ? "sucessful": "failed",
         bt_gatt_get_mtu(conn));
 }
 
@@ -125,7 +125,7 @@ uint8_t ble_central_discovery_function(struct bt_conn *conn,
             printf("[CENTRAL] Discovery failed: %d\r\n", err);
         }    
     } else if (!bt_uuid_cmp(discover_params.uuid, BT_UUID_TEST_RX)) {
-        // Set discover data: Diccover CCC descriptor with given UUID
+        // Set discover data: Discover CCC descriptor with given UUID
         // and set value handler for subscription:
         memcpy(&uuid, BT_UUID_GATT_CCC, sizeof(uuid));
         discover_params.uuid = &uuid.uuid;
@@ -152,7 +152,7 @@ uint8_t ble_central_discovery_function(struct bt_conn *conn,
         if (err && err != -EALREADY) {
             printf("[CENTRAL] Subscribe failed: %d\r\n", err);
         } else {
-            printf("[CENTRAL] Subscribed\r\n");
+            printf("[CENTRAL] Subscribed successfully\r\n");
             bt_gatt_write_without_handle = subscribe_params.ccc_handle + 2;
 
             // Post message notifying a device subscribed
@@ -332,15 +332,15 @@ void ble_central_start_scanning() {
 
     // Post event to message broker
     aos_post_event(EV_BLE_TEST, BLE_SCAN_START, NULL);
-    printf("Scanning started successfully\r\n");
+    printf("[CENTRAL] Scanning started successfully\r\n");
 }
 
 /* Bluetooth started callback: start scanning for peripherals*/
 void ble_central_init(int err) {
     if (err != 0) {
-        printf("[CENTRAL] Bluetooth start failed\r\n");
+        printf("[CENTRAL] Bluetooth initialization failed\r\n");
     } else {
-        printf("[CENTRAL] Bluetooth start succeeded\r\n");
+        printf("[CENTRAL] Bluetooth initialization succeeded\r\n");
 
         /* Start scanning */
         ble_central_start_scanning();

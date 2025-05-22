@@ -79,7 +79,7 @@ struct bt_gatt_service ble_bl_server = BT_GATT_SERVICE(blattrs);
 /* Send notification */
 void ble_peripheral_send_notification() {
     // Data to send
-    char data[11] = "Peripheral";
+    char data[22] = "Hello from Peripheral";
 
     // Send data if connection available and notifications allowed
     if (default_conn != NULL && notify_flag == true) {
@@ -92,7 +92,7 @@ void ble_peripheral_send_notification() {
             3: Data to send
             4: Length of the data
         */
-        bt_gatt_notify(default_conn, &blattrs[1], data, 11);
+        bt_gatt_notify(default_conn, &blattrs[1], data, 22);
     }
 }
 

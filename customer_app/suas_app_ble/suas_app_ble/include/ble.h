@@ -9,6 +9,7 @@
 #define BLE_DEV_DISCONN 0x04
 #define BLE_SCAN_START  0x05
 #define BLE_SCAN_STOP   0x06
+#define BLE_DEV_SUBSCRIBED 0x07
 
 /* UUIDs to reference services */
 #define BT_UUID_TEST        BT_UUID_DECLARE_16(0xFFF0)

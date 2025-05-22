@@ -27,6 +27,7 @@
 #include <looprt.h>
 #include <loopset.h>
 #include <aos/yloop.h>
+#include <cli.h>
 
 // Standard input/output
 #include <stdio.h>
@@ -108,6 +109,11 @@ void event_cb_ble_event(input_event_t *event, void *private_data) {
       } else { // Peripheral
         ble_peripheral_start_advertising();
       }
+      break;
+    /* Only called by client: exchange MTU size*/
+    case BLE_DEV_SUBSCRIBED:
+      bl_gpio_output_set(LED_GREEN, 0);
+      ble_central_exchange_mtu();
       break;
     /* Unknown event */
     default:
@@ -199,6 +205,14 @@ void aos_loop_proc(void *pvParameters) {
 
   /* Start loop */
   aos_loop_init();
+
+  /* Console */
+  int fd_console = aos_open("/dev/ttyS0", 0);
+  if (fd_console >= 0) {
+    printf("[SYS] Console initialization");
+    aos_cli_init(0);
+    aos_poll_read_fd(fd_console, aos_cli_event_cb_read_get(), (void *) 0x12345678);
+  }
 
   /* Register event filters */
   aos_register_event_filter(EV_KEY, event_cb_key_event, NULL);

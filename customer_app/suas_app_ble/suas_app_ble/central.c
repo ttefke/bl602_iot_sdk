@@ -23,12 +23,13 @@
 static struct bt_uuid_16 uuid = BT_UUID_INIT_16(0);
 static struct bt_gatt_discover_params discover_params;
 static struct bt_gatt_subscribe_params subscribe_params;
+static struct bt_gatt_exchange_params exchange_params;
 static u16_t bt_gatt_write_without_handle = 0;
 
 /* Send message to peripheral device */
 void ble_central_write() {
     // Data to send
-    char data[8] = "Central";
+    char data[19] = "Hello from Central";
 
     // Check if connection is available
     if (default_conn != NULL) {
@@ -40,7 +41,7 @@ void ble_central_write() {
                 4: Data length
                 5: Whether to sign data
         */
-        bt_gatt_write_without_response(default_conn, bt_gatt_write_without_handle, data, 8, 0);
+        bt_gatt_write_without_response(default_conn, bt_gatt_write_without_handle, data, 19, 0);
     }
 }
 
@@ -70,6 +71,32 @@ uint8_t ble_central_notify_function(struct bt_conn *conn,
     }
 
     return BT_GATT_ITER_CONTINUE;
+}
+
+/* Callback function indicating MTU exchange */
+void ble_exchange_mtu_cb(struct bt_conn *conn, u8_t err,
+    struct bt_gatt_exchange_params *params) {
+    printf("[CENTRAL] MTU exchange %s, MTU size: %d\r\n", err == 0U ? "sucessful": "failed",
+        bt_gatt_get_mtu(conn));
+}
+
+/* Initiate MTU exchange */
+void ble_central_exchange_mtu() {
+    if (!default_conn) {
+        printf("[CENTRAL] Not connected!\r\n");
+    } else {
+        // Register callback function and exchange MTU
+        exchange_params.func = ble_exchange_mtu_cb;
+        printf("[CENTRAL] Current MTU size: %d, requesting MTU exchange\r\n",
+            bt_gatt_get_mtu(default_conn));
+        int err = bt_gatt_exchange_mtu(default_conn, &exchange_params);
+
+        if (err) {
+            printf("[CENTRAL] MTU exchange failed\r\n");
+        } else {
+            printf("[CENTRAL] MTU exchange pending\r\n");
+        }
+    }
 }
 
 // Discover offered services
@@ -127,6 +154,9 @@ uint8_t ble_central_discovery_function(struct bt_conn *conn,
         } else {
             printf("[CENTRAL] Subscribed\r\n");
             bt_gatt_write_without_handle = subscribe_params.ccc_handle + 2;
+
+            // Post message notifying a device subscribed
+            aos_post_event(EV_BLE_TEST, BLE_DEV_SUBSCRIBED, NULL);
         }
 
         return BT_GATT_ITER_STOP;

@@ -24,6 +24,8 @@ digraph {
         ble_central_start_scanning [label="ble_central_start_scanning()\n Start scanning for peripherals"];
         ble_central_init [label="ble_central_init()\nBluetooth started callback"];
         start_central_application [label="start_central_application()\nSet up device as central and client"];
+        ble_exchange_mtu_cb [label="ble_exchange_mtu_cb()\nMTU size exchanged callback"];
+        ble_central_exchange_mtu [label="ble_central_exchange_mtu()\nRequest MTU exchange"];
     }
 
     subgraph cluster_peripheral {
@@ -50,6 +52,8 @@ digraph {
     aos_loop_proc -> event_cb_ble_event [label="Register callback", style="dashed"];
     event_cb_ble_event -> ble_central_start_scanning [label="Attempt to reconnect after disconnect"];
     event_cb_ble_event -> ble_peripheral_start_advertising [label="Attempt to reconnect after disconnect"];
+    event_cb_ble_event -> ble_central_exchange_mtu [label="Attempt to exchange MTU size"];
+    ble_central_exchange_mtu -> ble_exchange_mtu_cb [label="Set as callback function", style="dashed"];
     event_cb_key_event -> start_peripheral_application [label="Configure as peripheral device"];
     event_cb_key_event -> start_central_application [label="Configure as central device"];
     event_cb_key_event -> ble_central_write [label="Invoke ATT write command"];
@@ -69,4 +73,11 @@ digraph {
     ble_central_device_found -> data_cb [label="Set as callback function", style="dashed"];
     ble_central_connected -> ble_central_discovery_function [label="Set as callback function", style="dashed"];
     ble_central_discovery_function -> ble_central_notify_function [label="Set as callback function", style="dashed"];
+    #ble_central_discovery_function -> event_cb_ble_event [label="Post device subscribed message", style="dotted"];
+    #ble_central_connected -> event_cb_ble_event [label="Post device connected message", style="dotted"];
+    #ble_central_disconnected -> event_cb_ble_event [label="Post device disconnected message", style="dotted"];
+    #ble_central_start_scanning -> event_cb_ble_event [label="Post device started scanning event", style="dotted"];
+    #ble_peripheral_start_advertising -> event_cb_ble_event [label="Post started advertising event", style="dotted"];
+    #ble_peripheral_connected -> event_cb_ble_event [label="Post device connected message", style="dotted"];
+    #ble_peripheral_disconnected -> event_cb_ble_event [label="Post device disconnected message", style="dotted"];
 }

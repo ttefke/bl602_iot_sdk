@@ -31,6 +31,7 @@ COMPONENT_SRCS   := src/access.c \
 					src/transport.c \
 					src/mesh_cli_cmds/mesh_cli_cmds.c \
 					src/local_operation.c \
+					src/mesh_backports.c
 
 ifeq ($(CONFIG_BT_MESH_FRIEND),1)
 COMPONENT_SRCS   += src/friend.c

@@ -16,5 +16,9 @@ ifeq ($(CONFIG_INCLUDE_HTTPD),1)
 COMPONENT_SRCDIRS +=  src/apps/http
 endif
 
+ifeq ($(CONFIG_INCLUDE_MQTT),1)
+COMPONENT_SRCDIRS +=  src/apps/mqtt
+endif
+
 ##
 #CPPFLAGS +=

@@ -16,8 +16,8 @@
 #include <lwip/altcp_tls.h>
 extern const u8_t ca_certificate[];
 extern const unsigned int ca_certificate_len;
-extern const u8_t ec_private_key[];
-extern const unsigned int ec_private_key_len;
+extern const u8_t private_key[];
+extern const unsigned int private_key_len;
 extern const u8_t certificate[];
 extern const unsigned int certificate_len;
 #endif
@@ -176,8 +176,8 @@ void my_mqtt_connect() {
     client_info.tls_config = altcp_tls_create_config_client_2wayauth(
         ca_certificate,
         ca_certificate_len,
-        ec_private_key,
-        ec_private_key_len,
+        private_key,
+        private_key_len,
         NULL,
         0,
         certificate,

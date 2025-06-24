@@ -285,4 +285,9 @@ extern int bl_rand();
 #define LWIP_RANDOMIZE_INITIAL_LOCAL_PORTS 1
 #define LWIP_RAND() ((u32_t)bl_rand())
 
+// Custom memory pools
+#ifdef WITH_COAP
+#define MEMP_USE_CUSTOM_POOLS 1
+#endif
+
 #endif /* __LWIPOPTS_H__ */

@@ -49,24 +49,36 @@
 
 /* MEM_SIZE: the size of the heap memory. If the application will send
 a lot of data that needs to be copied, this should be set high. */
+#if WITH_COAP
+#define MEM_SIZE                (4*1024)
+#else
 #define MEM_SIZE                (8*1024)
+#endif
 
 /* MEMP_NUM_PBUF: the number of memp struct pbufs. If the application
    sends a lot of data out of ROM (or other static memory), this
    should be set high. */
+#if !WITH_COAP
 #define MEMP_NUM_PBUF           26
+#endif
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
+#if !WITH_COAP
 #define MEMP_NUM_UDP_PCB        6
+#endif
 /* MEMP_NUM_TCP_PCB: the number of simulatenously active TCP
    connections. */
+#if !WITH_COAP
 #define MEMP_NUM_TCP_PCB        10
+#endif
 /* MEMP_NUM_TCP_PCB_LISTEN: the number of listening TCP
    connections. */
 #define MEMP_NUM_TCP_PCB_LISTEN 5
 /* MEMP_NUM_TCP_SEG: the number of simultaneously queued TCP
    segments. */
+#if !WITH_COAP
 #define MEMP_NUM_TCP_SEG        32
+#endif
 
 /* NUM of sys_timeout pool*/
 #define MEMP_NUM_SYS_TIMEOUT            (LWIP_NUM_SYS_TIMEOUT_INTERNAL + 8 + 3)
@@ -99,10 +111,11 @@ a lot of data that needs to be copied, this should be set high. */
 
 /*  TCP_SND_QUEUELEN: TCP sender buffer space (pbufs). This must be at least
   as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work. */
-
 #define TCP_SND_QUEUELEN        ((2 * (TCP_SND_BUF) + (TCP_MSS - 1))/(TCP_MSS))
 
+#if !WITH_COAP
 #define MEMP_NUM_TCPIP_MSG_INPKT        (32)
+#endif
 
 /**
  * TCP_SNDQUEUELOWAT: TCP writable bufs (pbuf count). This must be less
@@ -286,7 +299,7 @@ extern int bl_rand();
 #define LWIP_RAND() ((u32_t)bl_rand())
 
 // Custom memory pools
-#ifdef WITH_COAP
+#if WITH_COAP
 #define MEMP_USE_CUSTOM_POOLS 1
 #endif
 

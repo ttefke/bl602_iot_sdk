@@ -167,6 +167,7 @@ struct altcp_tls_session
  */
 void altcp_tls_init_session(struct altcp_tls_session *dest);
 
+#ifdef MBEDTLS_HAVE_TIME
 /** @ingroup altcp_tls
  * Save current connected session to reuse it later. Should be called after altcp_connect() succeeded.
  * Return error if saving session fail.
@@ -179,8 +180,9 @@ err_t altcp_tls_get_session(struct altcp_pcb *conn, struct altcp_tls_session *de
  * Return error if cannot restore session.
  * Real type depends on port (e.g. mbedtls use mbedtls_ssl_session)
  */
-err_t altcp_tls_set_session(struct altcp_pcb *conn, struct altcp_tls_session *from);
 
+err_t altcp_tls_set_session(struct altcp_pcb *conn, struct altcp_tls_session *from);
+#endif
 /** @ingroup altcp_tls
  * Free allocated data inside a TLS session buffer.
  * Real type depends on port (e.g. mbedtls use mbedtls_ssl_session)

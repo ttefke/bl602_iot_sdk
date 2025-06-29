@@ -17,6 +17,10 @@ CFLAGS += -DWITH_COAP
 CFLAGS += -DCOAP_CLIENT_SUPPORT
 CFLAGS += -DCOAP_SERVER_SUPPORT
 
+ifeq ($(CONFIG_INCLUDE_COAP_DTLS), 1)
+CFLAGS += -DWITH_COAP_DTLS
+endif
+
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)
 endif

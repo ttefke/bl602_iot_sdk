@@ -13,6 +13,7 @@
 
 // CoAP includes
 #include <coap3/coap.h>
+#include "include/coap-log.h"
 #include "include/coap-server.h"
 
 // Local variable
@@ -49,23 +50,30 @@ void server_coap_init() {
   // 1. Start CoAP stack
   coap_startup();
 
-  // 2. Set log level
-  coap_set_log_level(COAP_LOG_NOTICE);
+  // 2. Set logging
+  coap_set_log_handler(coap_log_handler);
+  coap_set_log_level(COAP_LOG_INFO);
 
   // 3. Create server context
   main_coap_context = coap_new_context(NULL);
   LWIP_ASSERT("Failed to initialize context", main_coap_context != NULL);
 
-  // 4. Set connection schemes
-  uint32_t schemes =
-    coap_get_available_scheme_hint_bits(/* PSK */ 0,
-    /* Enable Websockets */ 0, /* IP sockets */ COAP_PROTO_NONE); 
+  // 4. Set keepalive time for sessions
+  coap_context_set_keepalive(main_coap_context, 60);
 
-  // 5. Set IP address to listen to (listen on all interfaces)
+  // 5. Set connection schemes
+  uint32_t schemes =
+    coap_get_available_scheme_hint_bits(
+      /* Use PSK */ 0,
+      /* Enable Websockets */ 0,
+      /* IP sockets */ COAP_PROTO_NONE
+  );
+
+  // 6. Set IP address to listen to (listen on all interfaces)
   const uint8_t ip_address[] = "0.0.0.0";
   coap_str_const_t ip_address_info = { strlen((char*)ip_address), ip_address };
 
-  // 6. Create server properties container
+  // 7. Create server properties container
   coap_addr_info_t *info_list = coap_resolve_address_info (
     /* Address to resolve */ &ip_address_info,
     /* CoAP port */ 5683,
@@ -77,32 +85,29 @@ void server_coap_init() {
     /* Connection type */ COAP_RESOLVE_TYPE_REMOTE
   );
 
-  // 7. Register CoAP endpoint on all interfaces
+  // 8. Register CoAP endpoint on all interfaces
   for (coap_addr_info_t *info = info_list; info != NULL; info = info->next) {
     coap_endpoint_t *ep = coap_new_endpoint(main_coap_context, &info->addr, info->proto);
     LWIP_ASSERT("Failed to initiialize context", ep != NULL);
   }
 
-  // 8. Deallocate server properties container
+  // 9. Deallocate server properties container
   coap_free_address_info(info_list);
 
-  // 9. Limit number of idle connections (this is strictly required!)
+  //10. Limit number of idle connections (this is strictly required!)
 #if MEMP_NUM_COAPSESSION < 2
 #error Insufficient amount of possible sessions, need at least two!
 #else
   coap_context_set_max_idle_sessions(main_coap_context, MEMP_NUM_COAPSESSION -1);
 #endif
 
-  // 10. Initialize resource
+  // 11. Initialize resource
   coap_resource_t *r = coap_resource_init(coap_make_str_const("random"), 0);
 
   // Check if resource could be created
   if (!r) {
     goto error;
   }
-
-  // 11. Disable observation (TODO: check if required)
-  coap_resource_set_get_observable(r, 0);
   
   // 12. Register handler
   coap_register_handler(r, COAP_REQUEST_GET, handler_random);

@@ -77,7 +77,6 @@
 #include "mbedtls/error.h"
 #include "mbedtls/debug.h"
 #include "mbedtls/platform.h"
-#include "mbedtls/memory_buffer_alloc.h"
 #include "mbedtls/ssl_cache.h"
 #include "mbedtls/ssl_ticket.h"
 
@@ -390,7 +389,7 @@ altcp_mbedtls_handle_rx_appldata(struct altcp_pcb *conn, altcp_mbedtls_state_t *
   }
   do {
     /* allocate a full-sized unchained PBUF_POOL: this is for RX! */
-    struct pbuf *buf = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_POOL);
+    struct pbuf *buf = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_RAM);
     if (buf == NULL) {
       /* We're short on pbufs, try again later from 'poll' or 'recv' callbacks.
          @todo: close on excessive allocation failures or leave this up to upper conn? */
@@ -675,6 +674,7 @@ altcp_tls_init_session(struct altcp_tls_session *session)
     mbedtls_ssl_session_init(&session->data);
 }
 
+#ifdef MBEDTLS_HAVE_TIME
 err_t
 altcp_tls_get_session(struct altcp_pcb *conn, struct altcp_tls_session *session)
 {
@@ -698,6 +698,7 @@ altcp_tls_set_session(struct altcp_pcb *conn, struct altcp_tls_session *session)
   }
   return ERR_ARG;
 }
+#endif
 
 void
 altcp_tls_free_session(struct altcp_tls_session *session)

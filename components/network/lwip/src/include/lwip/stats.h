@@ -487,6 +487,8 @@ void stats_display_sys(struct stats_sys *sys);
 #define stats_display_sys(sys)
 #endif /* LWIP_STATS_DISPLAY */
 
+void stats_netstat(void *ctx);
+
 #ifdef __cplusplus
 }
 #endif

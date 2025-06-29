@@ -490,6 +490,10 @@ void tcp_ext_arg_set_callbacks(struct tcp_pcb *pcb, u8_t id, const struct tcp_ex
 void tcp_ext_arg_set(struct tcp_pcb *pcb, u8_t id, void *arg);
 void *tcp_ext_arg_get(const struct tcp_pcb *pcb, u8_t id);
 #endif
+ 
+#if LWIP_STATS
+int tcp_get_pcbs(struct tcp_pcb **const**list);
+#endif
 
 #ifdef __cplusplus
 }

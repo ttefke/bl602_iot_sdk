@@ -122,7 +122,7 @@ struct stats_sys {
 
 /** SNMP MIB2 stats */
 struct stats_mib2 {
-  /* IP */
+  /* IPv4 */
   u32_t ipinhdrerrors;
   u32_t ipinaddrerrors;
   u32_t ipinunknownprotos;
@@ -139,6 +139,9 @@ struct stats_mib2 {
   u32_t ipreasmreqds;
   u32_t ipforwdatagrams;
   u32_t ipinreceives;
+
+  /* IPv6 */
+  u32_t ip6reasmoks;
 
   /* TCP */
   u32_t tcpactiveopens;
@@ -483,8 +486,6 @@ void stats_display_sys(struct stats_sys *sys);
 #define stats_display_memp(mem, index)
 #define stats_display_sys(sys)
 #endif /* LWIP_STATS_DISPLAY */
-
-void stats_netstat(void *ctx);
 
 #ifdef __cplusplus
 }

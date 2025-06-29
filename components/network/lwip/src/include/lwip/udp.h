@@ -1,6 +1,6 @@
 /**
  * @file
- * UDP API (to be used from TCPIP thread)\n
+ * UDP API (to be used from TCPIP thread)<br>
  * See also @ref udp_raw
  */
 
@@ -185,10 +185,6 @@ void udp_debug_print(struct udp_hdr *udphdr);
 #endif
 
 void udp_netif_ip_addr_changed(const ip_addr_t* old_addr, const ip_addr_t* new_addr);
-
-#if LWIP_STATS
-struct udp_pcb *udp_get_pcbs(void);
-#endif
 
 #ifdef __cplusplus
 }

@@ -11,6 +11,7 @@
 // CoAP includes
 #include <coap3/coap.h>
 #include "include/coap-client.h"
+#include "include/coap-log.h"
 
 // Local variables
 static coap_context_t *main_coap_context;
@@ -115,8 +116,9 @@ void client_coap_init() {
   // 1. Initialize CoAP stack
   coap_startup();
 
-  // 2. Set log level
-  coap_set_log_level(COAP_LOG_NOTICE);
+  // 2. Set logging
+  coap_set_log_handler(coap_log_handler);
+  coap_set_log_level(COAP_LOG_INFO);
 
   // 3. Parse URI
   len = coap_split_uri((const unsigned char *) uri_const, strlen(uri_const), &uri);

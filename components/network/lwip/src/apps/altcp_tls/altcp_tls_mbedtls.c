@@ -76,7 +76,7 @@
 #include "mbedtls/error.h"
 #include "mbedtls/debug.h"
 #include "mbedtls/platform.h"
-//#include "mbedtls/memory_buffer_alloc.h"
+#include "mbedtls/memory_buffer_alloc.h"
 #include "mbedtls/ssl_cache.h"
 
 #include "mbedtls/ssl_internal.h" /* to call mbedtls_flush_output after ERR_MEM */
@@ -359,7 +359,7 @@ altcp_mbedtls_handle_rx_appldata(struct altcp_pcb *conn, altcp_mbedtls_state_t *
   }
   do {
     /* allocate a full-sized unchained PBUF_POOL: this is for RX! */
-    struct pbuf *buf = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_RAM);
+    struct pbuf *buf = pbuf_alloc(PBUF_RAW, PBUF_POOL_BUFSIZE, PBUF_POOL);
     if (buf == NULL) {
       /* We're short on pbufs, try again later from 'poll' or 'recv' callbacks.
          @todo: close on excessive allocation failures or leave this up to upper conn? */
@@ -886,7 +886,7 @@ altcp_tls_free_config(struct altcp_tls_config *conf)
   }
   if (conf->ca) {
     mbedtls_x509_crt_free(conf->ca);
-  }
+  }  
   altcp_mbedtls_free_config(conf);
 }
 

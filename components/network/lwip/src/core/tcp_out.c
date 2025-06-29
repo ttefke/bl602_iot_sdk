@@ -355,7 +355,7 @@ tcp_write_checks(struct tcp_pcb *pcb, u16_t len)
  * it can send them more efficiently by combining them together).
  * To prompt the system to send data now, call tcp_output() after
  * calling tcp_write().
- *
+ * 
  * This function enqueues the data pointed to by the argument dataptr. The length of
  * the data is passed as the len parameter. The apiflags can be one or more of:
  * - TCP_WRITE_FLAG_COPY: indicates whether the new memory should be allocated
@@ -1386,9 +1386,7 @@ tcp_output(struct tcp_pcb *pcb)
         /* In the case of fast retransmit, the packet should not go to the tail
          * of the unacked queue, but rather somewhere before it. We need to check for
          * this case. -STJ Jul 27, 2004 */
-        /* The 'useg* variable can be null. If this is the case, an error is thrown.
-           Added checks for that - Dec 17, 2024 */
-        if ((useg != NULL) && (TCP_SEQ_LT(lwip_ntohl(seg->tcphdr->seqno), lwip_ntohl(useg->tcphdr->seqno)))) {
+        if (TCP_SEQ_LT(lwip_ntohl(seg->tcphdr->seqno), lwip_ntohl(useg->tcphdr->seqno))) {
           /* add segment to before tail of unacked list, keeping the list sorted */
           struct tcp_seg **cur_seg = &(pcb->unacked);
           while (*cur_seg &&
@@ -1399,7 +1397,8 @@ tcp_output(struct tcp_pcb *pcb)
           (*cur_seg) = seg;
         } else {
           /* add segment to tail of unacked list */
-          useg = seg;
+          useg->next = seg;
+          useg = useg->next;
         }
       }
       /* do not queue empty segments on the unacked list */

@@ -36,7 +36,6 @@
  *
  */
 
-#include <stdio.h>
 #include "lwip/opt.h"
 
 #if !NO_SYS /* don't build if not configured for use in lwipopts.h */
@@ -254,7 +253,6 @@ tcpip_inpkt(struct pbuf *p, struct netif *inp, netif_input_fn input_fn)
 
   msg = (struct tcpip_msg *)memp_malloc(MEMP_TCPIP_MSG_INPKT);
   if (msg == NULL) {
-    printf("[LWIP] NO TCP MSG\r\n");
     return ERR_MEM;
   }
 
@@ -263,7 +261,6 @@ tcpip_inpkt(struct pbuf *p, struct netif *inp, netif_input_fn input_fn)
   msg->msg.inp.netif = inp;
   msg->msg.inp.input_fn = input_fn;
   if (sys_mbox_trypost(&tcpip_mbox, msg) != ERR_OK) {
-    printf("[LWIP] NO MBOX\r\n");
     memp_free(MEMP_TCPIP_MSG_INPKT, msg);
     return ERR_MEM;
   }
@@ -522,7 +519,7 @@ tcpip_api_call(tcpip_api_call_fn fn, struct tcpip_api_call_data *call)
  * e.g. the message is allocated once and posted several times from an IRQ
  * using tcpip_callbackmsg_trycallback().
  * Example usage: Trigger execution of an ethernet IRQ DPC routine in lwIP thread context.
- *
+ * 
  * @param function the function to call
  * @param ctx parameter passed to function
  * @return a struct pointer to pass to tcpip_callbackmsg_trycallback().

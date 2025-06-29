@@ -382,7 +382,7 @@
  * This option may be removed in a future version of lwip.
  */
 #if !defined LWIP_HTTPD_FILE_EXTENSION || defined __DOXYGEN__
-#define LWIP_HTTPD_FILE_EXTENSION     0
+#define LWIP_HTTPD_FILE_EXTENSION     1
 #endif
 
 /** HTTPD_PRECALCULATED_CHECKSUM==1: include precompiled checksums for

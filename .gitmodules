@@ -4,3 +4,7 @@
 [submodule "components/3rdparty/kyber"]
 	path = components/3rdparty/kyber
 	url = git@github.com:ttefke/kyber.git
+[submodule "components/3rdparty/libcoap"]
+	path = components/3rdparty/libcoap
+	url = git@github.com:ttefke/libcoap.git
+        branch = v4.3.5-bl602

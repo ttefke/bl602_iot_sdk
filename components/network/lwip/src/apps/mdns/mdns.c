@@ -2811,6 +2811,7 @@ void
 mdns_resp_init(void)
 {
   err_t res;
+  static u8_t flag = 1;
 
   /* LWIP_ASSERT_CORE_LOCKED(); is checked by udp_new() */
 #if LWIP_MDNS_SEARCH
@@ -2829,7 +2830,10 @@ mdns_resp_init(void)
   LWIP_ASSERT("Failed to bind pcb", res == ERR_OK);
   udp_recv(mdns_pcb, mdns_recv, NULL);
 
-  mdns_netif_client_id = netif_alloc_client_data_id();
+  if (1 == flag) {
+      flag = 0;
+      mdns_netif_client_id = netif_alloc_client_data_id();
+  }
 
 #if MDNS_RESP_USENETIF_EXTCALLBACK
   /* register for netif events when started on first netif */
@@ -2850,6 +2854,73 @@ void *mdns_get_service_txt_userdata(struct netif *netif, s8_t slot)
   LWIP_ASSERT("mdns_get_service_txt_userdata: index out of range", slot < MDNS_MAX_SERVICES);
   s = mdns->services[slot];
   return s ? s->txt_userdata : NULL;
+}
+
+/**
+ * @ingroup mdns
+ * Uninitiate MDNS responder. Will close UDP sockets on port 5353
+ */
+void
+mdns_resp_deinit(void)
+{
+    if (mdns_pcb != NULL) {
+        udp_remove(mdns_pcb);
+    }
+#if MDNS_RESP_USENETIF_EXTCALLBACK
+    /* unregister*/
+    netif_remove_ext_callback(&netif_callback);
+#endif
+}
+
+static void srv_txt(struct mdns_service *service, void *txt_userdata)
+{
+    err_enum_t res;
+    res = mdns_resp_add_service_txtitem(service, "path=/", 6);
+    LWIP_ERROR("mdns add service txt failed\n", (res == ERR_OK), return);
+}
+
+int mdns_responder_start(struct netif *netif)
+{
+    int ret, slot = -1;
+
+    if (netif == NULL) {
+        printf("netif is NULL\r\n");
+        return -1;
+    }
+
+    mdns_resp_init();
+    ret = mdns_resp_add_netif(netif, "mdns");
+    if (ret != 0) {
+        mdns_resp_deinit();
+        printf("add netif failed:%d\r\n", ret);
+        return -1;
+    }
+    slot = mdns_resp_add_service(netif, "mdns", "_http", DNSSD_PROTO_TCP, 80, srv_txt, NULL);
+    if (slot < 0) {
+        mdns_resp_remove_netif(netif);
+        mdns_resp_deinit();
+        printf("add server failed:%d\r\n", slot);
+        return -1;
+    }
+    return slot;
+}
+
+int mdns_responder_stop(struct netif *netif)
+{
+    int ret;
+
+    if (netif == NULL) {
+        printf("netif is NULL\r\n");
+        return -1;
+    }
+
+    ret = mdns_resp_remove_netif(netif);
+    if (ret != 0) {
+        printf("remove netif failed:%d\r\n", ret);
+        return -1;
+    }
+    mdns_resp_deinit();
+    return 0;
 }
 
 #endif /* LWIP_MDNS_RESPONDER */

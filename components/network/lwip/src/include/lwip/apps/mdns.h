@@ -121,7 +121,8 @@ err_t mdns_resp_add_service_txtitem(struct mdns_service *service, const char *tx
 void mdns_resp_restart_delay(struct netif *netif, uint32_t delay);
 void mdns_resp_restart(struct netif *netif);
 void mdns_resp_announce(struct netif *netif);
-
+int mdns_responder_start(struct netif *netif);
+int mdns_responder_stop(struct netif *netif);
 /**
  * @ingroup mdns
  * Announce IP settings have changed on netif.

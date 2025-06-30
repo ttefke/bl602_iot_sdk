@@ -68,7 +68,7 @@
 #include <wifi_mgmr_ext.h>
 #include <libfdt.h>
 #include <blog.h>
-#include <mdns_server.h>
+#include <lwip/apps/mdns.h>
 
 #define TASK_PRIORITY_FW            ( 30 )
 #define mainHELLO_TASK_PRIORITY     ( 20 )

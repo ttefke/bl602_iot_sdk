@@ -24,7 +24,7 @@ COMPONENTS_VFS     := romfs
 COMPONENTS_BLE     := blecontroller blestack
 
 INCLUDE_COMPONENTS += freertos_riscv_ram bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd mbedtls vfs yloop utils cli aws-iot httpc netutils blog blog_testc cjson
-INCLUDE_COMPONENTS += easyflash4 atcmd lwip_altcp_tls_mbedtls blsync_ble
+INCLUDE_COMPONENTS += easyflash4 atcmd blsync_ble
 INCLUDE_COMPONENTS += $(COMPONENTS_NETWORK)
 INCLUDE_COMPONENTS += $(COMPONENTS_BLSYS)
 INCLUDE_COMPONENTS += $(COMPONENTS_VFS)

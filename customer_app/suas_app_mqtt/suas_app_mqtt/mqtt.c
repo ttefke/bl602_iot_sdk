@@ -94,8 +94,12 @@ void my_mqtt_incoming_payload_cb(void *arg, const u8_t *data, u16_t len, u8_t fl
         // Only consider payloads that fit into one buffer
         // Check previously assigned topic number
         if (topic_nr == 0) {
-            printf("[%s] Incoming data on topic \"%s\": \"%s\"\r\n",
-                __func__, subscribed_topic, (const char*) data);
+            printf("[%s] Incoming data on topic \"%s\": \"",
+                __func__, subscribed_topic);
+            for (u16_t i = 0; i < len; i++) {
+                printf("%c", data[i]);
+            }
+            printf("\"\r\n");
         } else {
             printf("[%s] Received data for topic we did not subscribe to\r\n",
                 __func__);

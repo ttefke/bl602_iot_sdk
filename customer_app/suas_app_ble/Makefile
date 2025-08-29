@@ -9,7 +9,7 @@ ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please SET BL60X_SDK_PATH ******)
 endif
 
-COMPONENTS_NETWORK := dns_server lwip lwip_dhcpd mbedtls 
+COMPONENTS_NETWORK := dns_server lwip lwip_dhcpd mbedtls-bl602
 COMPONENTS_BLSYS   := bltime blfdt blmtd blota bloop loopadc looprt loopset
 COMPONENTS_BLE     := blecontroller blestack
 

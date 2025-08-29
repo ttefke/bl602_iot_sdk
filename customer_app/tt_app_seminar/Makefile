@@ -25,7 +25,7 @@ COMPONENTS_NETWORK := sntp dns_server
 COMPONENTS_BLSYS   := bltime blfdt blmtd blota bloop loopadc looprt loopset
 COMPONENTS_VFS     := romfs
 
-INCLUDE_COMPONENTS += freertos_riscv_ram bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd vfs yloop utils cli httpc netutils blog blog_testc mbedtls cjson
+INCLUDE_COMPONENTS += freertos_riscv_ram bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd vfs yloop utils cli httpc netutils blog blog_testc mbedtls-bl602 cjson
 INCLUDE_COMPONENTS += easyflash4
 INCLUDE_COMPONENTS += suas_ic
 INCLUDE_COMPONENTS += $(COMPONENTS_NETWORK)

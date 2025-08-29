@@ -23,6 +23,8 @@
 #include "network_interface.h"
 #include "network_platform.h"
 
+#include "mbedtls/bl602_port.h"
+
 const char *TAG = "aws_iot";
 
 #define BFL_LOGD(TAG, format, ...) printf("DEBUG " format "\r\n", ##__VA_ARGS__)
@@ -95,6 +97,11 @@ static void aws_debug( void *ctx, int level, const char *file, int line, const c
     printf("[AWS] %s:%04d: %s\r", file, line, str);
 }
 #endif
+
+int rng_poll(void *data, unsigned char *output, size_t len)
+{
+  return mbedtls_hardware_poll(data, output, len, 0);
+}
 
 IoT_Error_t iot_tls_connect(Network *pNetwork, TLSConnectParams *params) 
 {
@@ -170,13 +177,14 @@ IoT_Error_t iot_tls_connect(Network *pNetwork, TLSConnectParams *params)
     /* Parse client private key... */
     if (pNetwork->tlsConnectParams.pDevicePrivateKeyLocation[0] == '/') {
         BFL_LOGD(TAG, "Loading client private key from file...");
-        ret = mbedtls_pk_parse_keyfile(&(tlsDataParams->pkey), pNetwork->tlsConnectParams.pDevicePrivateKeyLocation, "");
+        ret = mbedtls_pk_parse_keyfile(&(tlsDataParams->pkey), pNetwork->tlsConnectParams.pDevicePrivateKeyLocation, "", rng_poll, NULL);
     } else {
         BFL_LOGD(TAG, "Loading embedded client private key...");
         ret = mbedtls_pk_parse_key(&(tlsDataParams->pkey),
                                    (const unsigned char *)pNetwork->tlsConnectParams.pDevicePrivateKeyLocation,
                                    strlen(pNetwork->tlsConnectParams.pDevicePrivateKeyLocation)+1,
-                                   (const unsigned char *)"", 0);
+                                   (const unsigned char *)"", 0,
+                                   rng_poll, NULL);
     }
     if (ret != 0) {
         BFL_LOGE(TAG, "failed!  mbedtls_pk_parse_key returned -0x%x while parsing private key", -ret);
@@ -248,11 +256,11 @@ IoT_Error_t iot_tls_connect(Network *pNetwork, TLSConnectParams *params)
         BFL_LOGE(TAG, "failed! mbedtls_ssl_set_hostname returned %d", ret);
         return SSL_CONNECTION_ERROR;
     }
-    BFL_LOGD(TAG, "SSL state connect : %d ", tlsDataParams->ssl.state);
+    BFL_LOGD(TAG, "SSL state connect : %d ", tlsDataParams->ssl.MBEDTLS_PRIVATE(state));
     mbedtls_ssl_set_bio(&(tlsDataParams->ssl), &(tlsDataParams->server_fd), mbedtls_net_send, NULL, mbedtls_net_recv_timeout);
 
     BFL_LOGD(TAG, "ok");
-    BFL_LOGD(TAG, "SSL state connect : %d ", tlsDataParams->ssl.state);
+    BFL_LOGD(TAG, "SSL state connect : %d ", tlsDataParams->ssl.MBEDTLS_PRIVATE(state));
     BFL_LOGD(TAG, "Performing the SSL/TLS handshake...");
     while ((ret = mbedtls_ssl_handshake(&(tlsDataParams->ssl))) != 0) {
         if(ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
@@ -336,7 +344,7 @@ IoT_Error_t iot_tls_read(Network *pNetwork, unsigned char *pMsg, size_t len, Tim
     size_t rxLen = 0;
     int ret;
 
-    read_timeout = ssl_conf->read_timeout;
+    read_timeout = ssl_conf->MBEDTLS_PRIVATE(read_timeout);
 
     while (len > 0) {
         /* Make sure we never block on read for longer than timer has left,

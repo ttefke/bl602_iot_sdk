@@ -8,3 +8,6 @@
 	path = components/3rdparty/libcoap
 	url = git@github.com:ttefke/libcoap.git
         branch = v4.3.5-bl602
+[submodule "components/security/mbedtls-bl602"]
+	path = components/security/mbedtls-bl602
+	url = git@github.com:ttefke/mbedtls.git

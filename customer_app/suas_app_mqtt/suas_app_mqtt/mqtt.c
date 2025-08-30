@@ -58,6 +58,8 @@ void my_mqtt_publish() {
     if (!mqtt_connected) {
         printf("[%s] Not connected to a broker, connect first\r\n", __func__);
     } else {
+        printf("[%s] Connected to a broker, publishing message\r\n", __func__);
+
         const char payload[] = "test message";
         err_t err;
         u8_t retain = 0; // Set retain field (0 or 1)

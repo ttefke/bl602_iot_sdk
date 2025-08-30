@@ -150,9 +150,11 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
 void event_cb_key_event(input_event_t *event, void *private_data) {
   if (event->code == KEY_3) {
     // Disconnect on long button press
+    printf("[MQTT] Disconnecting\r\n");
     my_mqtt_disconnect();
   } else {
     // Publish MQTT message
+    printf("[MQTT] Publishing message\r\n");
     my_mqtt_publish();
   }
 }

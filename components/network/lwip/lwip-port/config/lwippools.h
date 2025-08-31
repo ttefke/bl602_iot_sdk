@@ -17,54 +17,23 @@
 #include <coap3/coap_net.h>
 #include <coap3/coap_resource.h>
 #include <coap3/coap_subscribe.h>
-#ifdef COAP_WITH_LIBTINYDTLS
-
-#ifndef LWIP_TINYDTLS_LOCAL_FIX
-#define LWIP_TINYDTLS_LOCAL_FIX
-
-#if defined(WITH_LWIP_NO_SOCKET)
-#include <lwip/ip_addr.h>
-/* Local copies of struct to simplify #include nightmare */
-typedef struct {
-  unsigned char size;     /**< size of session_t::addr */
-  unsigned short port;    /**< transport layer port */
-  ip_addr_t addr;         /**< session IP address */
-  int ifindex;            /**< network interface index */
-} l_session_t;
-#else /* ! WITH_LWIP_NO_SOCKET */
-typedef struct {
-  char dummy[36];
-} l_session_t;
-#endif /* ! WITH_LWIP_NO_SOCKET */
-
-typedef struct l_coap_tiny_context_t {
-  struct dtls_context_t *dtls_context;
-  coap_context_t *coap_context;
-  coap_dtls_pki_t setup_data;
-  coap_binary_t *priv_key;
-  coap_binary_t *pub_key;
-} l_coap_tiny_context_t;
-
-#endif /* LWIP_TINYDTLS_LOCAL_FIX */
-#endif /* COAP_WITH_LIBTINYDTLS */
 
 #ifndef MEMP_NUM_COAPCONTEXT
 #define MEMP_NUM_COAPCONTEXT 1
 #endif
-
 #ifndef MEMP_NUM_COAPENDPOINT
 #if COAP_DISABLE_TCP
-#ifdef COAP_WITH_LIBTINYDTLS
+#ifdef COAP_WITH_LIBMBEDTLS
 #define MEMP_NUM_COAPENDPOINT 2
-#else /* ! COAP_WITH_LIBTINYDTLS */
+#else /* ! COAP_WITH_LIBMBEDTLS */
 #define MEMP_NUM_COAPENDPOINT 1
-#endif /* ! COAP_WITH_LIBTINYDTLS */
+#endif /* ! COAP_WITH_LIBMBEDTLS */
 #else /* ! COAP_DISABLE_TCP */
-#ifdef COAP_WITH_LIBTINYDTLS
+#ifdef COAP_WITH_LIBMBEDTLS
 #define MEMP_NUM_COAPENDPOINT 4
-#else /* ! COAP_WITH_LIBTINYDTLS */
+#else /* ! COAP_WITH_LIBMBEDTLS */
 #define MEMP_NUM_COAPENDPOINT 2
-#endif /* ! COAP_WITH_LIBTINYDTLS */
+#endif /* ! COAP_WITH_LIBMBEDTLS */
 #endif /* ! COAP_DISABLE_TCP */
 #endif
 

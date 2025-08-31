@@ -63,9 +63,7 @@ a lot of data that needs to be copied, this should be set high. */
 #endif
 /* MEMP_NUM_UDP_PCB: the number of UDP protocol control blocks. One
    per active UDP "connection". */
-#if !WITH_COAP
 #define MEMP_NUM_UDP_PCB        6
-#endif
 /* MEMP_NUM_TCP_PCB: the number of simulatenously active TCP
    connections. */
 #if !WITH_COAP

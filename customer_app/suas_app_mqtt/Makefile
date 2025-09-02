@@ -15,7 +15,7 @@ CFLAGS += -DLWIP_ALTCP_TLS_MBEDTLS
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)
 endif
-COMPONENTS_NETWORK := dns_server lwip_dhcpd lwip mbedtls-bl602
+COMPONENTS_NETWORK := dns_server lwip_dhcpd lwip mbedtls-bl602 sniffer
 COMPONENTS_BLSYS   := bltime blfdt bloop looprt loopset vfs yloop utils cli blog
 COMPONENTS_HAL	   := bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv
 

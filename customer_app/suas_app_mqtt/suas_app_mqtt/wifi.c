@@ -17,6 +17,7 @@
 #include <loopset.h>
 #include <vfs.h>
 #include <wifi_mgmr_ext.h>
+#include <sniffer.h>
 
 #include "mqtt.h"
 #include "wifi.h"
@@ -127,6 +128,8 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
       break;
     case CODE_WIFI_ON_GOT_IP:
       printf("[WIFI] Received an IP address\r\n");
+      wifi_mgmr_sniffer_enable();
+      wifi_mgmr_sniffer_register(NULL, sniffer_suas_cb);
 
       // Initialize MQTT connection
       my_mqtt_connect();

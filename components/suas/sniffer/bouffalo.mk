@@ -1,0 +1,6 @@
+COMPONENT_ADD_INCLUDEDIRS += .
+COMPONENT_SRCDIRS := .
+NAME := sniffer
+
+COMPONENT_SRCS := sniffer.c
+COMPONENT_OBJS := $(patsubst %.c,%.o, $(COMPONENT_SRCS))

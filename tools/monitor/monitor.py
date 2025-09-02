@@ -1,3 +1,6 @@
+#!/bin/env python3
+
+import argparse
 import errno
 import os
 import serial
@@ -6,22 +9,30 @@ import struct
 import time
 import threading
 import tkinter as tk
+from tkinter import messagebox
 from tkinter.filedialog import asksaveasfile
 from tkinter.scrolledtext import ScrolledText
 from tkinter import ttk
 
 class Application(tk.Tk):
-    def __init__(self):
+    def __init__(self, device, baudrate, fifoPath):
         # Init window
         super().__init__()
 
+        # Create configuration
+        self.conf = {
+            "device": device,
+            "baudrate": baudrate,
+            "fifoPath": fifoPath
+        }
+
         # Apply new title
-        self.title("BL602 Monitor")
+        self.title(f"BL602 Monitor - {device}")
 
         # Set height, width and position
         screenWidth = self.winfo_screenwidth()
         screenHeight = self.winfo_screenheight()
-        rootWidth = int(screenHeight * 19 / 9 / 2)
+        rootWidth = int(screenHeight * 16 / 9 / 2)
         rootHeight = int(screenHeight / 2)
         centerX = int(screenWidth/2 - rootWidth/2)
         centerY = int(screenHeight/2 - rootHeight/2)
@@ -31,7 +42,7 @@ class Application(tk.Tk):
         menubar = tk.Menu(self)
         self.config(menu=menubar)
         fileMenu = tk.Menu(menubar, tearoff=False)
-        fileMenu.add_command(label="Save", command=self.saveToFile)
+        fileMenu.add_command(label="Save serial log", command=self.saveToFile)
         fileMenu.add_command(label="Exit", command=self.exit)
         menubar.add_cascade(label="File", menu=fileMenu, underline=0)
 
@@ -53,7 +64,7 @@ class Application(tk.Tk):
         self.sendSerialInput.pack(padx = (5, 10), pady = (5, 10), fill=tk.X, anchor=tk.SE)
 
         # Create PCAP output object
-        self.pcapOutput = BinaryToPCAP()
+        self.pcapOutput = BinaryToPCAP(self)
 
         # Start reading serial console
         self.serialConsoleReading = 1
@@ -77,14 +88,8 @@ class Application(tk.Tk):
         fileName.close()
 
     def readSerial(self):
-        # Default configuration
-        conf = {
-            "device": "/dev/ttyUSB0",
-            "baudrate": 2000000
-        }
-
         try:
-            with serial.Serial(conf["device"], conf["baudrate"],
+            with serial.Serial(self.conf["device"], self.conf["baudrate"],
                 bytesize=serial.EIGHTBITS, parity = serial.PARITY_NONE,
                 stopbits = serial.STOPBITS_ONE, xonxoff = False, rtscts= False, timeout=1) as ser:
 
@@ -118,7 +123,7 @@ class Application(tk.Tk):
                                 self.pcapOutput.handleReceivedFrame(bytes(line[5:], encoding="utf-8"))
                             else:
                                 # Output line
-                                line = line + "\n"
+                                line = f"{line}\n"
                                 self.text.configure(state="normal")
                                 self.text.insert("end", line)
                                 self.text.configure(state="disabled")
@@ -127,10 +132,14 @@ class Application(tk.Tk):
                             print(f"Could not decode line: {line}")
                             print(f"Exception: {e}")
         except KeyboardInterrupt as e:
-            print("Bye")
+            self.exit()
+        except RuntimeError as e:
+            self.exit()
+        except serial.SerialException as e:
+            confirmation = messagebox.showerror("Serial device not found", f"The specified serial device ({self.conf["device"]}) does not exist")
+            os._exit(1) # here we terminate everything directly
         except Exception as e:
-            print("Could not open port: ", e)
-
+            print(f"Could not open port: {e}")
 
     # Binding to send text if enter is pressed
     def sendSerialBind(self, textEntry):
@@ -147,17 +156,24 @@ class Application(tk.Tk):
     # Exit function
     def exit(self):
         self.serialConsoleReading = 0 # Stop reading serial console
-        self.destroy() # Destroy GUI
+        try:
+            self.destroy() # Destroy GUI
+        except Exception:
+            pass
+    
+    # Get configuration
+    def getConfiguration(self):
+        return self.conf
 
 # motivated from https://github.com/g-oikonomou/sensniff/blob/master/sensniff.py
 class BinaryToPCAP():
-    def __init__(self):
+    def __init__(self, application):
         # Generate header https://wiki.wireshark.org/Development/LibpcapFileFormat
 
         # Constants
         self.DLT_IEEE802_11 = 105
-        self.PCAP_GLOBAL_HEADER_FORMAT = '<LHHlLLL'
-        self.PCAP_FRAME_HEADER_FORMAT = '<LLLL'
+        self.PCAP_GLOBAL_HEADER_FORMAT = "<LHHlLLL"
+        self.PCAP_FRAME_HEADER_FORMAT = "<LLLL"
 
         PCAP_MAGIC_NUMBER = 0xA1B2C3D4
         PCAP_VERSION_MAJOR = 2
@@ -167,7 +183,8 @@ class BinaryToPCAP():
         PCAP_SNAPLEN = 65535
         PCAP_NETWORK = self.DLT_IEEE802_11
 
-        self.outputFifoPath = "/tmp/sniff"
+        self.app = application
+        self.outputFifoPath = self.app.getConfiguration()["fifoPath"]
 
         # Create global header
         self.PCAP_GLOBAL_HEADER = bytearray(struct.pack(self.PCAP_GLOBAL_HEADER_FORMAT,
@@ -197,8 +214,8 @@ class BinaryToPCAP():
                 else:
                     print(f"Queue {self.outputFifoPath} already exists - reusing it")
             else:
-                print(f"Can not create fifo queue at {self.outputFifoPath}: {e}")
-                os.exit(1)
+                print(f"Can not create FIFO queue at {self.outputFifoPath}: {e}")
+                self.app.exit()
 
     def openFifoQueue(self):
         # Open fifo queue
@@ -207,7 +224,7 @@ class BinaryToPCAP():
                 fileDescriptor = os.open(self.outputFifoPath, os.O_NONBLOCK | os.O_WRONLY)
                 self.outputFifo = os.fdopen(fileDescriptor, "wb")
             except OSError as e:
-                print("Could not open fifo queue, is Wireshark reading?")
+                print("Could not open FIFO queue, is Wireshark reading?")
                 self.outputFifo = None
                 self.requiresPCAPHeader = True
 
@@ -243,11 +260,23 @@ class BinaryToPCAP():
                 self.outputFifo.flush()
             except IOError as e:
                 if e.errno == errno.EPIPE:
-                    print("Remote end stopped reading")
+                    print("Wireshark stopped reading")
                     self.outputFifo = None
                     self.requiresPCAPHeader = True
 
 
 if __name__ == "__main__":
-    app = Application()
-    app.mainloop()
+    # Read command line parameters
+    parser = argparse.ArgumentParser(description="BL602 serial monitor")
+    parser.add_argument("-d", "--device", default="/dev/ttyUSB0", help="Serial device to connect to (default: /dev/ttyUSB0).")
+    parser.add_argument("-b", "--baudrate", default=2000000, help="Baudrate used for communication (default: 2000000).")
+    parser.add_argument("-f", "--fifoPath", default="/tmp/sniff", help="Path to the FIFO queue used to pipe captured network traffic (default: /tmp/sniff).")
+    args = parser.parse_args()
+
+    # Start application
+    app = Application(args.device, args.baudrate, args.fifoPath)
+    try:
+        app.mainloop()
+    except KeyboardInterrupt as e:
+        app.exit()
+    

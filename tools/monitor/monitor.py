@@ -120,7 +120,7 @@ class Application(tk.Tk):
 
                             # Check if line is packet
                             if line.startswith("#pkt#"):
-                                self.pcapOutput.handleReceivedFrame(bytes(line[5:], encoding="utf-8"))
+                                self.pcapOutput.handleReceivedFrame(line[5:])
                             else:
                                 # Output line
                                 line = f"{line}\n"
@@ -171,7 +171,8 @@ class BinaryToPCAP():
         # Generate header https://wiki.wireshark.org/Development/LibpcapFileFormat
 
         # Constants
-        self.DLT_IEEE802_11 = 105
+        self.DLT_TYPE = 101 # Link layer packet type (here we set it to IP wihtout link-layer header as we can not capture this one with lwIP)
+        # See https://www.tcpdump.org/linktypes.html for all types
         self.PCAP_GLOBAL_HEADER_FORMAT = "<LHHlLLL"
         self.PCAP_FRAME_HEADER_FORMAT = "<LLLL"
 
@@ -181,7 +182,7 @@ class BinaryToPCAP():
         PCAP_TIMEZONE = 0
         PCAP_SIGFIGS = 0
         PCAP_SNAPLEN = 65535
-        PCAP_NETWORK = self.DLT_IEEE802_11
+        PCAP_NETWORK = self.DLT_TYPE
 
         self.app = application
         self.outputFifoPath = self.app.getConfiguration()["fifoPath"]
@@ -234,36 +235,58 @@ class BinaryToPCAP():
         seconds = int(timestamp)
         microseconds = int((timestamp - seconds) * 1000000)
 
-        # Measure length of received frame
-        length = len(raw)
-
-        # Generate PCAP header
-        header = struct.pack(self.PCAP_FRAME_HEADER_FORMAT, seconds, microseconds, length, length)
-
-        # Generate PCAP
-        pcap = bytearray(header) + raw
-        
-        # Pipe PCAP
-        if self.createdFifo is False:
-            self.createFifo()
-
-        if self.outputFifo is None:
-            self.openFifoQueue()
-        
-        if self.outputFifo is not None:
+        # Generate PCAP        
+        try:
+            # Filter out packets with invalid header length (< 20), should be always 20 with lwIP
             try:
-                if self.requiresPCAPHeader is True:
-                    self.requiresPCAPHeader = False
-                    self.outputFifo.write(self.PCAP_GLOBAL_HEADER)
+                if int(raw[1]) < 5: # 5 equals 20 in the representation the string comes in
+                    print("Dropping packet with invalid header")
+                    return
+            except ValueError as e:
+                print("Dropping packet with invalid header")
+            
+            # Sometimes it occurs a packet has an odd number of characters.
+            # This should not happen, because this means we received only half a byte (four bits) somewhere when converting the string to a byte
+            # As workaround, we append a zero to ensure the length matches with the expected one.
+            # The assumption here is that the last byte contains no meaningful information.
+            # In some cases it might be better to drop the packet instead (revisit this in the future after some testing).
+            # Apparently, this affects especially network management protocols (BOOTP, IGMP, MDNS)
+            if (len(raw) % 2 != 0):
+                print("Suspicious body len, appending a zero")
+                raw = raw + "0"
 
-                self.outputFifo.write(pcap)
-                self.outputFifo.flush()
-            except IOError as e:
-                if e.errno == errno.EPIPE:
-                    print("Wireshark stopped reading")
-                    self.outputFifo = None
-                    self.requiresPCAPHeader = True
+            body = bytearray.fromhex(raw)
 
+            # Measure length of body
+            length = len(body)
+
+            # Generate PCAP header
+            header = bytearray(struct.pack(self.PCAP_FRAME_HEADER_FORMAT, seconds, microseconds, length, length))
+
+            pcap = header + body
+            
+            # Pipe PCAP
+            if self.createdFifo is False:
+                self.createFifo()
+
+            if self.outputFifo is None:
+                self.openFifoQueue()
+            
+            if self.outputFifo is not None: 
+                try:
+                    if self.requiresPCAPHeader is True:
+                        self.requiresPCAPHeader = False
+                        self.outputFifo.write(self.PCAP_GLOBAL_HEADER)
+
+                    self.outputFifo.write(pcap)
+                    self.outputFifo.flush()
+                except IOError as e:
+                    if e.errno == errno.EPIPE:
+                        print("Wireshark stopped reading")
+                        self.outputFifo = None
+                        self.requiresPCAPHeader = True
+        except Exception as e:
+            print(f"Dropped a packet that could not be converted to pcap: {e}")
 
 if __name__ == "__main__":
     # Read command line parameters

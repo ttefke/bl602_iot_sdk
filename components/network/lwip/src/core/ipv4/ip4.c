@@ -59,6 +59,10 @@
 
 #include <string.h>
 
+#if WITH_SNIFFER
+#include <lwip/bl602_sniffer.h>
+#endif
+
 #ifdef LWIP_HOOK_FILENAME
 #include LWIP_HOOK_FILENAME
 #endif
@@ -488,6 +492,10 @@ ip4_input(struct pbuf *p, struct netif *inp)
   }
 
 #ifdef LWIP_HOOK_IP4_INPUT
+#if WITH_SNIFFER
+  // Already inspect packet here, as it could be gone later
+  sniffer_inspect(p);
+#endif
   if (LWIP_HOOK_IP4_INPUT(p, inp)) {
     /* the packet has been eaten */
     return ERR_OK;
@@ -714,6 +722,12 @@ ip4_input(struct pbuf *p, struct netif *inp)
   ip4_debug_print(p);
   LWIP_DEBUGF(IP_DEBUG, ("ip4_input: p->len %"U16_F" p->tot_len %"U16_F"\n", p->len, p->tot_len));
 
+#if WITH_SNIFFER && !defined(LWIP_HOOK_IP4_INPUT)
+  // Usually the packet should be inspected here.
+  // So that it is ensured all checks passed.
+  sniffer_inspect(p);
+#endif
+
   ip_data.current_netif = netif;
   ip_data.current_input_netif = inp;
   ip_data.current_ip4_header = iphdr;
@@ -845,12 +859,17 @@ ip4_output_if_opt(struct pbuf *p, const ip4_addr_t *src, const ip4_addr_t *dest,
     }
   }
 
+  err_t result;
 #if IP_OPTIONS_SEND
-  return ip4_output_if_opt_src(p, src_used, dest, ttl, tos, proto, netif,
+  result = ip4_output_if_opt_src(p, src_used, dest, ttl, tos, proto, netif,
                                ip_options, optlen);
 #else /* IP_OPTIONS_SEND */
-  return ip4_output_if_src(p, src_used, dest, ttl, tos, proto, netif);
+#if WITH_SNIFFER
+  #warning "Sniffer only works with options"
+#endif
+  result = ip4_output_if_src(p, src_used, dest, ttl, tos, proto, netif);
 #endif /* IP_OPTIONS_SEND */
+  return result;
 }
 
 /**
@@ -1036,6 +1055,10 @@ ip4_output_if_opt_src(struct pbuf *p, const ip4_addr_t *src, const ip4_addr_t *d
     return ip4_frag(p, netif, dest);
   }
 #endif /* IP_FRAG */
+
+#if WITH_SNIFFER
+  sniffer_inspect(p);
+#endif
 
   LWIP_DEBUGF(IP_DEBUG, ("ip4_output_if: call netif->output()\n"));
   return netif->output(netif, p, dest);

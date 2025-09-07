@@ -44,7 +44,7 @@
 #include <utils_log.h>
 // #include "log/log.h"
 
-#define FDT_MAGIC_SIZE    4
+#define FDT_MAGIC_SIZE    40
 #define MAX_VERSION 17
 
 #define ALIGN(x, a)    (((x) + ((a) - 1)) & ~((a) - 1))
@@ -205,8 +205,8 @@ static void dump_blob(void *blob, bool debug)
         if (addr == 0 && size == 0)
             break;
 
-        printf("/memreserve/ %#"PRIx64" %#"PRIx64";\r\n",
-               addr, size);
+//        printf("/memreserve/ %#"PRIx64" %#"PRIx64";\r\n",
+//               addr, size);
     }
 
     p = p_struct;

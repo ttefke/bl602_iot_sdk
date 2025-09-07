@@ -18,7 +18,4 @@
 
 /* Constants */
 #define NAME_LEN        30
-
-/* Connection data structure */
-struct bt_conn *default_conn;
 #endif

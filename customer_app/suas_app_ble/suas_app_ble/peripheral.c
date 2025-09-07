@@ -17,6 +17,9 @@
 #include "include/ble.h"
 #include "include/peripheral.h"
 
+/* Connection data structure */
+extern struct bt_conn *default_conn;
+
 /* Function prototypes */
 void ble_bl_ccc_cfg_changed(const struct bt_gatt_attr *attr, u16_t vblfue);
 int ble_blf_recv(struct bt_conn *conn,

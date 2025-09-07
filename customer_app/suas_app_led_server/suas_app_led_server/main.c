@@ -31,6 +31,10 @@ static HeapRegion_t xHeapRegions[] =
         {NULL, 0},
         {NULL, 0}};
 
+
+// LED state
+struct led_state led_state;
+
 /* main function, execution starts here */
 void bfl_main(void)
 {

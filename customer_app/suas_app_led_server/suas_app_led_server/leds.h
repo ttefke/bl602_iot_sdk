@@ -20,7 +20,9 @@ struct led_state {
    uint8_t state_led_red;
    uint8_t state_led_green;
    uint8_t state_led_blue;
-} led_state;
+};
+
+extern struct led_state led_state;
 
 /* function to apply current led_state*/
 void apply_led_state();

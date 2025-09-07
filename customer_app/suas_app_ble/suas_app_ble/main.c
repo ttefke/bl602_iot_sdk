@@ -59,6 +59,9 @@ static HeapRegion_t xHeapRegions[] =
 /* Used to differentiate between central and peripheral role */
 static enum app_ble_role app_role;
 
+/* Connection data structure */
+struct bt_conn *default_conn;
+
 /* Helper function to turn off all LEDs */
 void board_leds_off() {
   bl_gpio_output_set(LED_BLUE, 1);

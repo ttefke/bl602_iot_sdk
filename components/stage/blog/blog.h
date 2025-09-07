@@ -57,7 +57,7 @@ const static uint32_t BLOG_HARD_DECLARE_DISABLE __attribute__((used)) = 0;
 /* component level */
 #define _REFC_LEVEL(name)            _fsymc_level_##name
 #define REFC_LEVEL(name)             _REFC_LEVEL(name)
-#define _DEFC_LEVEL(name)            blog_level_t REFC_LEVEL(name)
+#define _DEFC_LEVEL(name)            static blog_level_t REFC_LEVEL(name)
 #define DECLARE_C_LEVEL(name)        _DEFC_LEVEL(name)
 /* component info */
 #define _REFC_INFO(name)             _fsymc_info_##name

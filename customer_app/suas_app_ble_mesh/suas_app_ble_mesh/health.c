@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 // Own header
-#include "include/health.h"
+//#include "include/health.h"
 
 // Define health service
 void attention_on(struct bt_mesh_model *mod) {
@@ -22,7 +22,7 @@ const struct bt_mesh_health_srv_cb health_cb = {
 	.attn_off = attention_off,
 };
 
-struct bt_mesh_health_srv health_srv = {
+struct bt_mesh_health_srv my_health_srv = {
 	.cb = &health_cb,
 };
 

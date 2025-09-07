@@ -4,10 +4,10 @@
 #include <main.h>
 
 // Struct to set provisioning callback functions
-struct bt_mesh_prov prov;
+extern struct bt_mesh_prov prov;
 
 // Device UUID
-uint8_t dev_uuid[16];
+extern uint8_t dev_uuid[16];
 
 // Function prototype
 void mesh_node_provision();

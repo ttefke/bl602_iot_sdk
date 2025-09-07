@@ -8,6 +8,11 @@
 #include <hal_i2c.h>
 #include "grove_dls.h"
 
+uint16_t ch0, ch1;
+// calculate lux
+unsigned long chScale;
+unsigned long channel0, channel1;
+
 int init_grove_dls() {
     uint8_t power_up[1] = {0x03};
     uint8_t power_down[1] =  {0x00};

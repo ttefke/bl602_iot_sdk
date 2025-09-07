@@ -23,11 +23,6 @@ unsigned long readVisibleLux();
 #define GROVE_DLS_1_1_CHANNEL_1L 0x8E
 #define GROVE_DLS_1_1_CHANNEL_1H 0x8F
 
-uint16_t ch0, ch1;
-// calculate lux
-unsigned long chScale;
-unsigned long channel0, channel1;
-
 #define LUX_SCALE 14           // scale by 2^14
 #define RATIO_SCALE 9          // scale ratio by 2^9
 #define CH_SCALE 10            // scale channel values by 2^10

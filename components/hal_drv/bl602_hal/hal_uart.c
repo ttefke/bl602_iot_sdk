@@ -457,6 +457,6 @@ void hal_uart_setbaud(uart_dev_t *uart, uint32_t baud)
 
 void hal_uart_setconfig(uart_dev_t *uart, uint32_t baud, hal_uart_parity_t parity)
 {
-    bl_uart_setconfig(uart->port, baud, parity);
+    bl_uart_setconfig(uart->port, baud, (UART_Parity_Type) parity);
 }
 

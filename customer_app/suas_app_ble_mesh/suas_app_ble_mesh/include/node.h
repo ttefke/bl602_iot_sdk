@@ -11,7 +11,9 @@
 struct state {
 	uint8_t data;
 	uint8_t transaction_id;
-} state;
+};
+
+extern struct state state;
 
 // Function prototypes
 void mesh_init();

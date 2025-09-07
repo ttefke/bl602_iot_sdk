@@ -68,7 +68,7 @@ int bl_sha_mutex_give()
 
 void bl_sha_init(bl_sha_ctx_t *ctx, const bl_sha_type_t type)
 {
-    const SEC_ENG_SHA_Type sha_type = type; // bl_sha_type_t is the same as SEC_ENG_SHA_Type in driver
+    const SEC_ENG_SHA_Type sha_type = (SEC_ENG_SHA_Type) type; // bl_sha_type_t is the same as SEC_ENG_SHA_Type in driver
 
     Sec_Eng_SHA256_Init((SEC_Eng_SHA256_Ctx *)&ctx->sha_ctx, BL_SHA_ID, sha_type, ctx->tmp, ctx->pad);
     Sec_Eng_SHA_Start(BL_SHA_ID);

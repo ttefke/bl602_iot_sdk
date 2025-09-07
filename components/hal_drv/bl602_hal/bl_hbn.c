@@ -157,7 +157,7 @@ int bl_hbn_enter(hbn_type_t *hbn, uint32_t *time)
     }
 
     cfg.sleepTime = (*time + 999) / 1000;
-    if ((!hbn->buf) || ((hbn->buflen != 1) && (hbn->buflen != 2))) {
+    if (((hbn->buflen != 1) && (hbn->buflen != 2))) {
         printf("not support arg.\r\n");
         return -1;
     }

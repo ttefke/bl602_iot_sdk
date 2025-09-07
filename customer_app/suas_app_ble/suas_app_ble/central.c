@@ -26,6 +26,9 @@ static struct bt_gatt_subscribe_params subscribe_params;
 static struct bt_gatt_exchange_params exchange_params;
 static u16_t bt_gatt_write_without_handle = 0;
 
+/* Connection data structure */
+extern struct bt_conn *default_conn;
+
 /* Send message to peripheral device */
 void ble_central_write() {
     // Data to send

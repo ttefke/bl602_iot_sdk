@@ -193,7 +193,7 @@ void ATTR_TCM_SECTION BLSP_Boot2_Get_Efuse_Cfg(Boot_Efuse_HW_Config *efuseCfg)
 {
     uint32_t tmp;
 
-    HBN_Set_ROOT_CLK_Sel(GLB_ROOT_CLK_XTAL);
+    HBN_Set_ROOT_CLK_Sel((HBN_ROOT_CLK_Type) GLB_ROOT_CLK_XTAL);
 
     /* Get sign and aes type*/
     EF_Ctrl_Read_Secure_Boot((EF_Ctrl_Sign_Type*)efuseCfg->sign, (EF_Ctrl_SF_AES_Type*)efuseCfg->encrypted);

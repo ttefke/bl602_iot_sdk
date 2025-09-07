@@ -1955,7 +1955,7 @@ enum cfg_msg_tag
     CFG_MAX,
 };
 
-struct
+typedef struct
 {
     /// TASK
     uint32_t task;

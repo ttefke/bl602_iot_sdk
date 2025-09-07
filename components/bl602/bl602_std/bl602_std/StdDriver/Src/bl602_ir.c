@@ -885,7 +885,7 @@ IR_RxMode_Type IR_LearnToInit(uint32_t* data,uint8_t* length)
         if(timeoutCnt == 0){
             IR_Disable(IR_RX);
 
-            return TIMEOUT;
+            return (IR_RxMode_Type) TIMEOUT;
         }
     }
 

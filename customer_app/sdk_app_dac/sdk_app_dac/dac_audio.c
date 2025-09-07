@@ -92,7 +92,7 @@ GLB_GPIP_DAC_ChanB_Cfg_Type chBCfg = {
     .chanCovtEn = ENABLE,
     .outputEn = ENABLE,
     .chanEn = ENABLE,
-    .src = GPIP_DAC_ChanA_SRC_DMA
+    .src = (GPIP_DAC_ChanB_SRC_Type) GPIP_DAC_ChanA_SRC_DMA
 };
 
 

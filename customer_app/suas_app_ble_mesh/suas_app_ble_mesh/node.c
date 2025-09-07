@@ -21,6 +21,8 @@
 #include "include/provisioning.h"
 #include "include/server.h"
 
+struct state state = {0, 0};
+
 // Server configuration
 struct bt_mesh_cfg_srv cfg_srv = {
 	.relay = BT_MESH_RELAY_ENABLED,
@@ -68,7 +70,7 @@ BT_MESH_MODEL_PUB_DEFINE(gen_onoff_pub_cli, NULL, 2 + 2);
 // 4: User data structure that is being exchanged
 struct bt_mesh_model models[] = {
 	BT_MESH_MODEL_CFG_SRV(&cfg_srv),
-	BT_MESH_MODEL_HEALTH_SRV(&health_srv, &health_pub),
+	BT_MESH_MODEL_HEALTH_SRV(&my_health_srv, &health_pub),
 	BT_MESH_MODEL(BT_MESH_MODEL_ID_GEN_ONOFF_SRV, gen_onoff_srv_op, &gen_onoff_pub_srv, &state),
 	BT_MESH_MODEL(BT_MESH_MODEL_ID_GEN_ONOFF_CLI, gen_onoff_cli_op, &gen_onoff_pub_cli, &state),
 };
@@ -99,6 +101,9 @@ struct bt_mesh_msg_ctx network_configuration = {
 	.app_idx = MESH_APP_ID, // Application ID
 	.addr = MESH_GROUP_ADDRESS, // Receiver address
 };
+
+/* Device UUID */
+uint8_t dev_uuid[16];
 
 // Bluetooth started callback function
 void bt_ready_cb(int err) {

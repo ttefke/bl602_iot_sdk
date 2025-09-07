@@ -35,7 +35,7 @@
 #include "bl_sys.h"
 
 #define MFG_CONFIG_REG    (0x4000F100)
-#define MFG_CONFIG_VAL    ("0mfg")
+#define MFG_CONFIG_VAL    {'0', 'm', 'f', 'g'}
 
 volatile bool sys_log_all_enable = true;
 

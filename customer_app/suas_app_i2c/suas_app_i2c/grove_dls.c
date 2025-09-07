@@ -16,6 +16,11 @@
 const uint8_t POWER_UP_DATA = 0x03;
 const uint8_t POWER_DOWN_DATA =  0x00;
 
+// Global variables
+uint16_t ch0, ch1;
+unsigned long chScale;
+unsigned long channel0, channel1;
+
 // Initialization function for sensor
 int init_grove_dls() {
     // Define result value

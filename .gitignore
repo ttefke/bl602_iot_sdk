@@ -10,3 +10,6 @@
 # MacOS
 .DS_Store
 __pycache__
+
+# GDB 
+toolchain/riscv/Linux/gdb

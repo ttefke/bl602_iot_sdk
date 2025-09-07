@@ -26,4 +26,4 @@ EOF
 cat $(pwd)/../../tools/debug/602.init /tmp/gdb_tgt.cfg > /tmp/602.init
 
 echo "Starting GDB"
-gnome-terminal -- bash -c "$path/../../toolchain/riscv/Linux/bin/riscv64-unknown-elf-gdb -x /tmp/602.init --se=$path/build_out/$wd.elf; exec bash"
+gnome-terminal -- bash -c "$path/../../toolchain/riscv/Linux/gdb/bin/riscv64-unknown-elf-gdb -x /tmp/602.init --se=$path/build_out/$wd.elf; exec bash"

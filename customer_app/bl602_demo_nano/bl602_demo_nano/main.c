@@ -431,7 +431,7 @@ static void cmd_stack_ble(char *buf, int len, int argc, char **argv)
     ble_stack_start();
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         /*Stack Command*/
         { "stack_wifi", "Wi-Fi Stack", cmd_stack_wifi},
         { "stack_ble", "BLE Stack", cmd_stack_ble},

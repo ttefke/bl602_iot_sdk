@@ -265,13 +265,12 @@ CPPFLAGS += -D BL_CHIP_NAME=\"$(BL_CHIP_NAME)\" -MMD -MP $(CPPFLAGS) $(EXTRA_CPP
 CPPFLAGS += -DARCH_RISCV
 
 # Warnings-related flags relevant both for C and C++
-COMMON_WARNING_FLAGS = -Wall -Werror=all \
-	-Wno-error=unused-function \
-	-Wno-error=unused-but-set-variable \
-	-Wno-error=unused-variable \
-	-Wno-error=deprecated-declarations \
+COMMON_WARNING_FLAGS = \
+	-Wall \
+	-Werror=all \
 	-Wextra \
-	-Wno-unused-parameter -Wno-sign-compare
+	-Wno-unused-parameter \
+	-Wno-sign-compare
 
 ifdef CONFIG_WARN_WRITE_STRINGS
 COMMON_WARNING_FLAGS += -Wwrite-strings
@@ -286,15 +285,14 @@ endif
 # -fno-common
 # -funwind-tables
 COMMON_FLAGS = \
-	-ffunction-sections -fdata-sections \
+	-ffunction-sections \
+	-fdata-sections \
 	-fstrict-volatile-bitfields \
-    -fshort-enums
-
+   	-fshort-enums
 
 COMMON_FLAGS_M4_EXT := 	\
 	-ffreestanding \
 	-fno-strict-aliasing
-
 
 COMMON_FLAGS += $(COMMON_FLAGS_M4_EXT)
 
@@ -330,15 +328,16 @@ DEBUG_FLAGS ?= -gdwarf
 EXTRA_CFLAGS ?=
 
 E21_CPU_CFLAGS := -march=rv32imfc \
-                   -mabi=ilp32f
+                  -mabi=ilp32f
 
 ASMFLAGS := $(E21_CPU_CFLAGS)
 
 CFLAGS := $(strip \
 	-std=gnu17 \
-	$(OPTIMIZATION_FLAGS) $(DEBUG_FLAGS) \
+	$(OPTIMIZATION_FLAGS) \
+	$(DEBUG_FLAGS) \
 	$(COMMON_FLAGS) \
-	$(COMMON_WARNING_FLAGS) -Wno-old-style-declaration \
+	$(COMMON_WARNING_FLAGS) \
 	$(CFLAGS) \
 	$(E21_CPU_CFLAGS) \
 	$(EXTRA_CFLAGS)) \
@@ -347,7 +346,8 @@ CFLAGS := $(strip \
 
 CXXFLAGS := $(strip \
 	-std=c++20 \
-	$(OPTIMIZATION_FLAGS) $(DEBUG_FLAGS) \
+	$(OPTIMIZATION_FLAGS) \
+	$(DEBUG_FLAGS) \
 	$(COMMON_FLAGS) \
 	$(COMMON_WARNING_FLAGS) \
 	$(CXXFLAGS) \
@@ -365,7 +365,8 @@ CXXFLAGS := $(strip \
 	-Wswitch-default \
 	-Wunused \
 	-Wundef \
-	-fno-rtti -fno-exceptions \
+	-fno-rtti \
+	-fno-exceptions \
 	-save-temps=obj \
 	-Werror -Wall \
 	)

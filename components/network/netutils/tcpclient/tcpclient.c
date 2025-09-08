@@ -199,7 +199,7 @@ void tcpclient_cmd(char *buf, int len, int argc, char **argv)
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "tcpc", "create a tcpc for in a new task", tcpclient_cmd},
 };
 

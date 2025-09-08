@@ -464,7 +464,7 @@ static void test_cmd_sha1(char *buf, int len, int argc, char **argv)
     sha_test(length, count, SHA_1_MODE, sha_soft, ram_type);
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "test_aes_ecb", "AES ECB -length -count -keytype -soft -ramtype", test_cmd_aes_ecb},
     { "test_aes_cbc", "AES CBC -length -count -keytype -soft -ramtype", test_cmd_aes_cbc},
     { "test_aes_ctr", "AES CTR -length -count -keytype -soft -ramtype", test_cmd_aes_ctr},

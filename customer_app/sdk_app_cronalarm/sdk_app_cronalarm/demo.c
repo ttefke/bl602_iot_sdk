@@ -273,7 +273,7 @@ static void cmd_show_date(char *buf, int len, int argc, char **argv)
     return;
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "test_seconds", "test seconds", cmd_test_seconds},
         { "test_minutes", "test minutes", cmd_test_minutes},
         { "test_hour", "test hour", cmd_test_hour},

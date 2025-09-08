@@ -68,7 +68,7 @@ static void cmd_clk_change(char *buf, int len, int argc, char **argv)
     }
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "clk", "change hdiv and bdiv", cmd_clk_change},
 };
 

@@ -52,7 +52,7 @@ extern "C" {
 #define ATTR_BLOG_CODE3(name)        __attribute__((used, section(".static_blogpri_code." #name)))
 
 /* for hard debug level */
-const static uint32_t BLOG_HARD_DECLARE_DISABLE __attribute__((used)) = 0;
+static const uint32_t BLOG_HARD_DECLARE_DISABLE __attribute__((used)) = 0;
 
 /* component level */
 #define _REFC_LEVEL(name)            _fsymc_level_##name

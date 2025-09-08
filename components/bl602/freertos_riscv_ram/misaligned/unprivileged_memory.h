@@ -66,7 +66,7 @@ static inline void store_uint64_t(uint64_t* addr, uint64_t val, uintptr_t mepc)
 }
 #endif
 
-static uintptr_t inline __attribute__((always_inline)) get_insn(uintptr_t mepc, uintptr_t* mstatus)
+inline static uintptr_t __attribute__((always_inline)) get_insn(uintptr_t mepc, uintptr_t* mstatus)
 {
   register uintptr_t __mstatus_adjust asm ("a1") = MSTATUS_MPRV | MSTATUS_MXR;
   register uintptr_t __mepc asm ("a2") = mepc;

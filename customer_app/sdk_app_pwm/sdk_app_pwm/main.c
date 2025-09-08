@@ -217,7 +217,7 @@ void cmd_pwm_test(char *buf, int len, int argc, char **argv)
     }
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "pwm_init", "pwm_init 0 0", cmd_pwm_init},
     { "pwm_start", "pwm_start 0", cmd_pwm_start},
     { "pwm_stop", "pwm_stop 0", cmd_pwm_stop},
@@ -318,7 +318,7 @@ void __pwm_stop(char *buf, int len, int argc, char **argv)
 // hal_pwm_duty_set 1 3000 18000
 // hal_pwm_duty_set 2 7000 15000
 // hal_pwm_duty_set 3 7000 15000
-const static struct cli_command hal_pwm_cmds[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command hal_pwm_cmds[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "hal_pwm_init", "pwm_init 0", __pwm_init},
     { "hal_pwm_duty_set", "pwm_duty_set 0 20000 1000", __pwm_duty_set},
     { "hal_pwm_duty_get", "pwm_duty_get 0", __pwm_duty_get},

@@ -97,7 +97,7 @@ kvbin_exit:
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "psm_set", "psm set", psm_set_cmd },
         { "psm_unset", "psm unset", psm_unset_cmd },
         { "psm_get", "psm get", psm_get_cmd },

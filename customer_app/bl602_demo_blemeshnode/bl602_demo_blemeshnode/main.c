@@ -201,10 +201,6 @@ static void cmd_start_pds(char *buf, int len, int argc, char **argv)
     }
 }
 #endif
-static void _cli_init()
-{
-    
-}
 
 static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off)
 {

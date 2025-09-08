@@ -129,7 +129,7 @@ void bl_dma_update_memdst(uint8_t ch, uint32_t dst, uint32_t len)
     BL_WR_REG(DMAChs, DMA_CONTROL, tmpVal);
 }
 
-static void inline _dma_copy_trigger(struct bl_dma_item *first)
+inline static void _dma_copy_trigger(struct bl_dma_item *first)
 {
     //blog_info("------ DMA Trigger\r\n");
     DMA_LLI_Update(DMA_DEFAULT_CHANNEL_COPY, (uint32_t)&(first->src));

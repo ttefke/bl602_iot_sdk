@@ -152,7 +152,7 @@ void spi_loop_slave(char *buf, int len, int argc, char **argv)
     return;
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     {"test_slave", "spi test slave", demo_spi_slave},
     {"test_master", "spi test master", demo_spi_master},
     {"test_loop_master", "loop test master", spi_loop_master},

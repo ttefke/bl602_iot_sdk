@@ -37,17 +37,21 @@ static void ble_read_local_address(char *pcWriteBuffer, int xWriteBufferLen, int
 static void ble_set_adv_channel(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_start_advertise(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_stop_advertise(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
+#ifdef CONFIG_BT_CENTRAL
 static void ble_connect(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
+#endif
 static void ble_disconnect(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_select_conn(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_unpair(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_conn_update(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
+#ifdef CONFIG_BT_SMP
 static void ble_security(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_auth(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_auth_cancel(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_auth_passkey_confirm(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_auth_pairing_confirm(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_auth_passkey(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
+#endif
 static void ble_exchange_mtu(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_discover(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);
 static void ble_read(char *pcWriteBuffer, int xWriteBufferLen, int argc, char **argv);

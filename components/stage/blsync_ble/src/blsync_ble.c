@@ -282,12 +282,12 @@ static int __recv_event(void *p_drv, struct pro_event *p_event)
     return PRO_OK;
 }
 
-const static struct pro_func ble_gatt_func = {
+static const struct pro_func ble_gatt_func = {
     __ble_bytes_send,
     __recv_event,
 };
 
-const static cJSON_Hooks __g_cjson_hooks = {
+static const cJSON_Hooks __g_cjson_hooks = {
     pvPortMalloc,
     vPortFree,
 };
@@ -349,7 +349,7 @@ static struct bt_gatt_attr attrs[]= {
                                 NULL),
 };
 
-const static struct bt_gatt_service wifiprov_server = BT_GATT_SERVICE(attrs);
+static const struct bt_gatt_service wifiprov_server = BT_GATT_SERVICE(attrs);
 
 static struct bt_conn_cb blsync_conn_callbacks = {
     .connected  =   blsync_connected,

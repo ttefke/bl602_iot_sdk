@@ -33,7 +33,7 @@ extern "C" {
 #define BFL_LOGE(TAG, format, ...) puts(TAG);printf("ERROR" format "\r\n", ##__VA_ARGS__)
 #define BFL_LOGW(TAG, format, ...) puts(TAG);printf("WARNN" format "\r\n", ##__VA_ARGS__)
 
-const static char *TAG = "aws_timer";
+static const char *TAG = "aws_timer";
 
 bool has_timer_expired(Timer *timer) 
 {

@@ -64,7 +64,7 @@ static int __pack_encrypt_write (void *p_drv, uint8_t pack_type,
                          src_id, src_buf, src_len, remain_len);
 }
 
-const static struct pro_enc_func __g_enc_func = {
+static const struct pro_enc_func __g_enc_func = {
     __pack_encrypt_read,
     __pack_encrypt_write
 };

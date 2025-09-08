@@ -53,7 +53,7 @@ void cmd_loopset_led_trigger(char *buf, int len, int argc, char **argv)
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "loopset-led-trigger", "Trigger LED on PIN", cmd_loopset_led_trigger},
 };
 

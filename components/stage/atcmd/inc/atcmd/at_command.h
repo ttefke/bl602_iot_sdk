@@ -526,7 +526,7 @@ typedef struct
   s32 type;   /* 0: value 1: buffer pointer */
   void *vptr; /* value or buffer pointer */
   s32 vsize;
-} at_callback_rsp_t __attribute__ ((deprecated));
+} at_callback_rsp_t;
 
 typedef struct {
   AT_ERROR_CODE (*handle_cb)

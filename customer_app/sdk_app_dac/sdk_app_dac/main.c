@@ -156,7 +156,7 @@ int bl_sys_play_audio_init(void)
     return 0;
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "play_audio", "play audio 32k 32bit", cmd_play_audio},
 };
 

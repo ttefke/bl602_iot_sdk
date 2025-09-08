@@ -78,7 +78,7 @@ void cmd_looprt_test_schedule_evt2(char *buf, int len, int argc, char **argv)
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "looprt", "looprt based on bloop", cmd_looprt_test},
     { "looprt_status", "looprt based on bloop", cmd_looprt_test_status},
     { "looprt_evt", "looprt notify event", cmd_looprt_test_evt},

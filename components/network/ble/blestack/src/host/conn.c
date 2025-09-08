@@ -2569,7 +2569,7 @@ struct bt_conn *bt_conn_lookup_id(u8_t id)
 extern bool queue_inited;
 int bt_conn_init(void)
 {
-    int err, i;
+    int i;
 
 #if defined(BFLB_BLE)
     if(queue_inited == false)
@@ -2583,7 +2583,7 @@ int bt_conn_init(void)
     bt_att_init();
 
     #if defined(CONFIG_BT_SMP)
-    err = bt_smp_init();
+    int err = bt_smp_init();
     if (err) {
         return err;
     }

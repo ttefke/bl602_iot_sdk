@@ -939,7 +939,7 @@ static void cmd_wifi_power_table_update(char *buf, int len, int argc, char **arg
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "rf_dump", "rf dump", cmd_rf_dump},
         { "wifi_capcode", "wifi capcode", wifi_capcode_cmd},
         { "wifi_scan", "wifi scan", wifi_scan_cmd},

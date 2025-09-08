@@ -1011,7 +1011,7 @@ void cmd_mfg(char *buf, int len, int argc, char **argv)
     hal_reboot();
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "aws", "aws iot demo", cmd_aws},
         { "pka", "pka iot demo", cmd_pka},
         { "sha", "sha iot demo", cmd_sha},

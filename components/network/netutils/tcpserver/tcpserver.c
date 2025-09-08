@@ -219,7 +219,7 @@ static void cmd_tcp_server(char *buf, int len, int argc, char **argv)
     xTaskCreate(TCP_Server, "TCP Server", 1024, argv[1], 20, NULL);
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "tcps", "create a tcp server for in a new task", cmd_tcp_server},
 };
 

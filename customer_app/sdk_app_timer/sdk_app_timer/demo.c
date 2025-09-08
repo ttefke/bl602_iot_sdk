@@ -182,7 +182,7 @@ void cmd_timer_delete(char *buf, int len, int argc, char **argv)
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     {"test_timer", "test timer", cmd_timer_func},
     {"add_timer", "add timer", cmd_timer_add},
     {"delete_timer", "delete timer by id", cmd_timer_delete},

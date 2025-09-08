@@ -344,9 +344,10 @@ static void cmd_heap_test(char *buf, int len, int argc, char **argv)
                                     &heap_test_task);
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "heap_test", "Heap Test", cmd_heap_test},
 };
+
 void bfl_main(void)
 {
     static StaticTask_t aos_loop_proc_task;

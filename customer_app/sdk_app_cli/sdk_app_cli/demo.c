@@ -36,7 +36,7 @@ static void cmd_cli(char *buf, int len, int argc, char **argv)
     printf("hello world\r\n");
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     {"test", "cli test", cmd_cli},
 };
 

@@ -567,7 +567,7 @@ static int hal_board_load_fdt_info(const void *dtb)
     const void *fdt = (const void *)dtb;/* const */
 
     int wifi_offset = 0, bt_offset = 0;    /* subnode wifi & bluetooth */
-    int offset1 = 0, offset2 = 0;        /* subnode offset1 */
+    int offset1 = 0;        /* subnode offset1 */
     const uint8_t *addr_prop = 0;
 
     int lentmp = 0;
@@ -717,7 +717,8 @@ static int hal_board_load_fdt_info(const void *dtb)
        blog_error("bt NULL.\r\n");
     }
 
-    offset2 = fdt_subnode_offset(fdt, bt_offset, "brd_rf");
+#ifdef CFG_BLE_ENABLE
+    int offset2 = fdt_subnode_offset(fdt, bt_offset, "brd_rf");
     if (offset2 > 0) {
         int pwr_table_ble = 0;
         addr_prop = fdt_getprop(fdt, offset2, "pwr_table_ble", &lentmp);
@@ -727,10 +728,9 @@ static int hal_board_load_fdt_info(const void *dtb)
             pwr_table_ble = 0;
         }
         blog_info("set pwr_table_ble = %ld in dts\r\n", pwr_table_ble);
-#ifdef CFG_BLE_ENABLE
         ble_controller_set_tx_pwr(pwr_table_ble);
-#endif
     }
+#endif
     return 0;
 }
 #endif

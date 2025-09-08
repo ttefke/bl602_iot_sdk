@@ -86,7 +86,6 @@ static void attn_off(struct bt_mesh_model *model);
 static void blemesh_init(void);
 
 static void blemesh_pb_gatt(void);
-static void blemesh_pb_adv(void);
 
 static struct bt_mesh_prov prov = {
 	.uuid = dev_uuid,
@@ -278,17 +277,6 @@ static void blemesh_pb_gatt(void)
 		vOutputString("blemesh_pb_gatt Failed to enable\n");
 	} else {
 		vOutputString("blemesh_pb_gatt enable\n");
-	}
-}
-static void blemesh_pb_adv(void)
-{
-    int err;
-
-	err = bt_mesh_prov_enable(BT_MESH_PROV_ADV);
-	if (err) {
-		vOutputString("blemesh_pb_adv Failed to enable\n");
-	} else {
-		vOutputString("blemesh_pb_adv enable\n");
 	}
 }
 #endif

@@ -336,7 +336,7 @@ static void cmd_align(char *buf, int len, int argc, char **argv)
     log_info("align test end.\r\n");
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "exception_load", "exception load test", cmd_exception_load},
         { "exception_l_illegal", "exception load test", cmd_exception_l_illegal},
         { "exception_store", "exception store test", cmd_exception_store},

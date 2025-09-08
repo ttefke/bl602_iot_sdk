@@ -62,7 +62,7 @@ static void cmd_sntp_date(char *buf, int len, int argc, char **argv)
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "sntp_start", "sntp start", cmd_sntp_start},
         { "sntp_time", "sntp time", cmd_sntp_time},
         { "sntp_date", "sntp date", cmd_sntp_date},

@@ -453,7 +453,7 @@ static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
 
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         /*Stack Command*/
         { "stack_wifi", "Wi-Fi Stack", cmd_stack_wifi},
 };

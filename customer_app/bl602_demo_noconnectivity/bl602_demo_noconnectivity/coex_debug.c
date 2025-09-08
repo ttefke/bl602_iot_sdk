@@ -39,7 +39,7 @@ static void __attribute__((unused)) cmd_coex_dump(char *buf, int len, int argc, 
     coex_dump_wifi();
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "coex_dump", "coex dump", cmd_coex_dump},
 };
 

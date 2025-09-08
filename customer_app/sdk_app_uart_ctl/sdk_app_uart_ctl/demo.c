@@ -213,7 +213,7 @@ void cmd_uart_block(char *buf, int len, int argc, char **argv)
     aos_task_new("uart1_block", bluart_block_entry, "/dev/ttyS1", 2048);
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "uartflush", "uart flush", cmd_uart_flush},
     { "uartblock", "uart block", cmd_uart_block},
     { "uartioctl", "uart io control", cmd_uart_ioctl},

@@ -55,7 +55,7 @@
 #define TSEN_RELOAD_MS         (10000)
 
 wifi_mgmr_t wifiMgmr;
-const static struct state
+static const struct state
     stateGlobal,
     stateIdle,
     stateConnecting,
@@ -617,7 +617,7 @@ static bool stateGlobalGuard_denoise(void *ev, struct event *event )
     return false;
 }
 
-const static struct state stateGlobal = {
+static const struct state stateGlobal = {
    .parentState = NULL,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -641,7 +641,7 @@ const static struct state stateGlobal = {
    .exitAction = &stateGlobalExit,
 };
 
-const static struct state stateSniffer = {
+static const struct state stateSniffer = {
    .parentState = &stateGlobal,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -656,7 +656,7 @@ const static struct state stateSniffer = {
    .exitAction = &stateSnifferExit,
 };
 
-const static struct state stateConnecting = {
+static const struct state stateConnecting = {
    .parentState = &stateGlobal,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -763,7 +763,7 @@ static void stateIdleExit( void *stateData, struct event *event )
    os_printf(DEBUG_HEADER "Entering %s state\r\n", (char *)stateData);
 }
 
-const static struct state stateIdle = {
+static const struct state stateIdle = {
    .parentState = &stateGlobal,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -818,7 +818,7 @@ static void stateIfaceDownExit( void *stateData, struct event *event )
     os_printf(DEBUG_HEADER "Exiting %s state\r\n", (char *)stateData);
 }
 
-const static struct state stateIfaceDown = {
+static const struct state stateIfaceDown = {
    .parentState = &stateGlobal,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -1044,7 +1044,7 @@ static void stateConnectedIPNoExit(void *stateData, struct event *event )
     os_timer_delete_nodelay(&(stateConnectedIPNo_data->timer));//detach no stop
 }
 
-const static struct state stateConnectedIPNo = {
+static const struct state stateConnectedIPNo = {
    .parentState = &stateGlobal,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -1153,7 +1153,7 @@ static void stateConnectedIPYes_exit( void *stateData, struct event *event )
    }
 }
 
-const static struct state stateConnectedIPYes = {
+static const struct state stateConnectedIPYes = {
    .parentState = &stateGlobal,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -1309,7 +1309,7 @@ static void stateDisconnect_exit(void *stateData, struct event *event)
     }
 }
 
-const static struct state stateDisconnect = {
+static const struct state stateDisconnect = {
    .parentState = &stateGlobal,
    .entryState = NULL,
    .transitions = (struct transition[])
@@ -1325,7 +1325,7 @@ const static struct state stateDisconnect = {
 /*==================================================================================================*/
 
 
-const static struct state stateError = {
+static const struct state stateError = {
    .entryAction = &printErrMsg
 };
 

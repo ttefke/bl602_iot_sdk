@@ -172,7 +172,7 @@ static void cmd_exception_illegal_ins(char *buf, int len, int argc, char **argv)
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_ILLEGAL_INSTRUCTION, (void*)0x22008001);
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "pka", "pka iot demo", cmd_pka},
         { "sha", "sha iot demo", cmd_sha},
         { "trng", "trng test", cmd_trng},

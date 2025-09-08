@@ -259,7 +259,7 @@ static int bl602_dac_set_mclk(audio_framework_device_t *device, uint32_t mclk)
     return 0;
 }
 
-const static audio_framework_device_t __g_bl602_dac_device ATTR_AUDIO_DEVICE_TABLE = {
+static const audio_framework_device_t __g_bl602_dac_device ATTR_AUDIO_DEVICE_TABLE = {
     .name = "bl602_dac",
     .init = bl602_dac_init,
     .config = bl602_dac_config,

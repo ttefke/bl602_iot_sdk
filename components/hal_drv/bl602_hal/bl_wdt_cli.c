@@ -66,7 +66,7 @@ int bl_timer_tick_enable(void);
     bl_timer_tick_enable();
 }
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     {"wdt-init", "wdt-init ms", cmd_wdt_init},
     {"wdt-feed", "wdt-feed", cmd_wdt_feed},
     {"wdt-disable", "wdt-disable", cmd_wdt_disable},

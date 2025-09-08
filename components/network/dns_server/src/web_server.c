@@ -26,9 +26,9 @@
 
 #define TAG  "lwip_udp"
 
-const static char http_html_hdr[] =
+static const char http_html_hdr[] =
     "HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n";
-const static char http_index_hml[] = "<!DOCTYPE html>"
+static const char http_index_hml[] = "<!DOCTYPE html>"
       "<html>\n"
       "<head>\n"
       "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"

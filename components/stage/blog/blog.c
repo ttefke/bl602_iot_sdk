@@ -354,7 +354,7 @@ void blog_init(void)
     blog_set_poweron_softlevel();
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "blogset", "blog pri set level", cmd_blog_set_level},
     { "blogdump", "blog info dump", cmd_blog_info_dump},
 #if BLOG_TEST

@@ -68,7 +68,7 @@ static int __payload_write (void *p_arg, uint8_t *dst_buf,
     return payload_size;
 }
 
-const static struct pro_pyld_func __g_pyld_func = {
+static const struct pro_pyld_func __g_pyld_func = {
     __payload_read,
     __payload_write,
 };

@@ -746,7 +746,7 @@ static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
 
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
         { "aws", "aws iot demo", cmd_aws},
         { "pka", "pka iot demo", cmd_pka},
         { "wifi", "wifi", cmd_wifi},

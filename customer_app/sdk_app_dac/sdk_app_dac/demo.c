@@ -110,7 +110,7 @@ static void cmd_gpio_get(char *buf, int len, int argc, char **argv)
 }
 
 // STATIC_CLI_CMD_ATTRIBUTE makes this(these) command(s) static
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     {"gpio-func", "gpio-func pinnum 0/1[0:output, 1:input] 0/1[pullup] 0/1[pulldown]", cmd_gpio_func},
     {"gpio-set", "gpio-set pinnum 0/1", cmd_gpio_set},
     {"gpio-get", "gpio-get pinnum", cmd_gpio_get},

@@ -333,7 +333,7 @@ static int bl_rx_rssi_status_ind(struct bl_hw *bl_hw,
     return 0;
 }
 
-const static msg_cb_fct mm_hdlrs[MSG_I(MM_MAX)] = {
+static const msg_cb_fct mm_hdlrs[MSG_I(MM_MAX)] = {
     [MSG_I(MM_CHANNEL_SWITCH_IND)]     = bl_rx_chan_switch_ind,
     [MSG_I(MM_CHANNEL_PRE_SWITCH_IND)] = bl_rx_chan_pre_switch_ind,
     [MSG_I(MM_REMAIN_ON_CHANNEL_EXP_IND)] = bl_rx_remain_on_channel_exp_ind,
@@ -361,7 +361,7 @@ static inline int bl_rx_dbg_error_ind(struct bl_hw *bl_hw,
     return 0;
 }
 
-const static msg_cb_fct dbg_hdlrs[MSG_I(DBG_MAX)] = {
+static const msg_cb_fct dbg_hdlrs[MSG_I(DBG_MAX)] = {
     [MSG_I(DBG_ERROR_IND)]                = bl_rx_dbg_error_ind,
 };
 
@@ -403,7 +403,7 @@ static int bl_rx_tdls_peer_ps_ind(struct bl_hw *bl_hw,
     return 0;
 }
 
-const static msg_cb_fct tdls_hdlrs[MSG_I(TDLS_MAX)] = {
+static const msg_cb_fct tdls_hdlrs[MSG_I(TDLS_MAX)] = {
     [MSG_I(TDLS_CHAN_SWITCH_CFM)] = bl_rx_tdls_chan_switch_cfm,
     [MSG_I(TDLS_CHAN_SWITCH_IND)] = bl_rx_tdls_chan_switch_ind,
     [MSG_I(TDLS_CHAN_SWITCH_BASE_IND)] = bl_rx_tdls_chan_switch_base_ind,
@@ -664,7 +664,7 @@ next:
     return 0;
 }
 
-const static msg_cb_fct scan_hdlrs[MSG_I(SCANU_MAX)] = {
+static const msg_cb_fct scan_hdlrs[MSG_I(SCANU_MAX)] = {
     [MSG_I(SCANU_START_CFM)]           = bl_rx_scanu_start_cfm,
     [MSG_I(SCANU_JOIN_CFM)]            = bl_rx_scanu_join_cfm,
     [MSG_I(SCANU_RESULT_IND)]          = bl_rx_scanu_result_ind,
@@ -685,7 +685,7 @@ static int bl_rx_me_tx_credits_update_ind(struct bl_hw *bl_hw,
     RWNX_DBG(RWNX_FN_LEAVE_STR);
     return 0;
 }
-const static msg_cb_fct me_hdlrs[MSG_I(ME_MAX)] = {
+static const msg_cb_fct me_hdlrs[MSG_I(ME_MAX)] = {
     [MSG_I(ME_TKIP_MIC_FAILURE_IND)] = bl_rx_me_tkip_mic_failure_ind,
     [MSG_I(ME_TX_CREDITS_UPDATE_IND)] = bl_rx_me_tx_credits_update_ind,
 };
@@ -818,7 +818,7 @@ static int bl_rx_sm_disconnect_ind(struct bl_hw *bl_hw,
     return 0;
 }
 
-const static msg_cb_fct sm_hdlrs[MSG_I(SM_MAX)] = {
+static const msg_cb_fct sm_hdlrs[MSG_I(SM_MAX)] = {
     [MSG_I(SM_CONNECT_IND)]    = bl_rx_sm_connect_ind,
     [MSG_I(SM_DISCONNECT_IND)] = bl_rx_sm_disconnect_ind,
 };
@@ -888,12 +888,12 @@ static int bl_rx_apm_sta_del_ind(struct bl_hw *bl_hw, struct bl_cmd *cmd, struct
     return 0;
 }
 
-const static msg_cb_fct apm_hdlrs[MSG_I(APM_MAX)] = {
+static const msg_cb_fct apm_hdlrs[MSG_I(APM_MAX)] = {
     [MSG_I(APM_STA_ADD_IND)] = bl_rx_apm_sta_add_ind,
     [MSG_I(APM_STA_DEL_IND)] = bl_rx_apm_sta_del_ind,
 };
 
-const static msg_cb_fct cfg_hdlrs[MSG_I(CFG_MAX)] = {
+static const msg_cb_fct cfg_hdlrs[MSG_I(CFG_MAX)] = {
 };
 
 
@@ -929,14 +929,14 @@ static int bl_rx_mesh_proxy_update_ind(struct bl_hw *bl_hw,
     return 0;
 }
 
-const static msg_cb_fct mesh_hdlrs[MSG_I(MESH_MAX)] = {
+static const msg_cb_fct mesh_hdlrs[MSG_I(MESH_MAX)] = {
     [MSG_I(MESH_PATH_CREATE_CFM)]  = bl_rx_mesh_path_create_cfm,
     [MSG_I(MESH_PEER_UPDATE_IND)]  = bl_rx_mesh_peer_update_ind,
     [MSG_I(MESH_PATH_UPDATE_IND)]  = bl_rx_mesh_path_update_ind,
     [MSG_I(MESH_PROXY_UPDATE_IND)] = bl_rx_mesh_proxy_update_ind,
 };
 
-const static msg_cb_fct *msg_hdlrs[] = {
+static const msg_cb_fct *msg_hdlrs[] = {
     [TASK_MM]    = mm_hdlrs,
     [TASK_DBG]   = dbg_hdlrs,
     [TASK_TDLS]  = tdls_hdlrs,

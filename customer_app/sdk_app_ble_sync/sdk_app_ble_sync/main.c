@@ -591,7 +591,7 @@ static void cmd_blsync_ble_stop(char *buf, int len, int argc, char **argv)
     aos_post_event(EV_CLI, CODE_CLI_BLSYNC_STOP, 0);
 }
 
-const static struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
+static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "blsync_ble_start", "blsync ble start", cmd_blsync_ble_start},
     { "blsync_ble_stop", "blsync ble stop", cmd_blsync_ble_stop},
 };

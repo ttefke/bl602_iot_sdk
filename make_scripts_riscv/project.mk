@@ -346,7 +346,7 @@ CFLAGS := $(strip \
 	-Werror -Wall
 
 CXXFLAGS := $(strip \
-	-std=c++11 \
+	-std=c++20 \
 	$(OPTIMIZATION_FLAGS) $(DEBUG_FLAGS) \
 	$(COMMON_FLAGS) \
 	$(COMMON_WARNING_FLAGS) \

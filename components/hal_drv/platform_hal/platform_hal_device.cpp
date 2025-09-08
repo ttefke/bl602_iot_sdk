@@ -52,6 +52,16 @@ extern "C" void operator delete[](void* ptr) {
     vPortFree(ptr);
 }
 
+extern "C" void operator delete(void* ptr, [[gnu::unused]] size_t size ) {
+    // There is no FreeRTOS free that takes size parameters
+    vPortFree(ptr);
+}
+
+extern "C" void operator delete[](void* ptr, [[gnu::unused]] size_t size) {
+    // There is no FreeRTOS free that takes size parameters
+    vPortFree(ptr);
+}
+
 BLLinkedItem::BLLinkedItem() 
 {
     this->next = NULL;

@@ -335,7 +335,7 @@ E21_CPU_CFLAGS := -march=rv32imfc \
 ASMFLAGS := $(E21_CPU_CFLAGS)
 
 CFLAGS := $(strip \
-	-std=gnu99 \
+	-std=gnu17 \
 	$(OPTIMIZATION_FLAGS) $(DEBUG_FLAGS) \
 	$(COMMON_FLAGS) \
 	$(COMMON_WARNING_FLAGS) -Wno-old-style-declaration \

@@ -1,9 +1,6 @@
 [submodule "docs"]
 	path = docs
 	url = https://github.com/pine64/bl602-docs.git
-[submodule "components/3rdparty/kyber"]
-	path = components/3rdparty/kyber
-	url = git@github.com:ttefke/kyber.git
 [submodule "components/3rdparty/libcoap"]
 	path = components/3rdparty/libcoap
 	url = git@github.com:ttefke/libcoap.git

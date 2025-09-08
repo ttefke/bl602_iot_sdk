@@ -43,7 +43,7 @@ void my_mqtt_disconnect() {
 
 // Callback for published message:
 // Check if message was published successfully
-void my_mqtt_publish_cb(void *arg, err_t result) {
+void my_mqtt_publish_cb([[gnu::unused]] void *arg, err_t result) {
     if (result == ERR_OK) {
         printf("[%s] Published message\r\n", __func__);
     } else {
@@ -74,7 +74,7 @@ void my_mqtt_publish() {
 }
 
 // Incoming topic callback
-void my_mqtt_incoming_topic_cb(void *arg, const char *topic, u32_t total_len) {
+void my_mqtt_incoming_topic_cb([[gnu::unused]] void *arg, const char *topic, u32_t total_len) {
     printf("[%s] Incoming message, topic: %s, total length: %u\r\n",
         __func__, topic, (unsigned int) total_len);
     
@@ -88,7 +88,7 @@ void my_mqtt_incoming_topic_cb(void *arg, const char *topic, u32_t total_len) {
 }
 
 // Incoming payload callback
-void my_mqtt_incoming_payload_cb(void *arg, const u8_t *data, u16_t len, u8_t flags) {
+void my_mqtt_incoming_payload_cb([[gnu::unused]] void *arg, const u8_t *data, u16_t len, u8_t flags) {
     printf("[%s] Incoming payload, length: %d, flags: %u\r\n",
         __func__, len, (unsigned int) flags);
 
@@ -112,7 +112,7 @@ void my_mqtt_incoming_payload_cb(void *arg, const u8_t *data, u16_t len, u8_t fl
 }
 
 // Subscription request result callback
-void my_mqtt_sub_request_cb(void *arg, err_t result) {
+void my_mqtt_sub_request_cb([[gnu::unused]] void *arg, err_t result) {
     if (result == ERR_OK) {
         printf("[%s] Subscribed\r\n", __func__);
     } else {
@@ -122,8 +122,8 @@ void my_mqtt_sub_request_cb(void *arg, err_t result) {
 }
 
 // Connection establishment status callback
-void my_mqtt_connected_cb(mqtt_client_t *client, void *arg,
-    mqtt_connection_status_t status) {
+void my_mqtt_connected_cb([[gnu::unused]] mqtt_client_t *client,
+    void *arg, mqtt_connection_status_t status) {
     // Connection accepted
     if (status == MQTT_CONNECT_ACCEPTED) {
         printf("[%s] Connected\r\n", __func__);

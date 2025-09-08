@@ -22,7 +22,7 @@ const struct file_ops gpio_ops =
     .ioctl = vfs_gpio_ioctl
 };
 
-int vfs_gpio_open(inode_t *inode, file_t *fp)
+int vfs_gpio_open([[gnu::unused]] inode_t *inode, file_t *fp)
 {
     int ret = -1;                /* return value */
     gpio_dev_t *gpio_dev = NULL; /* device pointer */
@@ -79,7 +79,7 @@ int vfs_gpio_close(file_t *fp)
     return ret;
 }
 
-ssize_t vfs_gpio_write(file_t *fp, const void *buf, size_t nbytes)
+ssize_t vfs_gpio_write(file_t *fp, const void *buf, [[gnu::unused]] size_t nbytes)
 {
     int ret = -1;                /* return value */
     uint8_t write_buf;           /* write buf */
@@ -118,7 +118,7 @@ ssize_t vfs_gpio_write(file_t *fp, const void *buf, size_t nbytes)
     return ret;
 }
 
-ssize_t vfs_gpio_read(file_t *fp, void *buf, size_t nbytes)
+ssize_t vfs_gpio_read(file_t *fp, void *buf, [[gnu::unused]] size_t nbytes)
 {
     int ret = -1;                /* return value */
     gpio_dev_t *gpio_dev = NULL; /* device pointer */
@@ -155,7 +155,7 @@ ssize_t vfs_gpio_read(file_t *fp, void *buf, size_t nbytes)
     return ret;
 }
 
-int vfs_gpio_ioctl(file_t *fp, int cmd, unsigned long arg)
+int vfs_gpio_ioctl(file_t *fp, int cmd, [[gnu::unused]] unsigned long arg)
 {
     int ret = -1;                /* return value */
     gpio_dev_t *gpio_dev = NULL; /* device pointer */

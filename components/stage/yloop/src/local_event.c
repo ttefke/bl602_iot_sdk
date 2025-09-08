@@ -72,7 +72,7 @@ static int input_add_event(int fd, input_event_t *event)
     return aos_ioctl(fd, cmd, (unsigned long)event);
 }
 
-void event_read_cb(int fd, void *param)
+void event_read_cb(int fd, [[gnu::unused]] void *param)
 {
     input_event_t event;
     int ret = aos_read(fd, &event, sizeof(event));

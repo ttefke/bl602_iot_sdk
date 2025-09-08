@@ -94,7 +94,7 @@ static HeapRegion_t xHeapRegions[] =
 };
 static wifi_interface_t wifi_interface;
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     blog_print("Stack Overflow checked\r\n");
     while (1) {
@@ -289,7 +289,7 @@ static void wifi_sta_connect(char *ssid, char *password)
     wifi_mgmr_sta_connect(wifi_interface, ssid, password, NULL, NULL, 0, 0);
 }
 
-static void event_cb_wifi_event(input_event_t *event, void *private_data)
+static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     static wifi_conf_t conf =
     {
@@ -410,7 +410,7 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
     }
 }
 
-static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
+static void cmd_stack_wifi([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     /*wifi fw stack and thread stuff*/
     static uint8_t stack_wifi_init  = 0;
@@ -426,7 +426,7 @@ static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
     aos_post_event(EV_WIFI, CODE_WIFI_ON_INIT_DONE, 0);
 }
 
-static void cmd_stack_ble(char *buf, int len, int argc, char **argv)
+static void cmd_stack_ble([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     ble_stack_start();
 }
@@ -444,7 +444,7 @@ static void _cli_init()
 
 static void _test_flash_read(void)
 {
-    int i;
+    uint8_t i;
     uint8_t buffer[32];
 
     memset(buffer, 0, sizeof(buffer));
@@ -456,7 +456,7 @@ static void _test_flash_read(void)
     blog_print("\r\n");
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
 

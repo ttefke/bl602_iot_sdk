@@ -17,6 +17,7 @@ COMPONENT_OBJS := $(patsubst %.c,%.o, $(COMPONENT_SRCS))
 
 COMPONENT_SRCDIRS := src test
 
+CFLAGS += -Wno-sign-compare
 
 ##
 #CPPFLAGS +=

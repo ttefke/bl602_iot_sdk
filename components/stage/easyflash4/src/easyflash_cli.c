@@ -4,7 +4,7 @@
 #include <easyflash.h>
 #include <blog.h>
 
-static void psm_set_cmd(char *buf, int len, int argc, char **argv)
+static void psm_set_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (argc != 3) {
         printf("usage: psm_set [key] [value]\r\n");
@@ -14,7 +14,7 @@ static void psm_set_cmd(char *buf, int len, int argc, char **argv)
     ef_save_env();
 }
 
-static void psm_unset_cmd(char *buf, int len, int argc, char **argv)
+static void psm_unset_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (argc != 2) {
         printf("usage: psm_unset [key]\r\n");
@@ -24,22 +24,22 @@ static void psm_unset_cmd(char *buf, int len, int argc, char **argv)
     ef_save_env();
 }
 
-static void psm_get_cmd(char *buf, int len, int argc, char **argv)
+static void psm_get_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     /* You can add your code here. */
 }
 
-static void psm_dump_cmd(char *buf, int len, int argc, char **argv)
+static void psm_dump_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     ef_print_env();
 }
 
-static void psm_erase_cmd(char *buf, int len, int argc, char **argv)
+static void psm_erase_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     ef_env_set_default();
 }
 
-void psm_test_cmd(char *buf, int len, int argc, char **argv)
+void psm_test_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     const char *def_name = "1234567890123456789012345678901234567890123456789012345678901234";
     uint8_t *data_src = NULL;

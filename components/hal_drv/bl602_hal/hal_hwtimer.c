@@ -239,7 +239,7 @@ int hal_hwtimer_init(void)
     return 0;
 }
 
-hw_timer_t *hal_hwtimer_create(uint32_t period, hw_t handler, int repeat)
+hw_timer_t *hal_hwtimer_create(uint32_t period, hw_t handler, [[gnu::unused]] int repeat)
 {
     TimerHandle_t handle;
 

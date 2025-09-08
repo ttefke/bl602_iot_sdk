@@ -13,7 +13,7 @@
 #include <vfs_err.h>
 #include <yloop_types.h>
 
-static int vfs_adc_open(inode_t *inode, file_t *fp)
+static int vfs_adc_open([[gnu::unused]] inode_t *inode, file_t *fp)
 {
     int ret = -1;              /* return value */
     adc_dev_t *adc_dev = NULL; /* adc device pointer */

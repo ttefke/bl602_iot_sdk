@@ -50,7 +50,7 @@ void helloworld(void)
     log_step(ci_table_step_end);
 }
 
-void user_vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void user_vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     /*empty*/
 }

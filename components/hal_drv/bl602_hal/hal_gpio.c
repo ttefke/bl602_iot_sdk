@@ -155,7 +155,7 @@ static int _get_gpio_config(const void* fdt, uint32_t dtb_offset, const char *na
     return 0;
 }
 
-static void _dump_gpio_conf(struct gpio_feature_config *config)
+static void _dump_gpio_conf([[maybe_unused]] struct gpio_feature_config *config)
 {
     blog_info("New CONF: GPIO%02u: feature %u, active %u, mode %u, time %u\r\n",
             config->pin,

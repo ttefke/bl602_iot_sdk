@@ -32,23 +32,25 @@ struct poll_arg {
     aos_sem_t sem;
 };
 
-static void setup_fd(int fd)
+static void setup_fd([[gnu::unused]] int fd)
 {
 }
 
-static void teardown_fd(int fd)
+static void teardown_fd([[gnu::unused]] int fd)
 {
 }
 
-static void vfs_poll_notify(struct pollfd *fd, void *arg)
+static void vfs_poll_notify([[gnu::unused]] struct pollfd *fd, void *arg)
 {
     struct poll_arg *parg = arg;
     aos_sem_signal(&parg->sem);
 }
 
-static int wait_io(int maxfd, fd_set *rfds, struct poll_arg *parg, int timeout)
+static int wait_io([[gnu::unused]] int maxfd, [[gnu::unused]] fd_set *rfds, struct poll_arg *parg, int timeout)
 {
-    timeout = timeout >= 0 ? timeout : AOS_WAIT_FOREVER;
+    if (timeout < 0) {
+        timeout = AOS_WAIT_FOREVER;
+    }
     aos_sem_wait(&parg->sem, timeout);
     return 0;
 }
@@ -174,7 +176,11 @@ check_poll:
 }
 #endif
 
+#ifdef IO_NEED_TRAP
 int aos_fcntl(int fd, int cmd, int val)
+#else
+int aos_fcntl(int fd, [[gnu::unused]] int cmd, [[gnu::unused]] int val)
+#endif
 {
     if (fd < 0) {
         return -EINVAL;

@@ -702,7 +702,7 @@ const struct cli_command built_ins[] STATIC_CLI_CMD_ATTRIBUTE = {
 /* Built-in "help" command: prints all registered commands and their help
  * text string, if any.
  */
-static void help_cmd(char *buf, int len, int argc, char **argv)
+static void help_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int      i, n;
     uint32_t build_in_count = sizeof(built_ins) / sizeof(built_ins[0]);
@@ -734,7 +734,7 @@ static void help_cmd(char *buf, int len, int argc, char **argv)
 }
 
 
-static void version_cmd(char *buf, int len, int argc, char **argv)
+static void version_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int num = 4, i;
     unsigned int addr[4], size[4];
@@ -760,7 +760,7 @@ static void version_cmd(char *buf, int len, int argc, char **argv)
 
 #if (AOS_CLI_MINI_SIZE <= 0)
 
-static void echo_cmd(char *buf, int len, int argc, char **argv)
+static void echo_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (argc == 1) {
         aos_cli_printf("Usage: echo on/off. Echo is currently %s\r\n",
@@ -777,18 +777,18 @@ static void echo_cmd(char *buf, int len, int argc, char **argv)
     }
 }
 
-static void exit_cmd(char *buf, int len, int argc, char **argv)
+static void exit_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     cliexit = 1;
     return;
 }
 
-static void devname_cmd(char *buf, int len, int argc, char **argv)
+static void devname_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     aos_cli_printf("device name: %s\r\n", SYSINFO_DEVICE_NAME);
 }
 
-static void pmem_cmd(char *buf, int len, int argc, char **argv)
+static void pmem_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int   i;
     char *pos    = NULL;
@@ -859,7 +859,7 @@ static void pmem_cmd(char *buf, int len, int argc, char **argv)
     }
 }
 
-static void mmem_cmd(char *buf, int len, int argc, char **argv)
+static void mmem_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     void        *addr  = NULL;
     int          width = 4;
@@ -914,28 +914,28 @@ static void mmem_cmd(char *buf, int len, int argc, char **argv)
 
 #endif
 
-static void reboot_cmd(char *buf, int len, int argc, char **argv)
+static void reboot_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     aos_cli_printf("reboot\r\n");
 
     hal_reboot();
 }
 
-static void poweroff_cmd(char *buf, int len, int argc, char **argv)
+static void poweroff_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     aos_cli_printf("poweroff\r\n");
 
     hal_poweroff();
 }
 
-static void reset_cmd(char *buf, int len, int argc, char **argv)
+static void reset_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     aos_cli_printf("system reset\r\n");
 
     hal_sys_reset();
 }
 
-static void uptime_cmd(char *buf, int len, int argc, char **argv)
+static void uptime_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     long long ms;
     long long days;
@@ -957,17 +957,17 @@ static void uptime_cmd(char *buf, int len, int argc, char **argv)
     );
 }
 
-void tftp_ota_thread(void *arg)
+void tftp_ota_thread([[gnu::unused]] void *arg)
 {
     aos_task_exit(0);
 }
 
-static void ota_cmd(char *buf, int len, int argc, char **argv)
+static void ota_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     aos_task_new("LOCAL OTA", tftp_ota_thread, 0, 4096);
 }
 
-static void ps_cmd(char *buf, int len, int argc, char **argv)
+static void ps_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     char *pcWriteBuffer, *info;
     const char *const pcHeader = "State   Priority  Stack    #          Base\r\n********************************************************\r\n";
@@ -1017,7 +1017,7 @@ static int cb_idnoe(void *arg, inode_t *node)
     return 0;
 }
 
-static void ls_cmd(char *buf, int len, int argc, char **argv)
+static void ls_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     char path_name[128];
     aos_dir_t * dp;
@@ -1100,7 +1100,7 @@ static void ls_cmd(char *buf, int len, int argc, char **argv)
     vPortFree(st);
 }
 
-static void hexdump_cmd(char *buf, int len, int argc, char **argv)
+static void hexdump_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int fd;
     romfs_filebuf_t filebuf;
@@ -1126,7 +1126,7 @@ static void hexdump_cmd(char *buf, int len, int argc, char **argv)
     aos_close(fd);
 }
 
-static void cat_cmd(char *buf, int len, int argc, char **argv)
+static void cat_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int fd;
     char ch;
@@ -1270,7 +1270,7 @@ void *aos_cli_task_get(void)
     return cli_task.hdl;
 }
 
-int aos_cli_init(int use_thread)
+int aos_cli_init([[gnu::unused]] int use_thread)
 {
     extern char _ld_bl_static_cli_cmds_start, _ld_bl_static_cli_cmds_end;
 #if 0
@@ -1320,7 +1320,7 @@ init_general_err:
 #endif
 }
 
-static void console_cb_read(int fd, void *param)
+static void console_cb_read([[gnu::unused]] int fd, [[gnu::unused]] void *param)
 {
     char buffer[16];
     int ret;
@@ -1336,7 +1336,7 @@ static void console_cb_read(int fd, void *param)
     }
 }
 
-static void console_cb_write(int fd, void *param)
+static void console_cb_write([[gnu::unused]] int fd, [[gnu::unused]] void *param)
 {
     printf("Empty cb\r\n");
 }

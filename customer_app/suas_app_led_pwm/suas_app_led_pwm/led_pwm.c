@@ -17,7 +17,7 @@
 #define PWM_FREQUENCY_DIVIDER 4
 
 /* LED task */
-void task_led_pwm(void *pvParameters)
+void task_led_pwm([[gnu::unused]] void *pvParameters)
 {
   printf("LED PWM task started\r\n");
   

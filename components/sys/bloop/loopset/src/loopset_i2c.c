@@ -50,7 +50,7 @@ struct loop_evt_handler_holder {
     const struct loop_evt_handler handler;
 };
 
-static int _i2c_bloop_evt(struct loop_ctx *loop, const struct loop_evt_handler *handler, uint32_t *bitmap_evt, uint32_t *evt_type_map)
+static int _i2c_bloop_evt([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, [[gnu::unused]] uint32_t *bitmap_evt, uint32_t *evt_type_map)
 {
     uint32_t map = *evt_type_map;
 
@@ -86,7 +86,7 @@ redo: if (map & EVT_MAP_INSERT_I2C_TRIGGER) {
     return 0;
 }
 
-static int _i2c_bloop_msg(struct loop_ctx *loop, const struct loop_evt_handler *handler, struct loop_msg *msg)
+static int _i2c_bloop_msg([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, [[gnu::unused]] struct loop_msg *msg)
 {
     blog_debug("[I2C] [MSG] called with msg info\r\n");
     return 0;

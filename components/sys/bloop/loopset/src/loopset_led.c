@@ -79,7 +79,7 @@ static inline void _waiting_queue_handle(struct led_trigger_ctx *ctx)
     }
 }
 
-static int _led_bloop_evt(struct loop_ctx *loop, const struct loop_evt_handler *handler, uint32_t *bitmap_evt, uint32_t *evt_type_map)
+static int _led_bloop_evt([[gnu::unused]] struct loop_ctx *loop, const struct loop_evt_handler *handler, [[gnu::unused]] uint32_t *bitmap_evt, uint32_t *evt_type_map)
 {
     uint32_t map = *evt_type_map;
     struct loop_evt_handler_holder *handler_holder = (struct loop_evt_handler_holder*)handler;
@@ -102,7 +102,7 @@ redo:
     return 0;
 }
 
-static int _led_bloop_msg(struct loop_ctx *loop, const struct loop_evt_handler *handler, struct loop_msg *msg)
+static int _led_bloop_msg([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, [[gnu::unused]] struct loop_msg *msg)
 {
     blog_debug("[LED] [MSG] called with msg info\r\n"
            "    priority %u\r\n"
@@ -138,7 +138,7 @@ int loopset_led_hook_on_looprt(void)
     return looprt_handler_register(&_led_bloop_handler_holder.handler, 1);
 }
 
-static void _cb_led_trigger(struct loop_ctx *loop, struct loop_timer *timer, void *arg)
+static void _cb_led_trigger([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] struct loop_timer *timer, void *arg)
 {
     struct led_trigger_item *trigger = (struct led_trigger_item*)arg;
 

@@ -19,7 +19,7 @@
 #define TRANSFER_SIZE    5111
 
 
-static void init_buf(uint8_t *buf, int size)
+static void init_buf(uint8_t *buf)
 {
     int i = 0;
 
@@ -28,7 +28,8 @@ static void init_buf(uint8_t *buf, int size)
     }
 }
 
-void demo_spi_master(char *buf, int len, int argc, char **argv)
+void demo_spi_master([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int a = 0;
     int spi_dev = -1;
@@ -55,7 +56,7 @@ void demo_spi_master(char *buf, int len, int argc, char **argv)
         return;
     }
  
-    init_buf(pbuf0_tx, TRANSFER_SIZE);
+    init_buf(pbuf0_tx);
     memset(pbuf0_rx, 0x00, TRANSFER_SIZE);
 
     pxfer[0].tx_buf = (uint32_t)pbuf0_tx;
@@ -79,7 +80,8 @@ void demo_spi_master(char *buf, int len, int argc, char **argv)
     aos_close(spi_dev);
 }
 
-void demo_spi_slave(char *buf, int len, int argc, char **argv)
+void demo_spi_slave([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int a = 0;
     int spi_dev = -1;
@@ -106,7 +108,7 @@ void demo_spi_slave(char *buf, int len, int argc, char **argv)
         return;
     }
  
-    init_buf(pbuf0_tx, TRANSFER_SIZE);
+    init_buf(pbuf0_tx);
     memset(pbuf0_rx, 0x00, TRANSFER_SIZE);
 
     pxfer[0].tx_buf = (uint32_t)pbuf0_tx;
@@ -130,7 +132,8 @@ void demo_spi_slave(char *buf, int len, int argc, char **argv)
     aos_close(spi_dev);
 }
 
-void spi_loop_master(char *buf, int len, int argc, char **argv)
+void spi_loop_master([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {   
     int i = 0;
     for (i = 0; i < 100; i++) {
@@ -141,7 +144,8 @@ void spi_loop_master(char *buf, int len, int argc, char **argv)
     return;
 }
 
-void spi_loop_slave(char *buf, int len, int argc, char **argv)
+void spi_loop_slave([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {   
     int i = 0;
     for (i = 0; i < 100; i++) {

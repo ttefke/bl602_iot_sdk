@@ -49,8 +49,8 @@ void ble_central_write() {
 }
 
 /* Callback for received notifications */
-uint8_t ble_central_notify_function(struct bt_conn *conn,
-    struct bt_gatt_subscribe_params *params,
+uint8_t ble_central_notify_function([[gnu::unused]] struct bt_conn *conn,
+    [[gnu::unused]] struct bt_gatt_subscribe_params *params,
     const void *data, uint16_t length) {
     
     /* Print received message */
@@ -78,7 +78,7 @@ uint8_t ble_central_notify_function(struct bt_conn *conn,
 
 /* Callback function indicating MTU exchange */
 void ble_exchange_mtu_cb(struct bt_conn *conn, u8_t err,
-    struct bt_gatt_exchange_params *params) {
+    [[gnu::unused]]struct bt_gatt_exchange_params *params) {
     printf("[CENTRAL] MTU exchange %s, new MTU size: %d\r\n", err == 0U ? "sucessful": "failed",
         bt_gatt_get_mtu(conn));
 }

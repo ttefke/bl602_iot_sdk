@@ -193,7 +193,8 @@ int bl_sec_init(void)
     return 0;
 }
 
-int bl_exp_mod(uint32_t *src, uint32_t *result, int len, uint32_t *exp, int exp_len, uint32_t *mod, int mod_len)
+int bl_exp_mod([[gnu::unused]] uint32_t *src, [[gnu::unused]] uint32_t *result, [[gnu::unused]] int len,
+  [[gnu::unused]] uint32_t *exp, [[gnu::unused]] int exp_len, [[gnu::unused]] uint32_t *mod, [[gnu::unused]] int mod_len)
 {
     return 0;
 }
@@ -208,7 +209,7 @@ int bl_sec_test(void)
     return 0;
 }
 
-void _dump_rsa_data(const uint8_t *data, int size)
+void _dump_rsa_data([[maybe_unused]] const uint8_t *data, int size)
 {
     int i;
 

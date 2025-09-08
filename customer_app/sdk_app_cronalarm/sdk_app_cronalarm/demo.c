@@ -134,7 +134,7 @@ static void test_month02(void)
 }
 
 
-static void cmd_test_seconds(char *buf, int len, int argc, char **argv)
+static void cmd_test_seconds([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     cron_alarm_create("1-10/1 * * * * *", Repeats, 0);         // every minute 1-10s every second triggle once.
     cron_alarm_create("*/2 * * * * *", Repeats2, 0);         // timer for every 2 seconds
@@ -142,7 +142,7 @@ static void cmd_test_seconds(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void cmd_test_minutes(char *buf, int len, int argc, char **argv)
+static void cmd_test_minutes([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     cron_alarm_create("27 44 9 * * *", test_min01, 0);         // every 9:44:27
     cron_alarm_create("0 */1 * * * *", test_min02, 0);         // timer for every 1 minutes
@@ -150,7 +150,7 @@ static void cmd_test_minutes(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void cmd_test_hour(char *buf, int len, int argc, char **argv)
+static void cmd_test_hour([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     cron_alarm_create("0 0 */1 * * *", test_hour01, 0);         //every hour 0 min, 0 s
     cron_alarm_create("15 15 */4 * * *", test_hour02, 0);       //every 4 hour 15 min, 15 s
@@ -158,7 +158,7 @@ static void cmd_test_hour(char *buf, int len, int argc, char **argv)
 }
 
 
-static void cmd_test_day(char *buf, int len, int argc, char **argv)
+static void cmd_test_day([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     cron_alarm_create("0 0 0 */1 * ?", test_day01, 0);         //every 1 day, 0:0:0
     cron_alarm_create("11 23 0 */3 * *", test_day02, 0);       //every 3 day, 00:23:11
@@ -166,21 +166,21 @@ static void cmd_test_day(char *buf, int len, int argc, char **argv)
 }
 
 
-static void cmd_test_week(char *buf, int len, int argc, char **argv)
+static void cmd_test_week([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     cron_alarm_create("0 0 0 * * MON,WED,FRI", test_week01, 0);         //every MON, WED, FRI 00:00:00
     cron_alarm_create("11 23 0 ? * 5", test_week02, 0);       //every Friday 00:23:11
     return;
 }
 
-static void cmd_test_month(char *buf, int len, int argc, char **argv)
+static void cmd_test_month([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     cron_alarm_create("0 0 0 1 * *", test_month01, 0);         //every month  1day, 00:00:00
     cron_alarm_create("11 23 1 1 JAN-FEB *", test_month02, 0);      //every JAN, FEB day1 01:23:11
     return;
 }
 
-static void cmd_add_minutes(char *buf, int len, int argc, char **argv)
+static void cmd_add_minutes([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int num = 0;
     if (argc == 1) {
@@ -194,7 +194,7 @@ static void cmd_add_minutes(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void cmd_add_hour(char *buf, int len, int argc, char **argv)
+static void cmd_add_hour([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int num = 0;
     if (argc == 1) {
@@ -208,7 +208,7 @@ static void cmd_add_hour(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void cmd_add_day(char *buf, int len, int argc, char **argv)
+static void cmd_add_day([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int num = 0;
     if (argc == 1) {
@@ -222,7 +222,7 @@ static void cmd_add_day(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void cmd_add_week(char *buf, int len, int argc, char **argv)
+static void cmd_add_week([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int num = 0;
     if (argc == 1) {
@@ -236,7 +236,7 @@ static void cmd_add_week(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void cmd_add_month(char *buf, int len, int argc, char **argv)
+static void cmd_add_month([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int num = 0;
     if (argc == 1) {
@@ -250,7 +250,7 @@ static void cmd_add_month(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void cmd_show_date(char *buf, int len, int argc, char **argv)
+static void cmd_show_date([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     uint32_t seconds = 0;
     utils_time_date_t date;

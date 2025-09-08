@@ -71,7 +71,7 @@ static HeapRegion_t xHeapRegions[] =
 static StackType_t proc_stack_looprt[512];
 static StaticTask_t proc_task_looprt;
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -125,7 +125,7 @@ static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off)
     return 0;
 }
 
-static void event_cb_i2c_event(input_event_t *event, void *private_data)
+static void event_cb_i2c_event(input_event_t *event, [[gnu::unused]]  void *private_data)
 {
     switch (event->code) {
         case CODE_I2C_END:
@@ -156,7 +156,7 @@ static void event_cb_i2c_event(input_event_t *event, void *private_data)
     }
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

@@ -33,7 +33,7 @@
 
 #include <blog.h>
 
-void blog_testc3_entry(void *arg)
+void blog_testc3_entry([[gnu::unused]] void *arg)
 {
     aos_msleep(5000);
 

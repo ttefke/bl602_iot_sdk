@@ -99,7 +99,7 @@ static HeapRegion_t xHeapRegions[] =
         { NULL, 0 } /* Terminates the array. */
 };
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -126,7 +126,7 @@ void vApplicationIdleHook(void)
 }
 
 #include <bl_pwm.h>
-void cmd_pwm_init(char *buf, int len, int argc, char **argv)
+void cmd_pwm_init([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint8_t id;
     uint8_t pin;
@@ -142,7 +142,7 @@ void cmd_pwm_init(char *buf, int len, int argc, char **argv)
     bl_pwm_init(id, pin, 6000000);
 }
 
-void cmd_pwm_start(char *buf, int len, int argc, char **argv)
+void cmd_pwm_start([[gnu::unused]] char *buf,[[gnu::unused]]  int len, int argc, char **argv)
 {
     uint8_t id;
 
@@ -156,7 +156,7 @@ void cmd_pwm_start(char *buf, int len, int argc, char **argv)
     bl_pwm_start(id);
 }
 
-void cmd_pwm_stop(char *buf, int len, int argc, char **argv)
+void cmd_pwm_stop([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint8_t id;
 
@@ -192,12 +192,14 @@ void pwm_entry(void *arg)
     aos_ioctl(fd, IOCTL_PWM_OUTPUT_STOP, 0);
 }
 
-void cmd_pwm_task(char *buf, int len, int argc, char **argv)
+void cmd_pwm_task([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     aos_task_new("pwm_tsk", pwm_entry, "/dev/pwm0", 1024);
 }
 
-void cmd_pwm_test(char *buf, int len, int argc, char **argv)
+void cmd_pwm_test([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     uint8_t pin = 0;
     uint8_t id = 0;
@@ -225,7 +227,7 @@ static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "pwm_test", "pwm_test", cmd_pwm_test},
 };
 
-void __pwm_init(char *buf, int len, int argc, char **argv)
+void __pwm_init([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int id;
     if (argc != 2) {
@@ -238,7 +240,7 @@ void __pwm_init(char *buf, int len, int argc, char **argv)
     hal_pwm_start(id);
 }
 
-void __pwm_duty_set(char *buf, int len, int argc, char **argv)
+void __pwm_duty_set([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t id, duty, ms;
 
@@ -253,7 +255,7 @@ void __pwm_duty_set(char *buf, int len, int argc, char **argv)
     hal_pwm_duty_set(id, duty, ms);
 }
 
-void __pwm_duty_get(char *buf, int len, int argc, char **argv)
+void __pwm_duty_get([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t duty;
     int id;
@@ -270,7 +272,7 @@ void __pwm_duty_get(char *buf, int len, int argc, char **argv)
     printf("pwm duty %ld", duty);
 }
 
-void __pwm_freq_set(char *buf, int len, int argc, char **argv)
+void __pwm_freq_set([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t freq;
     int id;
@@ -285,7 +287,7 @@ void __pwm_freq_set(char *buf, int len, int argc, char **argv)
     hal_pwm_freq_update(id, freq);
 }
 
-void __pwm_freq_get(char *buf, int len, int argc, char **argv)
+void __pwm_freq_get([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t freq;
     int id;
@@ -300,7 +302,7 @@ void __pwm_freq_get(char *buf, int len, int argc, char **argv)
     printf("pwm freq %ld", freq);
 }
 
-void __pwm_stop(char *buf, int len, int argc, char **argv)
+void __pwm_stop([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int id;
 
@@ -362,7 +364,7 @@ static void __opt_feature_init(void)
 #endif
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

@@ -268,9 +268,7 @@ CPPFLAGS += -DARCH_RISCV
 COMMON_WARNING_FLAGS = \
 	-Wall \
 	-Werror=all \
-	-Wextra \
-	-Wno-unused-parameter \
-	-Wno-sign-compare
+	-Wextra
 
 ifdef CONFIG_WARN_WRITE_STRINGS
 COMMON_WARNING_FLAGS += -Wwrite-strings
@@ -342,7 +340,8 @@ CFLAGS := $(strip \
 	$(E21_CPU_CFLAGS) \
 	$(EXTRA_CFLAGS)) \
 	-save-temps=obj \
-	-Werror -Wall
+	-Werror \
+	-Wall
 
 CXXFLAGS := $(strip \
 	-std=c++20 \
@@ -368,7 +367,8 @@ CXXFLAGS := $(strip \
 	-fno-rtti \
 	-fno-exceptions \
 	-save-temps=obj \
-	-Werror -Wall \
+	-Werror \
+	-Wall \
 	)
 
 export CFLAGS CPPFLAGS CXXFLAGS ASMFLAGS

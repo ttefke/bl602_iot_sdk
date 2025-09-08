@@ -36,7 +36,7 @@
 #include <blog.h>
 #define USER_UNUSED(a) ((void)(a))
 
-static void cmd_gpio_func(char *buf, int len, int argc, char **argv)
+static void cmd_gpio_func([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int ionum = -1, inputmode = -1, pullup = -1, pulldown = -1;
 
@@ -67,7 +67,7 @@ static void cmd_gpio_func(char *buf, int len, int argc, char **argv)
     }
 }
 
-static void cmd_gpio_set(char *buf, int len, int argc, char **argv)
+static void cmd_gpio_set([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int ionum = -1, val = -1;
 
@@ -90,7 +90,7 @@ static void cmd_gpio_set(char *buf, int len, int argc, char **argv)
     bl_gpio_output_set(ionum, val ? 1 : 0);
 }
 
-static void cmd_gpio_get(char *buf, int len, int argc, char **argv)
+static void cmd_gpio_get([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int ionum = -1, ret;
     uint8_t val;

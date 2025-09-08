@@ -54,7 +54,7 @@ static HeapRegion_t xHeapRegions[] =
 };
 
 // Keepalive function
-static void keepalive(void *pvParameters)
+static void keepalive([[gnu::unused]] void *pvParameters)
 {
     // Wait half a second for system initialization
     vTaskDelay(500);
@@ -95,7 +95,7 @@ int get_dts_addr(const char *name, uint32_t *start, uint32_t *off)
 }
 
 // Key event callback
-static void event_cb_key_event(input_event_t *event, void *private_data)
+static void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     switch (event->code) {
         // Short key press (read a high value on GPIO pin 2 for 100-3000ms)
@@ -133,7 +133,7 @@ static void event_cb_key_event(input_event_t *event, void *private_data)
 }
 
 // Event loop
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     uint32_t fdt = 0, offset = 0;
     static StackType_t proc_stack_looprt[512];

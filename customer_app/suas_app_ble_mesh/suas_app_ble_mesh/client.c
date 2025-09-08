@@ -20,7 +20,7 @@ extern struct bt_mesh_model models[];
 extern struct bt_mesh_msg_ctx network_configuration;
 
 // Client: evaluate received GET packet
-void gen_onoff_status(struct bt_mesh_model *model,
+void gen_onoff_status([[gnu::unused]] struct bt_mesh_model *model,
 	struct bt_mesh_msg_ctx *ctx,
 	struct net_buf_simple *buf)
 {

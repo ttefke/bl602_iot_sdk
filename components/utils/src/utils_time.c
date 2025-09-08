@@ -33,7 +33,7 @@
 
 int utils_time_date_from_epoch(unsigned int epoch, utils_time_date_t *date)
 {
-    int i;
+    unsigned int i;
     unsigned short temp_days;
     unsigned char month_days[12]={31,28,31,30,31,30,31,31,30,31,30,31};
     unsigned char week_days[7] = {4,5,6,0,1,2,3};

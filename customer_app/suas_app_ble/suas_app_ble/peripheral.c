@@ -100,9 +100,9 @@ void ble_peripheral_send_notification() {
 }
 
 /* Received data callback function */
-int ble_blf_recv(struct bt_conn *conn,
-    const struct bt_gatt_attr *attr, const void *buf,
-    u16_t len, u16_t offset, u8_t flags)
+int ble_blf_recv([[gnu::unused]] struct bt_conn *conn,
+    [[gnu::unused]] const struct bt_gatt_attr *attr, const void *buf,
+    u16_t len, [[gnu::unused]] u16_t offset, [[gnu::unused]] u8_t flags)
 {
     // Allocate storage to hold received data
     uint8_t *recv_buffer;
@@ -124,7 +124,7 @@ int ble_blf_recv(struct bt_conn *conn,
 }
 
 /* Changes in client characteristic configuration */
-void ble_bl_ccc_cfg_changed(const struct bt_gatt_attr *attr, u16_t value) {
+void ble_bl_ccc_cfg_changed([[gnu::unused]] const struct bt_gatt_attr *attr, u16_t value) {
     // Enable notifications if requested
     if (value == BT_GATT_CCC_NOTIFY) {
         notify_flag = true;
@@ -199,7 +199,7 @@ void ble_peripheral_connected(struct bt_conn *conn, uint8_t err) {
 }
 
 /* Device disconnected */
-void ble_peripheral_disconnected(struct bt_conn *conn, uint8_t reason) {
+void ble_peripheral_disconnected([[gnu::unused]] struct bt_conn *conn, uint8_t reason) {
     printf("[PERIPHERAL] Disconnected, reason: 0x%02x\r\n", reason);
 
     // Send device disconnected message to device handler

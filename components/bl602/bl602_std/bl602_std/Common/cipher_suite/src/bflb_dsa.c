@@ -209,7 +209,8 @@ int32_t bflb_dsa_mexp_mont(uint32_t size,uint32_t *a,uint32_t *b,uint32_t *c,uin
  * invR_p*r%p=1(r is 1024/2048/256)
  * invR_q*r%q=1(r is 1024/2048/256)
  */
-int32_t bflb_dsa_decrypt_crt(uint32_t size,uint32_t *c,bflb_dsa_crt_cfg* crtCfg,uint32_t *d,uint32_t *r)
+int32_t bflb_dsa_decrypt_crt(uint32_t size, uint32_t *c,
+  bflb_dsa_crt_cfg* crtCfg, [[gnu::unused]] uint32_t *d ,uint32_t *r)
 {
     /*
      * m1 = pow(c, dP, p)
@@ -294,7 +295,7 @@ int32_t bflb_dsa_decrypt_crt(uint32_t size,uint32_t *c,bflb_dsa_crt_cfg* crtCfg,
     return 0;
 }
 
-int32_t bflb_dsa_init(uint32_t size)
+int32_t bflb_dsa_init([[gnu::unused]] uint32_t size)
 {
     return 0;
 }

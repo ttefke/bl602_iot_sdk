@@ -33,8 +33,8 @@ extern struct bt_mesh_msg_ctx network_configuration;
 
 // Send current STATUS message
 // The message contains the current on/off state of the LED
-void send_onoff_status(struct bt_mesh_model *model,
-	struct bt_mesh_msg_ctx *context)
+void send_onoff_status([[gnu::unused]] struct bt_mesh_model *model,
+	[[gnu::unused]] struct bt_mesh_msg_ctx *context)
 {
 	// Construct message:
 	//	Parameters:
@@ -62,14 +62,14 @@ void send_onoff_status(struct bt_mesh_model *model,
 // to get the current LED state
 void gen_onoff_get(struct bt_mesh_model *model,
 	struct bt_mesh_msg_ctx *ctx,
-	struct net_buf_simple *buf)
+	[[gnu::unused]]struct net_buf_simple *buf)
 {
 	send_onoff_status(model, ctx);
 }
 
 // SET new state received by a client
 void gen_onoff_set(struct bt_mesh_model *model,	
-	struct bt_mesh_msg_ctx *ctx,
+	[[gnu::unused]] struct bt_mesh_msg_ctx *ctx,
 	struct net_buf_simple *buf)
 {
 

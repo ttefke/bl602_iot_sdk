@@ -34,7 +34,7 @@
 
 #include <blog.h>
 
-static void cmd_wdt_init(char *buf, int len, int argc, char **argv)
+static void cmd_wdt_init([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int ms = 0;
 
@@ -50,17 +50,17 @@ static void cmd_wdt_init(char *buf, int len, int argc, char **argv)
     bl_wdt_init(ms);
 }
 
-static void cmd_wdt_feed(char *buf, int len, int argc, char **argv)
+static void cmd_wdt_feed([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_wdt_feed();
 }
 
-static void cmd_wdt_disable(char *buf, int len, int argc, char **argv)
+static void cmd_wdt_disable([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_wdt_disable();
 }
 
-static void cmd_timer_start(char *buf, int len, int argc, char **argv)
+static void cmd_timer_start([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
 int bl_timer_tick_enable(void);
     bl_timer_tick_enable();

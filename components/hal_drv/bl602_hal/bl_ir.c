@@ -43,7 +43,7 @@ static void ir_gpio_init(int pin)
     return;
 }
 
-static void ir_init(int pin, int ctrltype)
+static void ir_init(int pin, [[gnu::unused]] int ctrltype)
 {
     IR_RxCfg_Type rxcfg = {
         IR_RX_NEC,      /* Set ir rx mode NEC */

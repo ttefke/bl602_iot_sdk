@@ -342,7 +342,7 @@ uint32_t dirent_file(char *path, void **p_addr_start_input, void **p_addr_end_in
     return 0;
 }
 
-static int romfs_open(file_t *fp, const char *path, int flags)
+static int romfs_open(file_t *fp, const char *path, [[gnu::unused]] int flags)
 {
     char *start_addr;
     char *end_addr;
@@ -477,7 +477,7 @@ static off_t romfs_lseek(file_t *fp, off_t off, int whence)
     return fp->offset;
 }
 
-static int romfs_stat(file_t *fp, const char *path, struct stat *st)
+static int romfs_stat([[gnu::unused]] file_t *fp, const char *path, struct stat *st)
 {
     char *start_addr = 0;
     char *end_addr = 0;
@@ -511,7 +511,7 @@ static int romfs_stat(file_t *fp, const char *path, struct stat *st)
     return 0;
 }
 
-static aos_dir_t *romfs_opendir(file_t *fp, const char *path)
+static aos_dir_t *romfs_opendir([[gnu::unused]] file_t *fp, const char *path)
 {
     romfs_dir_t *dp      = NULL;
     char *start_addr;
@@ -555,7 +555,7 @@ static aos_dir_t *romfs_opendir(file_t *fp, const char *path)
     return NULL;
 }
 
-static aos_dirent_t *romfs_readdir(file_t *fp, aos_dir_t *dir)
+static aos_dirent_t *romfs_readdir([[gnu::unused]] file_t *fp, aos_dir_t *dir)
 {
     romfs_dir_t    *dp = (romfs_dir_t *)dir;
 
@@ -619,7 +619,7 @@ static aos_dirent_t *romfs_readdir(file_t *fp, aos_dir_t *dir)
     return &(dp->cur_dirent);
 }
 
-static int romfs_closedir(file_t *fp, aos_dir_t *dir)
+static int romfs_closedir([[gnu::unused]] file_t *fp, aos_dir_t *dir)
 {
     romfs_dir_t *dp  = (romfs_dir_t *)dir;
 

@@ -33,7 +33,7 @@
 void coex_dump_pta(void);
 void coex_dump_wifi(void);
 
-static void __attribute__((unused)) cmd_coex_dump(char *buf, int len, int argc, char **argv)
+static void cmd_coex_dump([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     coex_dump_pta();
     coex_dump_wifi();

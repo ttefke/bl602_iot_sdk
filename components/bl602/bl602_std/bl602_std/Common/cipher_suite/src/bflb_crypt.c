@@ -297,15 +297,15 @@ int32_t bflb_crypt_deinit_do(bflb_crypt_handle_t *crypt_handle)
 }
 #else
 static SEC_Eng_AES_Ctx aesCtx;
-int32_t bflb_crypt_init_do(bflb_crypt_handle_t *crypt_handle,uint8_t type)
+int32_t bflb_crypt_init_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle, [[gnu::unused]] uint8_t type)
 {
     int32_t ret = BFLB_CRYPT_OK;
 
     return ret;
 }
 
-int32_t bflb_crypt_setkey_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *key, uint8_t keytype, uint8_t key_len,
-                        const uint8_t *nonce,uint8_t nonce_len,uint8_t dir)
+int32_t bflb_crypt_setkey_do(bflb_crypt_handle_t *crypt_handle, const uint8_t *key, uint8_t keytype, uint8_t key_len,
+                        const uint8_t *nonce, [[gnu::unused]] uint8_t nonce_len, uint8_t dir)
 {
     int32_t ret = BFLB_CRYPT_OK;
 
@@ -343,17 +343,15 @@ int32_t bflb_crypt_setkey_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *ke
     return ret;
 }
 
-int32_t bflb_crypt_setadd_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *add,uint8_t len,
-                            uint8_t dir)
+int32_t bflb_crypt_setadd_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle, [[gnu::unused]] const uint8_t *add,
+                            [[gnu::unused]] uint8_t len, [[gnu::unused]] uint8_t dir)
 {
     int32_t ret = BFLB_CRYPT_OK;
-
-
     return ret;
 }
 
-int32_t bflb_crypt_encrypt_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *in,uint32_t len,
-                        size_t offset,uint8_t *out)
+int32_t bflb_crypt_encrypt_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle, const uint8_t *in,uint32_t len,
+                        [[gnu::unused]] size_t offset, uint8_t *out)
 {
     int result=BFLB_CRYPT_OK;
 
@@ -362,29 +360,17 @@ int32_t bflb_crypt_encrypt_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *i
     return result;
 }
 
-int32_t bflb_crypt_encrypt_tag_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *in,uint32_t in_len,
-                        const uint8_t *add,uint32_t add_len,size_t offset,uint8_t *out,
-                        uint8_t *tag,uint8_t tag_len)
+int32_t bflb_crypt_encrypt_tag_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle, [[gnu::unused]] const uint8_t *in,
+                        [[gnu::unused]] uint32_t in_len, [[gnu::unused]] const uint8_t *add,
+                        [[gnu::unused]] uint32_t add_len, [[gnu::unused]] size_t offset, [[gnu::unused]] uint8_t *out,
+                        [[gnu::unused]] uint8_t *tag, [[gnu::unused]] uint8_t tag_len)
 {
     int result=BFLB_CRYPT_OK;
-
-
     return result;
 }
 
-int32_t bflb_crypt_update_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *in,uint32_t len,
-                        uint8_t *out)
-{
-    int result=BFLB_CRYPT_OK;
-
-    Sec_Eng_AES_Crypt(&aesCtx,SEC_ENG_AES_ID0,in, len,out);
-
-    return result;
-}
-
-
-int32_t bflb_crypt_decrypt_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *in,uint32_t len,
-                        size_t offset,uint8_t *out)
+int32_t bflb_crypt_update_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle,
+                        const uint8_t *in, uint32_t len, uint8_t *out)
 {
     int result=BFLB_CRYPT_OK;
 
@@ -393,17 +379,27 @@ int32_t bflb_crypt_decrypt_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *i
     return result;
 }
 
-int32_t bflb_crypt_auth_decrypt_do(bflb_crypt_handle_t *crypt_handle,const uint8_t *in,uint32_t in_len,
-                        const uint8_t *add,uint32_t add_len,size_t offset,uint8_t *out,
-                        const uint8_t *tag,uint8_t tag_len)
+
+int32_t bflb_crypt_decrypt_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle, [[gnu::unused]] const uint8_t *in,
+                        [[gnu::unused]] uint32_t len, [[gnu::unused]] size_t offset, [[gnu::unused]] uint8_t *out)
 {
     int result=BFLB_CRYPT_OK;
 
+    Sec_Eng_AES_Crypt(&aesCtx,SEC_ENG_AES_ID0,in, len,out);
 
     return result;
 }
 
-int32_t bflb_crypt_finish_do(bflb_crypt_handle_t *crypt_handle,uint8_t *tag,uint32_t len)
+int32_t bflb_crypt_auth_decrypt_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle, [[gnu::unused]] const uint8_t *in,
+                        [[gnu::unused]] uint32_t in_len, [[gnu::unused]] const uint8_t *add, [[gnu::unused]] uint32_t add_len,
+                        [[gnu::unused]] size_t offset, [[gnu::unused]] uint8_t *out, [[gnu::unused]] const uint8_t *tag,
+                        [[gnu::unused]] uint8_t tag_len)
+{
+    int result=BFLB_CRYPT_OK;
+    return result;
+}
+
+int32_t bflb_crypt_finish_do([[gnu::unused]] bflb_crypt_handle_t *crypt_handle, [[gnu::unused]] uint8_t *tag, [[gnu::unused]] uint32_t len)
 {
     int result=BFLB_CRYPT_OK;
 

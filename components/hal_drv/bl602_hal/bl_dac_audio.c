@@ -195,7 +195,7 @@ static void __dma_irq_handler(void)
     __dma_int_clear(DAC_DMA_CHANNLE);
 }
 
-int bl_audio_dac_samplerate_set (bl_audio_dac_dev_t *p_dev, GPIP_DAC_MOD_Type samplerate)
+int bl_audio_dac_samplerate_set ([[gnu::unused]] bl_audio_dac_dev_t *p_dev, GPIP_DAC_MOD_Type samplerate)
 {
     dacCfg.mod = samplerate;
     return 0;
@@ -213,9 +213,9 @@ int bl_audio_dac_tx_ready_config(bl_audio_dac_dev_t *p_dev,
     return 0;
 }
 
-int bl_audio_dac_rx_ready_config(bl_audio_dac_dev_t *p_dev,
-                              audio_callback_rx_ready_t cb,
-                              void *p_arg)
+int bl_audio_dac_rx_ready_config([[gnu::unused]] bl_audio_dac_dev_t *p_dev,
+                              [[gnu::unused]] audio_callback_rx_ready_t cb,
+                              [[gnu::unused]] void *p_arg)
 {
     return 0;
 }
@@ -243,9 +243,9 @@ int bl_audio_dac_tx_buffer_config (bl_audio_dac_dev_t *p_dev, void **ptr_mem, ui
     return 0;
 }
 
-int bl_audio_dac_rx_buffer_config (bl_audio_dac_dev_t *p_dev,
-                                  void **ptr_mem,
-                                  uint32_t bufsize)
+int bl_audio_dac_rx_buffer_config ([[gnu::unused]] bl_audio_dac_dev_t *p_dev,
+                                  [[gnu::unused]] void **ptr_mem,
+                                  [[gnu::unused]] uint32_t bufsize)
 {
     return 0;
 }
@@ -277,7 +277,7 @@ int bl_audio_dac_start (bl_audio_dac_dev_t *p_dev)
     return 0;
 }
 
-int bl_audio_dac_stop (bl_audio_dac_dev_t *p_dev)
+int bl_audio_dac_stop ([[gnu::unused]] bl_audio_dac_dev_t *p_dev)
 {
     gp_audio_dac_dev->pingpang = 0;
 

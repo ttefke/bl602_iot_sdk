@@ -77,7 +77,7 @@ static void web_http_server(struct netconn *conn)
 }
 
 
-void web_server2(void *pvParameters)
+void web_server2([[gnu::unused]] void *pvParameters)
 {
   struct netconn *conn, *newconn;
   err_t err;

@@ -5,7 +5,7 @@
 
 #define DATA_PIN 14
 
-void task_dht22(void *pvParameters) {
+void task_dht22([[gnu::unused]] void *pvParameters) {
     while (1) {
         printf("Current temperature: %.1f\r\n", getTemperature(DATA_PIN));
         vTaskDelay(2500 / portTICK_PERIOD_MS);

@@ -13,6 +13,6 @@ COMPONENT_OBJS := $(patsubst %.c,%.o, $(COMPONENT_SRCS))
 
 COMPONENT_SRCDIRS := cli
 
-
+CFLAGS += -Wno-sign-compare
 ##
 #CPPFLAGS +=

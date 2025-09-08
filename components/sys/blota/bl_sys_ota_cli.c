@@ -69,7 +69,7 @@ typedef struct ota_header {
 static int _check_ota_header(ota_header_t *ota_header, uint32_t *ota_len, int *use_xz)
 {
     char str[33];//assume max segment size
-    int i;
+    unsigned int i;
 
     memcpy(str, ota_header->u.s.header, sizeof(ota_header->u.s.header));
     str[sizeof(ota_header->u.s.header)] = '\0';
@@ -115,9 +115,10 @@ static int _check_ota_header(ota_header_t *ota_header, uint32_t *ota_len, int *u
 }
 
 #define OTA_PROGRAM_SIZE (512)
-static void ota_tcp_cmd(char *buf, int len, int argc, char **argv)
+static void ota_tcp_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
-    int sockfd, i;
+    int sockfd;
+    unsigned int i;
     int ret;
     struct hostent *hostinfo;
     uint8_t *recv_buffer;
@@ -159,7 +160,7 @@ static void ota_tcp_cmd(char *buf, int len, int argc, char **argv)
     uint32_t address = dest.sin_addr.s_addr;
     char *ip = inet_ntoa(address);
 
-    int total = 0;
+    uint32_t total = 0;
     int ota_header_found, use_xz;
     ota_header_t *ota_header;
 
@@ -225,10 +226,10 @@ static void ota_tcp_cmd(char *buf, int len, int argc, char **argv)
         } else {
             total += ret;
             if (0 == ret) {
-                printf("[OTA] [TEST] seems ota file ends unexpectedly, already transfer %u\r\n", total);
+                printf("[OTA] [TEST] seems ota file ends unexpectedly, already transfer %lu\r\n", total);
                 break;
             }
-            printf("total = %d, ret = %d\n\r", total, ret);
+            printf("total = %ld, ret = %d\n\r", total, ret);
             buffer_offset += ret;
 
             /*Only handle this case when ota header is NOT found*/
@@ -312,7 +313,8 @@ static void ota_tcp_cmd(char *buf, int len, int argc, char **argv)
     return;
 }
 
-static void ota_dump_cmd(char *buf, int len, int argc, char **argv)
+static void ota_dump_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+  [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     hal_boot2_dump();
 }

@@ -8,7 +8,7 @@
 
 #include <utils_log.h>
 
-int vfs_spi_open(inode_t *inode, file_t *fp)
+int vfs_spi_open([[gnu::unused]] inode_t *inode, file_t *fp)
 {
     int ret = -1;              /* return value */
     spi_dev_t *spi_dev = NULL; /* device pointer */

@@ -35,7 +35,7 @@
 /* Build the rocket with wheels*/
 static struct loop_ctx looprt;
 
-static void proc_entry_looprt(void *pvParameters)
+static void proc_entry_looprt([[gnu::unused]] void *pvParameters)
 {
     bloop_run(&looprt);
 

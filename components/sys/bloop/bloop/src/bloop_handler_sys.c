@@ -32,7 +32,7 @@
 #include <bloop.h>
 #include <utils_debug.h>
 
-static int loop_evt_entity_sys_evt(struct loop_ctx *loop, const struct loop_evt_handler *handler, uint32_t *bitmap_evt, uint32_t *evt_type_map)
+static int loop_evt_entity_sys_evt(struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, uint32_t *bitmap_evt, uint32_t *evt_type_map)
 {
     uint32_t map = *evt_type_map;
 
@@ -54,7 +54,7 @@ redo:
     return 0;
 }
 
-static int loop_evt_entity_sys_handler(struct loop_ctx *loop, const struct loop_evt_handler *handler, struct loop_msg *msg)
+static int loop_evt_entity_sys_handler([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, struct loop_msg *msg)
 {
     printf("[SYS] [MSG] called with msg info\r\n"
            "    priority %u\r\n"

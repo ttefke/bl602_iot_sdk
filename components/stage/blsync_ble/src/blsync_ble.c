@@ -31,19 +31,19 @@ static ssize_t read_data(struct bt_conn *conn,
                          u16_t len, u16_t offset);
 
 
-static void blsync_exchange_func(struct bt_conn *conn, u8_t err,
-              struct bt_gatt_exchange_params *params)
+static void blsync_exchange_func([[gnu::unused]] struct bt_conn *conn, u8_t err,
+              [[gnu::unused]] struct bt_gatt_exchange_params *params)
 {
     printf("Exchange %s\r\n", err == 0U ? "successful" : "failed");
 }
 
-static void blsync_disconnected(struct bt_conn *conn, u8_t reason)
+static void blsync_disconnected([[gnu::unused]] struct bt_conn *conn, u8_t reason)
 {
     printf("disconnected (reason %u)%s\r\n",reason);
     blsync_conn = NULL;
 }
 
-static void blsync_connected(struct bt_conn *conn, u8_t err)
+static void blsync_connected(struct bt_conn *conn, [[gnu::unused]] u8_t err)
 {
     int tx_octets = 0x00fb;
     int tx_time = 0x0848;
@@ -91,7 +91,7 @@ static void wifi_state_get_cb(void *p_arg)
     xSemaphoreGive(gp_index->xSemaphore);
 }
 
-static void wifiprov_ccc_cfg_changed(const struct bt_gatt_attr *attr,u16_t value)
+static void wifiprov_ccc_cfg_changed([[gnu::unused]] const struct bt_gatt_attr *attr, [[gnu::unused]] u16_t value)
 {
 
 }
@@ -116,8 +116,8 @@ static ssize_t read_data(struct bt_conn *conn,
 }
 
 static ssize_t write_data(struct bt_conn *conn,
-                   const struct bt_gatt_attr *attr, const void *buf,
-                   u16_t len, u16_t offset, u8_t flags)
+                   [[gnu::unused]] const struct bt_gatt_attr *attr, const void *buf,
+                   u16_t len, [[gnu::unused]] u16_t offset, [[gnu::unused]] u8_t flags)
 {
     gp_index->p_cur_conn = conn;
 
@@ -131,7 +131,7 @@ static ssize_t write_data(struct bt_conn *conn,
     return len;
 }
 
-static int __ble_bytes_send(void *p_drv, const void *buf, size_t bytes)
+static int __ble_bytes_send([[gnu::unused]] void *p_drv, const void *buf, size_t bytes)
 {
     if (gp_index->p_cur_conn == NULL) {
         return -1;
@@ -150,7 +150,7 @@ static int __ble_bytes_send(void *p_drv, const void *buf, size_t bytes)
     return 0;
 }
 
-static int __recv_event(void *p_drv, struct pro_event *p_event)
+static int __recv_event([[gnu::unused]] void *p_drv, struct pro_event *p_event)
 {
     char bssid[20] = {0};
     blesync_wifi_item_t *p_item;

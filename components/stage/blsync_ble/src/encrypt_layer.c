@@ -35,7 +35,7 @@ static int __pack_encrypt_read (void *p_drv, uint8_t pack_type,
                         dst_len, src_buf, src_lenght);
 }
 
-static int __pack_encrypt_write (void *p_drv, uint8_t pack_type,
+static int __pack_encrypt_write (void *p_drv, [[gnu::unused]] uint8_t pack_type,
                                  uint8_t src_id, uint8_t *dst_buf,
                                  uint8_t *dst_len, uint8_t *src_buf,
                                  uint8_t src_len, int16_t remain_len)

@@ -28,8 +28,8 @@ int xz_uncompress_init(struct xz_buf *stream, uint8_t *sbuf, uint8_t *dbuf)
     return 0;
 }
 
-int xz_uncompress_stream(struct xz_buf *stream, uint8_t *sbuf, uint32_t slen,
-        uint8_t *dbuf, uint32_t dlen, uint32_t *decomp_len)
+int xz_uncompress_stream(struct xz_buf *stream, [[gnu::unused]] uint8_t *sbuf, uint32_t slen,
+        [[gnu::unused]] uint8_t *dbuf, uint32_t dlen, uint32_t *decomp_len)
 {
     int status;
     *decomp_len = 0;

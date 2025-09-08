@@ -56,8 +56,8 @@ static struct bt_gatt_discover_params discover_params;
 static struct bt_gatt_subscribe_params subscribe_params;
 static u16_t bt_gatt_write_without_hanle=0;
 
-static uint8_t notify_func(struct bt_conn *conn,
-			   struct bt_gatt_subscribe_params *params,
+static uint8_t notify_func([[gnu::unused]] struct bt_conn *conn,
+			   [[gnu::unused]] struct bt_gatt_subscribe_params *params,
 			   const void *data, uint16_t length)
 {
  	

@@ -48,7 +48,8 @@ void log_step(const char *step[2])
 
 static void uart_echo_task(void *arg)
 {
-    int length = 0, total = 0;
+    int length = 0;
+    uint32_t total = 0;
     uint8_t buf_recv[128];
     uint8_t *pbuf = buf_recv;
     const char *name = arg;

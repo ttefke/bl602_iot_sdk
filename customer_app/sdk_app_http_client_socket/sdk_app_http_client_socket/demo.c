@@ -130,7 +130,8 @@ out:
     return 0;
 }
 
-static void http_test_cmd(char *buf, int len, int argc, char **argv)
+static void http_test_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     // http://nf.cr.dandanman.com/ddm/ContentResource/music/204.mp3
     client_demo("nf.cr.dandanman.com");

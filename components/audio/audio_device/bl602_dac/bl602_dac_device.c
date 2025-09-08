@@ -135,7 +135,7 @@ static int bl602_dac_stop(audio_framework_device_t *device)
     return 0;
 }
 
-static int bl602_dac_pause(audio_framework_device_t *device)
+static int bl602_dac_pause([[gnu::unused]] audio_framework_device_t *device)
 {
     return 0;
 }
@@ -254,7 +254,7 @@ static int bl602_dac_reset_samplerate(audio_framework_device_t *device, AUDIO_FR
     return 0;
 }
 
-static int bl602_dac_set_mclk(audio_framework_device_t *device, uint32_t mclk)
+static int bl602_dac_set_mclk([[gnu::unused]] audio_framework_device_t *device, [[gnu::unused]] uint32_t mclk)
 {
     return 0;
 }

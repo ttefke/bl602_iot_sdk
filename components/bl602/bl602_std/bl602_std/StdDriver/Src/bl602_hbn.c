@@ -185,7 +185,8 @@ void ATTR_TCM_SECTION HBN_Power_Down_Flash(SPI_Flash_Cfg_Type *flashCfg)
 *******************************************************************************/
 #ifndef BL602_USE_ROM_DRIVER
 __WEAK
-void ATTR_TCM_SECTION HBN_Enable(uint8_t aGPIOIeCfg,HBN_LDO_LEVEL_Type ldoLevel,HBN_LEVEL_Type hbnLevel)
+void ATTR_TCM_SECTION HBN_Enable(uint8_t aGPIOIeCfg,
+  [[gnu::unused]] HBN_LDO_LEVEL_Type ldoLevel, [[gnu::unused]] HBN_LEVEL_Type hbnLevel)
 {
     uint32_t tmpVal;
 
@@ -311,7 +312,8 @@ BL_Err_Type ATTR_TCM_SECTION HBN_Reset(void)
  * @return SUCCESS or ERROR
  *
 *******************************************************************************/
-BL_Err_Type HBN_App_Reset(uint8_t npXtalType,uint8_t bclkDiv,uint8_t apXtalType,uint8_t fclkDiv)
+BL_Err_Type HBN_App_Reset([[gnu::unused]] uint8_t npXtalType, [[gnu::unused]] uint8_t bclkDiv,
+  [[gnu::unused]] uint8_t apXtalType, [[gnu::unused]] uint8_t fclkDiv)
 {
     uint32_t tmp[12];
 

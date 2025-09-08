@@ -62,7 +62,7 @@ static void __uart_tx_irq(void *p_arg)
     }
 }
 
-int vfs_uart_open(inode_t *inode, file_t *fp)
+int vfs_uart_open([[gnu::unused]] inode_t *inode, file_t *fp)
 {
     int ret = -1;                /* return value */
     uart_dev_t *uart_dev = NULL; /* device pointer */
@@ -133,7 +133,7 @@ int vfs_uart_close(file_t *fp)
 
 ssize_t vfs_uart_read(file_t *fp, void *buf, size_t nbytes)
 {
-    int ret = -1;                /* return value */
+    uint32_t ret = -1;                /* return value */
     uart_dev_t *uart_dev = NULL; /* device pointer */
     uint32_t timeout;
 
@@ -253,7 +253,7 @@ int uart_ioctl_cmd_waimode(uart_dev_t *uart_dev, int cmd, unsigned long arg)
 {
     int ret = 0;
     uint32_t timeout;
-    uint32_t nbytes;
+    int nbytes;
     uart_ioc_waitread_t *waitr_arg = (uart_ioc_waitread_t *)arg;
 
     if (NULL == waitr_arg) {

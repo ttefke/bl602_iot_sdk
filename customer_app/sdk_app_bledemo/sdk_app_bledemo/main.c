@@ -93,7 +93,7 @@ static HeapRegion_t xHeapRegions[] =
 };
 
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -121,7 +121,7 @@ void vApplicationIdleHook(void)
     
 }
 
-static void proc_hellow_entry(void *pvParameters)
+static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
    
     vTaskDelay(500);
@@ -158,7 +158,7 @@ static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off)
     return 0;
 }
 static enum app_ble_role app_role;
-static void event_cb_key_event(input_event_t *event, void *private_data)
+static void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     switch (event->code) {
         case KEY_1:
@@ -218,7 +218,7 @@ static void borad_rgb_off(void)
     bl_gpio_output_set(LED_BLUE_PIN,1);
 
 }
-static void event_cb_ble_event(input_event_t *event, void *private_data)
+static void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     switch (event->code) {
         case BLE_ADV_START:
@@ -286,7 +286,7 @@ static void event_cb_ble_event(input_event_t *event, void *private_data)
 
 
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

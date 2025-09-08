@@ -91,7 +91,7 @@ static struct rb_node * rb_node_rotate2 (struct rb_node *self, int dir)
 }
 
 // rb_tree - default callbacks
-int rb_tree_node_cmp_ptr_cb (struct rb_tree *self, struct rb_node *a, struct rb_node *b)
+int rb_tree_node_cmp_ptr_cb ([[gnu::unused]] struct rb_tree *self, struct rb_node *a, struct rb_node *b)
 {
     return (a->value > b->value) - (a->value < b->value);
 }

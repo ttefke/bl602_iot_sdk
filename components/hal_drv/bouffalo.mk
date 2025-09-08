@@ -21,3 +21,5 @@ endif
 ifeq ($(HAL_DRV_HAS_CONFIG),0)
 $(error "Please Set CONFIG_CHIP_NAME, Avaliable list: BL606 BL602 BL702")
 endif
+
+CFLAGS += -Wno-sign-compare

@@ -70,7 +70,7 @@ void board_leds_off() {
 }
 
 /* Listener for BLE events */
-void event_cb_ble_event(input_event_t *event, void *private_data) {
+void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data) {
   /* Turn off LEDS */
   board_leds_off();
 
@@ -125,7 +125,7 @@ void event_cb_ble_event(input_event_t *event, void *private_data) {
 }
 
 /* Listener for key events */
-void event_cb_key_event(input_event_t *event, void *private_data) {
+void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data) {
   switch (event->code) {
     // Short key press (read a high value on GPIO pin 2 for 100-3000ms)
     // -> start as peripheral
@@ -181,7 +181,7 @@ int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
 }
 
 /* Event loop */
-void aos_loop_proc(void *pvParameters) {
+void aos_loop_proc([[gnu::unused]] void *pvParameters) {
   /* Init real-time loop */
   static StackType_t proc_stack_looprt[512];
   static StaticTask_t proc_task_looprt;
@@ -228,7 +228,7 @@ void aos_loop_proc(void *pvParameters) {
 }
 
 /* Keepalive task */
-void keep_alive_entry(void *pvParameters) {
+void keep_alive_entry([[gnu::unused]] void *pvParameters) {
   while(1) {
     vTaskDelay(60 * 1000);
   }

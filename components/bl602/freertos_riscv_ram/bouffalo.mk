@@ -31,3 +31,5 @@ CFLAGS := $(patsubst -Os,-O2,$(CFLAGS))
 endif
 
 ASMFLAGS += -DportasmHANDLE_INTERRUPT=interrupt_entry
+
+CFLAGS += -Wno-unused-parameter

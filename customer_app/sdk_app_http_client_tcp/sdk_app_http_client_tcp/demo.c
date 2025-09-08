@@ -38,7 +38,8 @@
 #include <cli.h>
 #include "demo.h"
 
-static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_content_len, u32_t srv_res, err_t err)
+static void cb_httpc_result(void *arg, [[gnu::unused]]  httpc_result_t httpc_result,
+        u32_t rx_content_len, [[gnu::unused]] u32_t srv_res, [[gnu::unused]] err_t err)
 {
     httpc_state_t **req = (httpc_state_t**)arg;
 
@@ -46,13 +47,15 @@ static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_con
     *req = NULL;
 }
 
-err_t cb_httpc_headers_done_fn(httpc_state_t *connection, void *arg, struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
+err_t cb_httpc_headers_done_fn([[gnu::unused]] httpc_state_t *connection, [[gnu::unused]] void *arg,
+        [[gnu::unused]] struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
 {
     printf("[HTTPC] hdr_len is %u, content_len is %lu\r\n", hdr_len, content_len);
     return ERR_OK;
 }
 
-static err_t cb_altcp_recv_fn(void *arg, struct altcp_pcb *conn, struct pbuf *p, err_t err)
+static err_t cb_altcp_recv_fn([[gnu::unused]] void *arg, struct altcp_pcb *conn,
+        struct pbuf *p, [[gnu::unused]] err_t err)
 {
     //printf("[HTTPC] Received %u Bytes\r\n", p->tot_len);
     static int count = 0;
@@ -67,7 +70,8 @@ static err_t cb_altcp_recv_fn(void *arg, struct altcp_pcb *conn, struct pbuf *p,
     return ERR_OK;
 }
 
-static void cmd_httpc_test(char *buf, int len, int argc, char **argv)
+static void cmd_httpc_test([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     static httpc_connection_t settings;
     static httpc_state_t *req;

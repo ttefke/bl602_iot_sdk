@@ -640,7 +640,7 @@ static void iperf_server_entry(const char *name)
     aos_task_new("ips", iperf_server, host, 4096);
 }
 
-static void ipc_test_cmd(char *buf, int len, int argc, char **argv)
+static void ipc_test_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (1 == argc) {
         printf(DEBUG_HEADER "[IPC] Connecting with default address " DEFAULT_HOST_IP "\r\n");
@@ -652,7 +652,7 @@ static void ipc_test_cmd(char *buf, int len, int argc, char **argv)
     }
 }
 
-static void ips_test_cmd(char *buf, int len, int argc, char **argv)
+static void ips_test_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (1 == argc) {
         puts(DEBUG_HEADER "[IPS] Starting iperf server on 0.0.0.0\r\n");
@@ -664,7 +664,7 @@ static void ips_test_cmd(char *buf, int len, int argc, char **argv)
     }
 }
 
-static void ipu_test_cmd(char *buf, int len, int argc, char **argv)
+static void ipu_test_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (1 == argc) {
         printf(DEBUG_HEADER "[IPU] Connecting with default address " DEFAULT_HOST_IP "\r\n");
@@ -677,7 +677,7 @@ static void ipu_test_cmd(char *buf, int len, int argc, char **argv)
 }
 
 // iperf UDP Server
-static void ipus_test_cmd(char *buf, int len, int argc, char **argv)
+static void ipus_test_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (1 == argc) {
         printf(DEBUG_HEADER "[IPUS] Connecting with default address 0.0.0.0\r\n");

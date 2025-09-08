@@ -141,3 +141,7 @@ COMPONENT_SRCS := $(ble_stack_srcs)
 COMPONENT_OBJS   := $(patsubst %.c,%.o, $(COMPONENT_SRCS))
 
 COMPONENT_SRCDIRS := $(ble_stack_srcs_dirs)
+
+CFLAGS += \
+	-Wno-sign-compare \
+	-Wno-unused-parameter

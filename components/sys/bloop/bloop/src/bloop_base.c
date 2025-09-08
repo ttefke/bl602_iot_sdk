@@ -38,7 +38,7 @@
 
 int bloop_init(struct loop_ctx *loop)
 {
-    int i;
+    unsigned int i;
 
     memset(loop, 0, sizeof(struct loop_ctx));
     for (i = 0; i < sizeof(loop->list)/sizeof(loop->list[0]); i++) {

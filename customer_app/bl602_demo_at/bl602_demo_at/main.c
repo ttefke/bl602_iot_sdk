@@ -124,7 +124,8 @@ static HeapRegion_t xHeapRegions[] =
 };
 static wifi_interface_t wifi_interface;
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask,
+    [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -218,7 +219,7 @@ struct _wifi_state {
     uint8_t state;
 };
 
-static void scan_item_cb(wifi_mgmr_ap_item_t *env, uint32_t *param1, wifi_mgmr_ap_item_t *item)
+static void scan_item_cb([[gnu::unused]] wifi_mgmr_ap_item_t *env, uint32_t *param1, wifi_mgmr_ap_item_t *item)
 {
     _wifi_item_t wifi_item;
     void (*complete)(void *) = (void (*)(void *))param1;
@@ -235,7 +236,7 @@ static void scan_item_cb(wifi_mgmr_ap_item_t *env, uint32_t *param1, wifi_mgmr_a
     }
 }
 
-static void scan_complete_cb(void *p_arg, void *param)
+static void scan_complete_cb(void *p_arg, [[gnu::unused]] void *param)
 {
     wifi_mgmr_scan_ap_all(NULL, p_arg, scan_item_cb);
 }
@@ -388,7 +389,7 @@ static void wifi_sta_connect(char *ssid, char *password)
 }
 
 static uint8_t ble_sync_auto = 0;
-static void event_cb_cli(input_event_t *event, void *p_arg)
+static void event_cb_cli(input_event_t *event, [[gnu::unused]] void *p_arg)
 {
     switch (event->code) {
         case CODE_CLI_BLSYNC_START :
@@ -408,7 +409,7 @@ static void event_cb_cli(input_event_t *event, void *p_arg)
     }
 }
 
-static void event_cb_wifi_event(input_event_t *event, void *private_data)
+static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     struct _wifi_conn *conn_info;
 
@@ -532,18 +533,13 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
     }
 }
 
-static void __attribute__((unused)) cmd_aws(char *buf, int len, int argc, char **argv)
-{
-void aws_main_entry(void *arg);
-    xTaskCreate(aws_main_entry, (char*)"aws_iot", 4096, NULL, 10, NULL);
-}
-
 #define MAXBUF          128
 #define BUFFER_SIZE     (12*1024)
 
 #define PORT 80
 
-static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
+static void cmd_stack_wifi([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     /*wifi fw stack and thread stuff*/
     static uint8_t stack_wifi_init  = 0;
@@ -561,11 +557,14 @@ static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
 
 }
 
-static void cmd_stack_ble(char *buf, int len, int argc, char **argv)
+static void cmd_stack_ble([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+    [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     ble_stack_start();
 }
-static void cmd_free_mem(char *buf, int len, int argc, char **argv)
+
+static void cmd_free_mem([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+    [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     printf("free memory is %d\r\n", xPortGetFreeHeapSize());
 }
@@ -626,7 +625,7 @@ static void __opt_feature_init(void)
 
 extern void usr_at_cmd_register(void);
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

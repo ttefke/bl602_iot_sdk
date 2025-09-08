@@ -101,7 +101,7 @@ static BL_Err_Type PWM_IntHandler(IRQn_Type intPeriph);
  *
 *******************************************************************************/
 #ifndef BL602_USE_HAL_DRIVER
-static BL_Err_Type PWM_IntHandler(IRQn_Type intPeriph)
+static BL_Err_Type PWM_IntHandler([[gnu::unused]] IRQn_Type intPeriph)
 {
     uint32_t i;
     uint32_t tmpVal;

@@ -115,7 +115,8 @@ void testfunc08(void)
 }
 
 
-void cmd_timer_func(char *buf, int len, int argc, char **argv)
+void cmd_timer_func([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     handle1 = hal_hwtimer_create(20000, testfunc01, 1);
     handle2 = hal_hwtimer_create(15000, testfunc02, 1);
@@ -126,18 +127,23 @@ void cmd_timer_func(char *buf, int len, int argc, char **argv)
     return;
 }
 
-void cmd_timer_add(char *buf, int len, int argc, char **argv)
-{
+void cmd_timer_add([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv) {
     hal_hwtimer_create(3301, testfunc06, 0);
     hal_hwtimer_create(3301, testfunc07, 0);
     hal_hwtimer_create(1234, testfunc08, 0);
     return;
 }
 
-void cmd_timer_delete(char *buf, int len, int argc, char **argv)
+void cmd_timer_delete([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int id;
     int ret = 0;
+
+    if (argc != 2) {
+        printf("Requires ID!\r\n");
+    }
+    
     id = atoi(argv[1]);
 
     switch (id) {

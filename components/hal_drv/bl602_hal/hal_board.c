@@ -507,7 +507,7 @@ static int update_sta_field(const void *fdt, int wifi_offset, const char *name)
     return offset1;
 }
 
-static int update_ap_field(const void *fdt, int wifi_offset, const char *name)
+static int update_ap_field(const void *fdt, int wifi_offset, [[gnu::unused]] const char *name)
 {
     int offset1 = 0;        /* subnode offset1 */
     int countindex = 0, lentmp = 0;
@@ -873,7 +873,7 @@ uint32_t hal_board_get_factory_addr(void)
     return factory_addr;
 }
 
-int hal_board_cfg(uint8_t board_code)
+int hal_board_cfg([[gnu::unused]] uint8_t board_code)
 {
 #ifdef CONFIG_USER_DTS_INAPP
     factory_addr = (uint32_t)factory_dtb;

@@ -109,7 +109,7 @@ const uint8_t secp256r1_Gy[32] ALIGN4 ={
         0x8b,0x4a,0xb8,0xe4,0xba,0x19,0xe4,0x5c,0xdd,0xf2,0x53,0x57,0xce,0x95,0x56,0x0a
 };
 
-int bflb_ecc_basic_parameter_init(uint8_t id)
+int bflb_ecc_basic_parameter_init([[gnu::unused]] uint8_t id)
 {
     Sec_Eng_PKA_Write_Data(ECP_SECP256R1_REG_TYPE,ECP_SECP256R1_N_REG_INDEX,(uint32_t *)secp256r1N,ECP_SECP256R1_SIZE/4,0);
     Sec_Eng_PKA_Write_Data(ECP_SECP256R1_REG_TYPE,ECP_SECP256R1_NPRIME_N_REG_INDEX,(uint32_t *)secp256r1PrimeN_N,ECP_SECP256R1_SIZE/4,0);
@@ -118,7 +118,7 @@ int bflb_ecc_basic_parameter_init(uint8_t id)
     return 0;
 }
 
-int bflb_ecc_point_mul_init(uint8_t id)
+int bflb_ecc_point_mul_init([[gnu::unused]] uint8_t id)
 {
     Sec_Eng_PKA_Write_Data(SEC_ENG_PKA_REG_SIZE_32,0,(uint32_t *)secp256r1P,ECP_SECP256R1_SIZE/4,0);
     Sec_Eng_PKA_Write_Data(SEC_ENG_PKA_REG_SIZE_32,1,(uint32_t *)secp256r1PrimeN_P,ECP_SECP256R1_SIZE/4,0);
@@ -172,7 +172,7 @@ void bflb_ecdsa_point_add_inf_check(uint8_t *pka_p1_eq_inf,uint8_t *pka_p2_eq_in
     *pka_p2_eq_inf = res[0]&res[1]&res[2]&res[3];
 }
 
-void bflb_ecdsa_copy_x2_to_x1(uint8_t id)
+void bflb_ecdsa_copy_x2_to_x1([[gnu::unused]] uint8_t id)
 {
     //X2->X1
     Sec_Eng_PKA_Move_Data(3,2,3,5,0);
@@ -182,7 +182,7 @@ void bflb_ecdsa_copy_x2_to_x1(uint8_t id)
     Sec_Eng_PKA_Move_Data(3,4,3,7,1);//Caution!!! wait movdat ready to execute next command
 }
 
-void bflb_ecdsa_point_add(uint8_t id)
+void bflb_ecdsa_point_add([[gnu::unused]] uint8_t id)
 {
     /* index 2:BAR_Zero_x
      * index 3:BAR_Zero_y
@@ -288,7 +288,7 @@ void bflb_ecdsa_point_add(uint8_t id)
 
 }
 
-void bflb_ecdsa_point_double(uint8_t id)
+void bflb_ecdsa_point_double([[gnu::unused]] uint8_t id)
 {
     /* index 2:BAR_Zero_x
      * index 3:BAR_Zero_y
@@ -475,12 +475,13 @@ int bflb_ecdsa_verify_point_mul(uint8_t id,const uint32_t *m )
     return 0;
 }
 
-int32_t bflb_ecdsa_init(uint8_t id)
+int32_t bflb_ecdsa_init([[gnu::unused]] uint8_t id)
 {
     return 0;
 }
 
-int32_t bflb_ecdsa_verify( uint8_t id,const uint32_t *hash, uint32_t hashLen,const uint32_t *pkX,const uint32_t *pkY, const uint32_t *r, const uint32_t *s)
+int32_t bflb_ecdsa_verify( uint8_t id, const uint32_t *hash, [[gnu::unused]] uint32_t hashLen,
+  const uint32_t *pkX, const uint32_t *pkY, const uint32_t *r, const uint32_t *s)
 {
     uint32_t bar_u1_x[8];
     uint32_t bar_u1_y[8];
@@ -778,7 +779,7 @@ int32_t bflb_ecdsa_verify( uint8_t id,const uint32_t *hash, uint32_t hashLen,con
     return 0;
 }
 
-int32_t bflb_ecdsa_deinit(uint8_t id)
+int32_t bflb_ecdsa_deinit([[gnu::unused]] uint8_t id)
 {
     return 0;
 }
@@ -1019,7 +1020,7 @@ int32_t bflb_ecdh_get_public_key( uint8_t id,const uint32_t *pkX,const uint32_t 
     return 0;
 }
 
-int32_t bflb_ecdsa_get_private_key( uint8_t id,uint32_t *private_key)
+int32_t bflb_ecdsa_get_private_key([[gnu::unused]] uint8_t id, uint32_t *private_key)
 {
     if(bflb_ecc_get_random_value(private_key,(uint32_t *)secp256r1N,32)<0){
         return -1;

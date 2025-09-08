@@ -83,7 +83,7 @@ static struct bt_gatt_attr blattrs[]= {
 };
 static struct bt_conn *ble_bl_conn=NULL;
 static bool notify_flag=false;
-static void ble_bl_ccc_cfg_changed(const struct bt_gatt_attr *attr, u16_t vblfue)
+static void ble_bl_ccc_cfg_changed([[gnu::unused]] const struct bt_gatt_attr *attr, u16_t vblfue)
 {
     if(vblfue == BT_GATT_CCC_NOTIFY) {
         
@@ -123,9 +123,9 @@ void ble_bl_disconnect(void)
     }
 }
 
-static int ble_blf_recv(struct bt_conn *conn,
-              const struct bt_gatt_attr *attr, const void *buf,
-              u16_t len, u16_t offset, u8_t flags)
+static int ble_blf_recv([[gnu::unused]] struct bt_conn *conn,
+              [[gnu::unused]] const struct bt_gatt_attr *attr, const void *buf,
+              u16_t len, [[gnu::unused]] u16_t offset, [[gnu::unused]] u8_t flags)
 {
     uint8_t *recv_buffer;
     recv_buffer=pvPortMalloc(sizeof(uint8_t)*len);
@@ -227,7 +227,7 @@ static void bl_connected(struct bt_conn *conn, uint8_t err)
 	}
 }
 
-static void bl_disconnected(struct bt_conn *conn, uint8_t reason)
+static void bl_disconnected([[gnu::unused]] struct bt_conn *conn, uint8_t reason)
 {
 	printf("Disconnected (reason 0x%02x)\n", reason);
     aos_post_event(EV_BLE_TEST,BLE_DEV_DISCONN,NULL);
@@ -308,7 +308,7 @@ static void auth_pairing_complete(struct bt_conn *conn, bool bonded)
     printf("%s with %s\r\n", bonded ? "Bonded" : "Paired", addr);
 }
 
-static void auth_pairing_failed(struct bt_conn *conn, enum bt_security_err reason)
+static void auth_pairing_failed(struct bt_conn *conn, [[gnu::unused]] enum bt_security_err reason)
 {
     char addr[BT_ADDR_LE_STR_LEN];
 

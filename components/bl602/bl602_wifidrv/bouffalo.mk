@@ -41,6 +41,9 @@ else
 CPPFLAGS += -DCFG_STA_MAX="1"
 endif
 
-
+CFLAGS += \
+	-Wno-sign-compare \
+	-Wno-unused-parameter
+	
 ##
 #CPPFLAGS +=

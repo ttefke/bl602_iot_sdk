@@ -22,7 +22,7 @@ struct cronalarm_trigger_item {
 
 struct cronalarm_trigger_item cronalarm_item;
 
-static int _cronalarm_bloop_evt(struct loop_ctx *loop, const struct loop_evt_handler *handler, uint32_t *bitmap_evt, uint32_t *evt_type_map)
+static int _cronalarm_bloop_evt([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, [[gnu::unused]] uint32_t *bitmap_evt, uint32_t *evt_type_map)
 {
     uint32_t map = *evt_type_map;
 redo:
@@ -42,7 +42,7 @@ redo:
     return 0;
 }
 
-static int _cronalarm_bloop_msg(struct loop_ctx *loop, const struct loop_evt_handler *handler, struct loop_msg *msg)
+static int _cronalarm_bloop_msg([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, [[gnu::unused]] struct loop_msg *msg)
 {
     blog_debug("[CRON ALARM] [MSG] called with msg info\r\n");
     return 0;
@@ -61,7 +61,7 @@ int loopapp_cronalarm_hook_on_looprt(void)
     return looprt_handler_register(&_cronalarm_bloop_handler_holder.handler, CRON_ALARM_PRIORITY);
 }
 
-static void _cb_cronalarm_trigger(struct loop_ctx *loop, struct loop_timer *timer, void *arg)
+static void _cb_cronalarm_trigger([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] struct loop_timer *timer, [[gnu::unused]] void *arg)
 {
     cron_alarm_service();
     return;

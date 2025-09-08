@@ -9,11 +9,11 @@
 //#include "include/health.h"
 
 // Define health service
-void attention_on(struct bt_mesh_model *mod) {
+void attention_on([[gnu::unused]] struct bt_mesh_model *mod) {
 	printf("[HEALTH] Attention on\r\n");
 }
 
-void attention_off(struct bt_mesh_model *mod) {
+void attention_off([[gnu::unused]] struct bt_mesh_model *mod) {
 	printf("[HEALTH] Attention off\r\n");
 }
 

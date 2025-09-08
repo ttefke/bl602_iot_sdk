@@ -85,7 +85,7 @@ static HeapRegion_t xHeapRegions[] =
         { NULL, 0 } /* Terminates the array. */
 };
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -111,7 +111,7 @@ void vApplicationIdleHook(void)
     /*empty*/
 }
 
-static void proc_hellow_entry(void *pvParameters)
+static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
     vTaskDelay(500);
 
@@ -122,52 +122,52 @@ static void proc_hellow_entry(void *pvParameters)
     vTaskDelete(NULL);
 }
 
-static void cmd_pka(char *buf, int len, int argc, char **argv)
+static void cmd_pka([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_pka_test();
 }
 
-static void cmd_sha(char *buf, int len, int argc, char **argv)
+static void cmd_sha([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_sec_sha_test();
 }
 
-static void cmd_trng(char *buf, int len, int argc, char **argv)
+static void cmd_trng([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_sec_test();
 }
 
-static void cmd_aes(char *buf, int len, int argc, char **argv)
+static void cmd_aes([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_sec_aes_test();
 }
 
-static void cmd_cks(char *buf, int len, int argc, char **argv)
+static void cmd_cks([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_cks_test();
 }
 
-static void cmd_dma(char *buf, int len, int argc, char **argv)
+static void cmd_dma([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_dma_test();
 }
 
-static void cmd_exception_load(char *buf, int len, int argc, char **argv)
+static void cmd_exception_load([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_LOAD_MISALIGN, (void*)0x22008001);
 }
 
-static void cmd_exception_l_illegal(char *buf, int len, int argc, char **argv)
+static void cmd_exception_l_illegal([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_ACCESS_ILLEGAL, (void*)0x00200000);
 }
 
-static void cmd_exception_store(char *buf, int len, int argc, char **argv)
+static void cmd_exception_store([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_STORE_MISALIGN, (void*)0x22008001);
 }
 
-static void cmd_exception_illegal_ins(char *buf, int len, int argc, char **argv)
+static void cmd_exception_illegal_ins([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_ILLEGAL_INSTRUCTION, (void*)0x22008001);
 }
@@ -225,7 +225,7 @@ static void __opt_feature_init(void)
 #endif
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

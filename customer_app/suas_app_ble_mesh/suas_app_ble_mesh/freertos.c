@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName ) {
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName ) {
     printf("[FreeRTOS] Stack Overflow checked\r\n");
     while (1) {}
 }
@@ -26,7 +26,7 @@ void vApplicationIdleHook(void)
 }
 
 #if ( configUSE_TICKLESS_IDLE != 0 )
-void vApplicationSleep( TickType_t xExpectedIdleTime_ms )
+void vApplicationSleep( [[gnu::unused]] TickType_t xExpectedIdleTime_ms )
 {
 }
 #endif

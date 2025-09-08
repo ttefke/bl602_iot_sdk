@@ -143,7 +143,7 @@ int aos_poll_read_fd(int sock, aos_poll_call_t cb, void *private_data)
     return 0;
 }
 
-void aos_cancel_poll_read_fd(int sock, aos_poll_call_t action, void *param)
+void aos_cancel_poll_read_fd(int sock, [[gnu::unused]] aos_poll_call_t action, [[gnu::unused]] void *param)
 {
     yloop_ctx_t *ctx = get_context();
     if (ctx->readers == NULL || ctx->reader_count == 0) {

@@ -317,7 +317,7 @@ BL_Err_Type SPI_Enable(SPI_ID_Type spiNo,SPI_WORK_MODE_Type modeType)
  * @return SUCCESS
  *
 *******************************************************************************/
-BL_Err_Type SPI_Disable(SPI_ID_Type spiNo,SPI_WORK_MODE_Type modeType)
+BL_Err_Type SPI_Disable(SPI_ID_Type spiNo, [[gnu::unused]] SPI_WORK_MODE_Type modeType)
 {
     uint32_t tmpVal;
     uint32_t SPIx = spiAddr[spiNo];

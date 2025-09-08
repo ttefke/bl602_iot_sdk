@@ -54,7 +54,7 @@ typedef struct bl_uart_notify {
 
 static bl_uart_notify_t g_uart_notify_arg[UART_NUMBER_SUPPORTED];
 
-static void gpio_init(uint8_t id, uint8_t tx_pin, uint8_t rx_pin, uint8_t cts_pin, uint8_t rts_pin)
+static void gpio_init(uint8_t id, uint8_t tx_pin, uint8_t rx_pin, [[gnu::unused]] uint8_t cts_pin, [[gnu::unused]] uint8_t rts_pin)
 {
     GLB_GPIO_Cfg_Type cfg;
     GLB_UART_SIG_FUN_Type tx_sigfun, rx_sigfun;
@@ -214,7 +214,7 @@ int bl_uart_flush(uint8_t id)
     return 0;
 }
 
-void bl_uart_getdefconfig(uint8_t id, uint8_t *parity)
+void bl_uart_getdefconfig([[gnu::unused]] uint8_t id, uint8_t *parity)
 {
     if (NULL == parity) {
         return;
@@ -339,7 +339,7 @@ int bl_uart_int_tx_notify_register(uint8_t id, cb_uart_notify_t cb, void *arg)
     return 0;
 }
 
-int bl_uart_int_rx_notify_unregister(uint8_t id, cb_uart_notify_t cb, void *arg)
+int bl_uart_int_rx_notify_unregister(uint8_t id, [[gnu::unused]] cb_uart_notify_t cb, [[gnu::unused]] void *arg)
 {
     if (!(id < UART_NUMBER_SUPPORTED)) {
         /*UART ID overflow*/
@@ -351,7 +351,7 @@ int bl_uart_int_rx_notify_unregister(uint8_t id, cb_uart_notify_t cb, void *arg)
     return 0;
 }
 
-int bl_uart_int_tx_notify_unregister(uint8_t id, cb_uart_notify_t cb, void *arg)
+int bl_uart_int_tx_notify_unregister(uint8_t id, [[gnu::unused]] cb_uart_notify_t cb, [[gnu::unused]] void *arg)
 {
     if (!(id < UART_NUMBER_SUPPORTED)) {
         /*UART ID overflow*/

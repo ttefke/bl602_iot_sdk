@@ -260,7 +260,7 @@ uint8_t rc522_is_new_card_present()
 }
 
 // Our task handle
-void spi_proc(void *pvParameters) {
+void spi_proc([[gnu::unused]] void *pvParameters) {
     // Wait until event loop initialized SPI handle
     vTaskDelay(2500);
     printf("Hello from spi proc\r\n");

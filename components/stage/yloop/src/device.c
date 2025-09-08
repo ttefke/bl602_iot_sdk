@@ -33,7 +33,7 @@ typedef struct {
     char buf[];
 } dev_event_t;
 
-static int event_open(inode_t *node, file_t *file)
+static int event_open([[gnu::unused]] inode_t *node, file_t *file)
 {
     event_dev_t *pdev = (event_dev_t *)aos_malloc(sizeof * pdev);
     memset(pdev, 0, sizeof (*pdev));

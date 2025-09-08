@@ -293,7 +293,7 @@ static void link_close(bt_mesh_prov_bearer_t bearer)
 	vOutputString("Provisioning link closed on %s\r\n", bearer2str(bearer));
 }
 
-static int output_number(bt_mesh_output_action_t action, u32_t number)
+static int output_number([[gnu::unused]] bt_mesh_output_action_t action, u32_t number)
 {
 	vOutputString("OOB Number: %u\r\n", number);
 	return 0;
@@ -413,15 +413,15 @@ static void show_faults(u8_t test_id, u16_t cid, u8_t *faults, size_t fault_coun
 	}
 }
 
-static void health_current_status(struct bt_mesh_health_cli *cli, u16_t addr,
-				  u8_t test_id, u16_t cid, u8_t *faults,
+static void health_current_status([[gnu::unused]] struct bt_mesh_health_cli *cli,
+				  u16_t addr, u8_t test_id, u16_t cid, u8_t *faults,
 				  size_t fault_count)
 {
 	vOutputString("Health Current Status from 0x%04x\r\n", addr);
 	show_faults(test_id, cid, faults, fault_count);
 }
 
-static int fault_get_cur(struct bt_mesh_model *model, u8_t *test_id,
+static int fault_get_cur([[gnu::unused]] struct bt_mesh_model *model, u8_t *test_id,
 			 u16_t *company_id, u8_t *faults, u8_t *fault_count)
 {
 	vOutputString("Sending current faults\r\n");
@@ -434,7 +434,7 @@ static int fault_get_cur(struct bt_mesh_model *model, u8_t *test_id,
 	return 0;
 }
 
-static int fault_get_reg(struct bt_mesh_model *model, u16_t cid,
+static int fault_get_reg([[gnu::unused]] struct bt_mesh_model *model, u16_t cid,
 			 u8_t *test_id, u8_t *faults, u8_t *fault_count)
 {
 	if (cid != BT_COMP_ID_LF) {
@@ -451,7 +451,7 @@ static int fault_get_reg(struct bt_mesh_model *model, u16_t cid,
 	return 0;
 }
 
-static int fault_clear(struct bt_mesh_model *model, uint16_t cid)
+static int fault_clear([[gnu::unused]] struct bt_mesh_model *model, uint16_t cid)
 {
 	if (cid != BT_COMP_ID_LF) {
 		return -EINVAL;
@@ -462,7 +462,7 @@ static int fault_clear(struct bt_mesh_model *model, uint16_t cid)
 	return 0;
 }
 
-static int fault_test(struct bt_mesh_model *model, uint8_t test_id, uint16_t cid)
+static int fault_test([[gnu::unused]] struct bt_mesh_model *model, uint8_t test_id, uint16_t cid)
 {
 	if (cid != BT_COMP_ID_LF) {
 		return -EINVAL;
@@ -475,14 +475,12 @@ static int fault_test(struct bt_mesh_model *model, uint8_t test_id, uint16_t cid
 	return 0;
 }
 
-static void attn_on(struct bt_mesh_model *model)
+static void attn_on([[gnu::unused]] struct bt_mesh_model *model)
 {
-
 	vOutputString("Attention timer on\r\n");
-
 }
 
-static void attn_off(struct bt_mesh_model *model)
+static void attn_off([[gnu::unused]] struct bt_mesh_model *model)
 {
 	vOutputString("Attention timer off\r\n");
 }

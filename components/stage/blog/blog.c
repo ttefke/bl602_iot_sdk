@@ -147,14 +147,14 @@ static int set_level(int argc, char **argv)
     return 0;
 }
 
-void cmd_blog_set_level(char *buf, int len, int argc, char **argv)
+void cmd_blog_set_level([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (0 != set_level(argc, argv)) {
         __blog_printf("set blog error.\r\n");
     }
 }
 
-void cmd_blog_info_dump(char *buf, int len, int argc, char **argv)
+void cmd_blog_info_dump([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     blog_info_t *info_c, *info_f, *info_p;
     char         name_buf[BLOG_NAMELEN_MAX] = {0};

@@ -83,7 +83,7 @@ static HeapRegion_t xHeapRegions[] =
         { NULL, 0 } /* Terminates the array. */
 };
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -137,7 +137,7 @@ static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off)
     return 0;
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;
@@ -274,7 +274,7 @@ static void system_thread_init()
     /*nothing here*/
 }
 
-static void test_cmd_aes_ecb(char *buf, int len, int argc, char **argv)
+static void test_cmd_aes_ecb([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count  = 256;
@@ -301,7 +301,7 @@ static void test_cmd_aes_ecb(char *buf, int len, int argc, char **argv)
     aes_ecb_test(length, count, keytype, aes_soft, ram_type);
 }
 
-static void test_cmd_aes_cbc(char *buf, int len, int argc, char **argv)
+static void test_cmd_aes_cbc([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count  = 256;
@@ -328,7 +328,7 @@ static void test_cmd_aes_cbc(char *buf, int len, int argc, char **argv)
     aes_cbc_test(length, count, keytype, aes_soft, ram_type);
 }
 
-static void test_cmd_aes_ctr(char *buf, int len, int argc, char **argv)
+static void test_cmd_aes_ctr([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count  = 256;
@@ -354,7 +354,7 @@ static void test_cmd_aes_ctr(char *buf, int len, int argc, char **argv)
     aes_ctr_test(length, count, keytype, aes_soft, ram_type);
 }
 
-static void test_cmd_aes_gcm(char *buf, int len, int argc, char **argv)
+static void test_cmd_aes_gcm([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count  = 256;
@@ -380,7 +380,7 @@ static void test_cmd_aes_gcm(char *buf, int len, int argc, char **argv)
     aes_gcm_test(length, count, keytype, aes_soft, ram_type);
 }
 
-static void test_cmd_gmac(char *buf, int len, int argc, char **argv)
+static void test_cmd_gmac([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count  = 256;
@@ -398,7 +398,7 @@ static void test_cmd_gmac(char *buf, int len, int argc, char **argv)
     gmac_test(length, count, ram_type);
 }
 
-static void test_cmd_sha256(char *buf, int len, int argc, char **argv)
+static void test_cmd_sha256([[gnu::unused]] char *buf, [[gnu::unused]]  int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count =  256;
@@ -420,7 +420,7 @@ static void test_cmd_sha256(char *buf, int len, int argc, char **argv)
     sha_test(length, count, SHA_256_MODE, sha_soft, ram_type);
 }
 
-static void test_cmd_sha224(char *buf, int len, int argc, char **argv)
+static void test_cmd_sha224([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count =  256;
@@ -442,7 +442,7 @@ static void test_cmd_sha224(char *buf, int len, int argc, char **argv)
     sha_test(length, count, SHA_224_MODE, sha_soft, ram_type);
 }
 
-static void test_cmd_sha1(char *buf, int len, int argc, char **argv)
+static void test_cmd_sha1([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     uint32_t length = 32768;
     uint32_t count =  256;

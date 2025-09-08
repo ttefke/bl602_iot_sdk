@@ -24,5 +24,6 @@ ifeq ($(CONFIG_INCLUDE_MQTT),1)
 COMPONENT_SRCDIRS +=  src/apps/mqtt
 endif
 
+CFLAGS += -Wno-unused-parameter
 ##
 #CPPFLAGS +=

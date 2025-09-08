@@ -98,7 +98,7 @@ extern SEC_Eng_SHA256_Ctx shaCtx;
 *******************************************************************************/
 static int32_t BLSP_MediaBot_Cal_Hash(uint32_t startAddr,uint32_t totalLen)
 {
-    int32_t dealLen=0;
+    uint32_t dealLen=0;
     int32_t readLen=0;
     uint32_t addr=startAddr;
     int32_t ret;

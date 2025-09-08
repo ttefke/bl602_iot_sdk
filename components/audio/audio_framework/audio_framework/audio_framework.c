@@ -29,7 +29,7 @@ int audio_framework_factory_build(const char *name, audio_framework_device_t **d
     return -1;
 }
 
-int audio_framework_factory_destory(audio_framework_device_t *device)
+int audio_framework_factory_destory([[gnu::unused]] audio_framework_device_t *device)
 {
     return -1;
 }

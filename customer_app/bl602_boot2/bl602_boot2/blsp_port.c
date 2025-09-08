@@ -344,13 +344,10 @@ void ATTR_TCM_SECTION BLSP_Boot2_Release_Other_CPU(void)
 /****************************************************************************//**
    * @brief  Boot2 update fw clock config
    *
-   * @param  clkCfg: Clock config pointer
-   * @param  flashCfg: flash config pointer
-   *
    * @return Boot_Error_Code
    *
 *******************************************************************************/
-void ATTR_TCM_SECTION BLSP_Boot2_Update_System_Flash_Clk(Boot_Clk_Config *clkCfg,SPI_Flash_Cfg_Type *flashCfg)
+void ATTR_TCM_SECTION BLSP_Boot2_Update_System_Flash_Clk()
 {
 #if 0
       SF_Ctrl_Cfg_Type sfCtrlCfg={

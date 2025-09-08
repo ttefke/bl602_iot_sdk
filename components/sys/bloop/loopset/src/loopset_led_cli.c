@@ -33,7 +33,7 @@
 
 #include <loopset.h>
 
-void cmd_loopset_led_trigger(char *buf, int len, int argc, char **argv)
+void cmd_loopset_led_trigger([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     int pin = -1, active = -1, type = -1;
     if (4 != argc) {

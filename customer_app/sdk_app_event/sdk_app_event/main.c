@@ -69,7 +69,7 @@ static HeapRegion_t xHeapRegions[] =
         { NULL, 0 } /* Terminates the array. */
 };
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -124,7 +124,7 @@ static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off)
     return 0;
 }
 
-static void event_cb_demo_event(input_event_t *event, void *private_data)
+static void event_cb_demo_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     uint16_t code = event->code;
     switch (code) {
@@ -145,12 +145,12 @@ static void event_cb_demo_event(input_event_t *event, void *private_data)
     }
 }
 
-static void delay_action(void *arg)
+static void delay_action([[gnu::unused]] void *arg)
 {
     printf("######This is event delay_action\r\n");
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

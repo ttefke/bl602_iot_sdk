@@ -365,25 +365,24 @@ int32_t hal_spi_init(spi_dev_t *spi)
     return 0;
 }
 
-int32_t hal_spi_finalize(spi_dev_t *spi)
+int32_t hal_spi_finalize([[gnu::unused]] spi_dev_t *spi)
 {
     blog_info("not support. hal_spi_finalize.\r\n");
     return 0;
 }
 
-int32_t hal_spi_send(spi_dev_t *spi, const uint8_t *data, uint16_t size, uint32_t timeout)
+int32_t hal_spi_send([[gnu::unused]] spi_dev_t *spi, [[gnu::unused]] const uint8_t *data, [[gnu::unused]] uint16_t size, [[gnu::unused]] uint32_t timeout)
 {
     blog_info("not support. hal_spi_send.\r\n");
     return 0;
 }
-
-int32_t hal_spi_recv(spi_dev_t *spi, uint8_t *data, uint16_t size, uint32_t timeout)
+int32_t hal_spi_recv([[gnu::unused]] spi_dev_t *spi, [[gnu::unused]] uint8_t *data, [[gnu::unused]] uint16_t size, [[gnu::unused]] uint32_t timeout)
 {
     blog_info("not support. hal_spi_recv.\r\n");
     return 0;
 }
 
-int32_t hal_spi_send_recv(spi_dev_t *spi, uint8_t *tx_data, uint8_t *rx_data, uint16_t size, uint32_t timeout)
+int32_t hal_spi_send_recv([[gnu::unused]] spi_dev_t *spi, [[gnu::unused]] uint8_t *tx_data, [[gnu::unused]] uint8_t *rx_data, [[gnu::unused]] uint16_t size, [[gnu::unused]] uint32_t timeout)
 {
     blog_info("not support. hal_spi_send_recv.\r\n");
     return 0;

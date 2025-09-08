@@ -178,7 +178,7 @@ extern void vprint(const char *fmt, va_list argp);
  * @param ... args
  *
  */
-void ef_log_debug(const char *file, const long line, const char *format, ...) {
+void ef_log_debug([[gnu::unused]] const char *file, [[gnu::unused]] const long line, const char *format, ...) {
 
 #ifdef PRINT_DEBUG
 

@@ -17,7 +17,7 @@
 #include "grove_dls_handler.h"
 
 // Function implementing the task to query sensor regularly
-void grove_handler(void *pvParameters) {
+void grove_handler([[gnu::unused]] void *pvParameters) {
     // Set up real-time looping to listen for hardware events (separate thread)
     static StackType_t proc_stack_looprt[256];
     static StaticTask_t proc_task_looprt;
@@ -53,7 +53,7 @@ void grove_handler(void *pvParameters) {
 }
 
 // Callback function to handle I2C interrupts
-void event_cb_i2c_interrupt(input_event_t *event, void *private_data)
+void event_cb_i2c_interrupt(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     switch (event->code) {
         case CODE_I2C_END:

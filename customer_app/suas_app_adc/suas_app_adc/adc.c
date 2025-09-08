@@ -16,7 +16,7 @@
 #include "adc.h"        // Our own header
 
 // ADC task implementation for FreeRTOS
-void task_adc(void *pvParameters)
+void task_adc([[gnu::unused]] void *pvParameters)
 {
   printf("ADC task started\r\n");
   
@@ -135,14 +135,14 @@ uint32_t read_adc() {
 
 #if DEBUG == 1
   printf("Read raw data:\r\n");
-  for (int i = 0; i < received_number_of_samples; i++) {
+  for (uint32_t i = 0; i < received_number_of_samples; i++) {
     printf("%"PRIu32"\r\n", ctx->channel_data[i]);
   }
 #endif
   
   // Calculate mean value
   uint32_t mean = 0;
-  for (int i = 0; i < received_number_of_samples; i++) {
+  for (uint32_t i = 0; i < received_number_of_samples; i++) {
     mean += adc_data[i];
   }
   mean /= received_number_of_samples;

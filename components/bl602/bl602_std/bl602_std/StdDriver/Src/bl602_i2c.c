@@ -160,7 +160,7 @@ static void I2C_IntHandler(I2C_ID_Type i2cNo)
  * @return None
  *
 *******************************************************************************/
-void I2C_SendWord(I2C_ID_Type i2cNo, uint32_t data)
+void I2C_SendWord([[gnu::unused]] I2C_ID_Type i2cNo, uint32_t data)
 {
     uint32_t I2Cx = I2C_BASE;
 
@@ -177,7 +177,7 @@ void I2C_SendWord(I2C_ID_Type i2cNo, uint32_t data)
  * @return word data
  *
 *******************************************************************************/
-uint32_t I2C_RecieveWord(I2C_ID_Type i2cNo)
+uint32_t I2C_RecieveWord([[gnu::unused]] I2C_ID_Type i2cNo)
 {
     uint32_t I2Cx = I2C_BASE;
 
@@ -194,7 +194,7 @@ uint32_t I2C_RecieveWord(I2C_ID_Type i2cNo)
  * @return None
  *
 *******************************************************************************/
-void I2C_Enable(I2C_ID_Type i2cNo)
+void I2C_Enable([[gnu::unused]] I2C_ID_Type i2cNo)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;
@@ -220,7 +220,7 @@ void I2C_Enable(I2C_ID_Type i2cNo)
  * @return None
  *
 *******************************************************************************/
-void I2C_Disable(I2C_ID_Type i2cNo)
+void I2C_Disable([[gnu::unused]] I2C_ID_Type i2cNo)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;
@@ -254,7 +254,7 @@ void I2C_Disable(I2C_ID_Type i2cNo)
  * @return SUCCESS or ERROR
  *
 *******************************************************************************/
-BL_Err_Type I2C_Reset(I2C_ID_Type i2cNo)
+BL_Err_Type I2C_Reset([[gnu::unused]] I2C_ID_Type i2cNo)
 {
     /* Check the parameters */
     CHECK_PARAM(IS_I2C_ID_TYPE(i2cNo));
@@ -273,7 +273,7 @@ BL_Err_Type I2C_Reset(I2C_ID_Type i2cNo)
  * @return None
  *
 *******************************************************************************/
-void I2C_Init(I2C_ID_Type i2cNo, I2C_Direction_Type direct, I2C_Transfer_Cfg *cfg)
+void I2C_Init([[gnu::unused]] I2C_ID_Type i2cNo, I2C_Direction_Type direct, I2C_Transfer_Cfg *cfg)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;
@@ -315,7 +315,7 @@ void I2C_Init(I2C_ID_Type i2cNo, I2C_Direction_Type direct, I2C_Transfer_Cfg *cf
  * @return None
  *
 *******************************************************************************/
-void I2C_SetPrd(I2C_ID_Type i2cNo, uint8_t phase)
+void I2C_SetPrd([[gnu::unused]] I2C_ID_Type i2cNo, uint8_t phase)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;
@@ -385,7 +385,7 @@ void I2C_ClockSet(I2C_ID_Type i2cNo, uint32_t clk)
  * @return None
  *
 *******************************************************************************/
-void I2C_SetSclSync(I2C_ID_Type i2cNo, uint8_t enable)
+void I2C_SetSclSync([[gnu::unused]] I2C_ID_Type i2cNo, uint8_t enable)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;
@@ -410,7 +410,7 @@ void I2C_SetSclSync(I2C_ID_Type i2cNo, uint8_t enable)
  * @return RESET or SET
  *
 *******************************************************************************/
-BL_Sts_Type I2C_IsBusy(I2C_ID_Type i2cNo)
+BL_Sts_Type I2C_IsBusy([[gnu::unused]] I2C_ID_Type i2cNo)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;
@@ -430,7 +430,7 @@ BL_Sts_Type I2C_IsBusy(I2C_ID_Type i2cNo)
  * @return RESET or SET
  *
 *******************************************************************************/
-BL_Sts_Type I2C_TransferEndStatus(I2C_ID_Type i2cNo)
+BL_Sts_Type I2C_TransferEndStatus([[gnu::unused]] I2C_ID_Type i2cNo)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;
@@ -583,7 +583,7 @@ BL_Err_Type I2C_MasterReceiveBlocking(I2C_ID_Type i2cNo, I2C_Transfer_Cfg *cfg)
  * @return None
  *
 *******************************************************************************/
-void I2C_IntMask(I2C_ID_Type i2cNo, I2C_INT_Type intType, BL_Mask_Type intMask)
+void I2C_IntMask([[gnu::unused]] I2C_ID_Type i2cNo, I2C_INT_Type intType, BL_Mask_Type intMask)
 {
     uint32_t tmpVal;
     uint32_t I2Cx = I2C_BASE;

@@ -485,7 +485,7 @@ BL_Err_Type GLB_Set_DMA_CLK(uint8_t enable,GLB_DMA_CLK_ID_Type clk)
  * @return SUCCESS or ERROR
  *
 *******************************************************************************/
-BL_Err_Type GLB_Set_IR_CLK(uint8_t enable,GLB_IR_CLK_SRC_Type clkSel,uint8_t div)
+BL_Err_Type GLB_Set_IR_CLK(uint8_t enable, [[gnu::unused]] GLB_IR_CLK_SRC_Type clkSel, uint8_t div)
 {
     uint32_t tmpVal = 0;
 

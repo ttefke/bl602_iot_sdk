@@ -33,7 +33,7 @@
 #include <bl_flash.h>
 #include <bl_boot2.h>
 
-PtTable_Error_Type PtTable_Update_Entry(const SPI_Flash_Cfg_Type *pFlashCfg,
+PtTable_Error_Type PtTable_Update_Entry([[gnu::unused]] const SPI_Flash_Cfg_Type *pFlashCfg,
                                                 PtTable_ID_Type targetTableID,
                                                 PtTable_Stuff_Config *ptStuff,
                                                 PtTable_Entry_Config *ptEntry)

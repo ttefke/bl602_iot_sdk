@@ -16,7 +16,7 @@ const struct file_ops pwm_ops =
     .ioctl = vfs_pwm_ioctl
 };
 
-int vfs_pwm_open(inode_t *inode, file_t *fp)
+int vfs_pwm_open([[gnu::unused]] inode_t *inode, file_t *fp)
 {
     int ret = -1;              /* return value */
     pwm_dev_t *pwm_dev = NULL; /* device pointer */

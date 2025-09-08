@@ -37,7 +37,8 @@ void log_step(const char *step[2])
     printf("%s   %s\r\n", step[0], step[1]);
 }
 
-void cmd_romfs(char *buf, int len, int argc, char **argv)
+void cmd_romfs([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     test1_romfs();
 }

@@ -178,7 +178,8 @@ int i2c_data_test(void)
     return 0;
 }
 
-static void test_i2c_api(char *buf, int len, int argc, char **argv)
+static void test_i2c_api([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int i = 0;
     uint8_t test_arr[32];

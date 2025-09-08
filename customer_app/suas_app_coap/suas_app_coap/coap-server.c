@@ -20,8 +20,9 @@
 static coap_context_t *main_coap_context;
 
 // Resource handler: generate random number and return it
-void handler_random(coap_resource_t *resource, coap_session_t  *session,
-  const coap_pdu_t *request, const coap_string_t *query,
+void handler_random([[gnu::unused]] coap_resource_t *resource,
+  [[gnu::unused]] coap_session_t *session, [[gnu::unused]] const coap_pdu_t *request,
+  [[gnu::unused]] const coap_string_t *query,
   coap_pdu_t *response) {
   // 0. Create variable: buffer to hold response data
   unsigned char buf[30];
@@ -121,7 +122,7 @@ error:
 }
 
 // CoAP server task
-void task_coap_server(void *pvParameters) {
+void task_coap_server([[gnu::unused]] void *pvParameters) {
   // Wait until WiFi is set up
   vTaskDelay(3 * 1000);
 

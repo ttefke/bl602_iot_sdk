@@ -31,7 +31,8 @@
 #include <cli.h>
 #include "demo.h"
 
-static void monitor_socket_cmd(char *buf, int len, int argc, char **argv)
+static void monitor_socket_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     printf("#####This is event poll_read_fd");
 }

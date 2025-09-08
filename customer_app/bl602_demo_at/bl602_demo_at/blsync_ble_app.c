@@ -68,7 +68,7 @@ static void wifiprov_api_state_get(void(*state_get)(void *))
     wifi_prov_api_event_state_get(state_get);
 }
 
-static void blesync_complete_cb (void *p_arg)
+static void blesync_complete_cb ([[gnu::unused]] void *p_arg)
 {
 
 }
@@ -80,7 +80,7 @@ static struct blesync_wifi_func WifiProv_conn_callback = {
     .local_wifi_state_get = wifiprov_api_state_get,
 };
 
-static void app_delayed_action_bleadv(void *arg)
+static void app_delayed_action_bleadv([[gnu::unused]] void *arg)
 {
     char *cmd1 = "ble_init\r\n";
     char *cmd2 = "ble_start_adv 0 0 0x100 0x100\r\n";
@@ -89,13 +89,13 @@ static void app_delayed_action_bleadv(void *arg)
     aos_cli_input_direct(cmd2, strlen(cmd2));
 }
 
-static void blsync_disconnected(struct bt_conn *conn, u8_t reason)
+static void blsync_disconnected([[gnu::unused]] struct bt_conn *conn, u8_t reason)
 {
     printf("disconnected (reason %u)\r\n",reason);
     at_server_notify_with_ctx(AT_BLE_DISCONNECTED, NULL, 0);
 }
 
-static void blsync_connected(struct bt_conn *conn, u8_t err)
+static void blsync_connected(struct bt_conn *conn, [[gnu::unused]] u8_t err)
 {
     const bt_addr_le_t *addr = bt_conn_get_dst(conn);
     at_server_notify_with_ctx(AT_BLE_CONNECTED, (void *)&addr->a, sizeof(addr->a));
@@ -131,7 +131,7 @@ void blsync_ble_start(void)
     aos_post_delayed_action(500, app_delayed_action_bleadv, NULL);
 }
 
-static void app_delayed_action_bleadvstop(void *arg)
+static void app_delayed_action_bleadvstop([[gnu::unused]] void *arg)
 {
     char *cmd3 = "ble_stop_adv\r\n";
     aos_cli_input_direct(cmd3, strlen(cmd3));

@@ -201,7 +201,8 @@ static intCallback_Type* secEngIntCbfArra[SEC_ENG_INT_ALL]= {NULL};
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_SHA256_Init(SEC_Eng_SHA256_Ctx *shaCtx,SEC_ENG_SHA_ID_Type shaNo,SEC_ENG_SHA_Type shaType,uint32_t shaTmpBuf[16],uint32_t padding[16])
+void Sec_Eng_SHA256_Init(SEC_Eng_SHA256_Ctx *shaCtx, [[gnu::unused]] SEC_ENG_SHA_ID_Type shaNo,
+  SEC_ENG_SHA_Type shaType, uint32_t shaTmpBuf[16], uint32_t padding[16])
 {
     uint32_t SHAx = SEC_ENG_BASE+SEC_ENG_SHA_OFFSET;
     uint32_t tmpVal;
@@ -233,7 +234,7 @@ void Sec_Eng_SHA256_Init(SEC_Eng_SHA256_Ctx *shaCtx,SEC_ENG_SHA_ID_Type shaNo,SE
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_SHA_Start(SEC_ENG_SHA_ID_Type shaNo)
+void Sec_Eng_SHA_Start([[gnu::unused]] SEC_ENG_SHA_ID_Type shaNo)
 {
     uint32_t SHAx = SEC_ENG_BASE+SEC_ENG_SHA_OFFSET;
     uint32_t tmpVal;
@@ -262,7 +263,8 @@ void Sec_Eng_SHA_Start(SEC_ENG_SHA_ID_Type shaNo)
  * @return SUCCESS or ERROR
  *
 *******************************************************************************/
-BL_Err_Type Sec_Eng_SHA256_Update(SEC_Eng_SHA256_Ctx *shaCtx,SEC_ENG_SHA_ID_Type shaNo,const uint8_t *input, uint32_t len)
+BL_Err_Type Sec_Eng_SHA256_Update(SEC_Eng_SHA256_Ctx *shaCtx,
+  [[gnu::unused]] SEC_ENG_SHA_ID_Type shaNo, const uint8_t *input, uint32_t len)
 {
     uint32_t SHAx = SEC_ENG_BASE+SEC_ENG_SHA_OFFSET;
     uint32_t tmpVal;
@@ -479,7 +481,7 @@ BL_Err_Type Sec_Eng_SHA256_Finish(SEC_Eng_SHA256_Ctx *shaCtx,SEC_ENG_SHA_ID_Type
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_SHA_Enable_Link(SEC_ENG_SHA_ID_Type shaNo)
+void Sec_Eng_SHA_Enable_Link([[gnu::unused]] SEC_ENG_SHA_ID_Type shaNo)
 {
     uint32_t SHAx = SEC_ENG_BASE;
     uint32_t tmpVal;
@@ -502,7 +504,7 @@ void Sec_Eng_SHA_Enable_Link(SEC_ENG_SHA_ID_Type shaNo)
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_SHA_Disable_Link(SEC_ENG_SHA_ID_Type shaNo)
+void Sec_Eng_SHA_Disable_Link([[gnu::unused]] SEC_ENG_SHA_ID_Type shaNo)
 {
     uint32_t SHAx = SEC_ENG_BASE;
     uint32_t tmpVal;
@@ -529,7 +531,9 @@ void Sec_Eng_SHA_Disable_Link(SEC_ENG_SHA_ID_Type shaNo)
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_SHA256_Link_Init(SEC_Eng_SHA256_Link_Ctx *shaCtx,SEC_ENG_SHA_ID_Type shaNo,uint32_t linkAddr,uint32_t shaTmpBuf[16],uint32_t padding[16])
+void Sec_Eng_SHA256_Link_Init(SEC_Eng_SHA256_Link_Ctx *shaCtx,
+  [[gnu::unused]] SEC_ENG_SHA_ID_Type shaNo, uint32_t linkAddr,
+  uint32_t shaTmpBuf[16], uint32_t padding[16])
 {
     /* Check the parameters */
     CHECK_PARAM(IS_SEC_ENG_SHA_ID_TYPE(shaNo));
@@ -556,7 +560,8 @@ void Sec_Eng_SHA256_Link_Init(SEC_Eng_SHA256_Link_Ctx *shaCtx,SEC_ENG_SHA_ID_Typ
  * @return SUCCESS or ERROR
  *
 *******************************************************************************/
-BL_Err_Type Sec_Eng_SHA256_Link_Update(SEC_Eng_SHA256_Link_Ctx *shaCtx,SEC_ENG_SHA_ID_Type shaNo,const uint8_t *input, uint32_t len)
+BL_Err_Type Sec_Eng_SHA256_Link_Update(SEC_Eng_SHA256_Link_Ctx *shaCtx,
+  [[gnu::unused]] SEC_ENG_SHA_ID_Type shaNo, const uint8_t *input, uint32_t len)
 {
     uint32_t SHAx = SEC_ENG_BASE;
     uint32_t tmpVal;
@@ -766,7 +771,8 @@ BL_Err_Type Sec_Eng_SHA256_Link_Finish(SEC_Eng_SHA256_Link_Ctx *shaCtx,SEC_ENG_S
  * @return SUCCESS
  *
 *******************************************************************************/
-BL_Err_Type Sec_Eng_AES_Init(SEC_Eng_AES_Ctx *aesCtx,SEC_ENG_AES_ID_Type aesNo,SEC_ENG_AES_Type aesType,SEC_ENG_AES_Key_Type keyType,SEC_ENG_AES_EnDec_Type enDecType)
+BL_Err_Type Sec_Eng_AES_Init(SEC_Eng_AES_Ctx *aesCtx, [[gnu::unused]] SEC_ENG_AES_ID_Type aesNo,
+  SEC_ENG_AES_Type aesType, SEC_ENG_AES_Key_Type keyType, SEC_ENG_AES_EnDec_Type enDecType)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
     uint32_t tmpVal;
@@ -824,7 +830,7 @@ BL_Err_Type Sec_Eng_AES_Init(SEC_Eng_AES_Ctx *aesCtx,SEC_ENG_AES_ID_Type aesNo,S
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Enable_BE(SEC_ENG_AES_ID_Type aesNo)
+void Sec_Eng_AES_Enable_BE([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
 
@@ -842,7 +848,7 @@ void Sec_Eng_AES_Enable_BE(SEC_ENG_AES_ID_Type aesNo)
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Enable_LE(SEC_ENG_AES_ID_Type aesNo)
+void Sec_Eng_AES_Enable_LE([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
 
@@ -860,7 +866,7 @@ void Sec_Eng_AES_Enable_LE(SEC_ENG_AES_ID_Type aesNo)
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Enable_Link(SEC_ENG_AES_ID_Type aesNo)
+void Sec_Eng_AES_Enable_Link([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo)
 {
     uint32_t AESx = SEC_ENG_BASE;
     uint32_t tmpVal;
@@ -881,7 +887,7 @@ void Sec_Eng_AES_Enable_Link(SEC_ENG_AES_ID_Type aesNo)
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Disable_Link(SEC_ENG_AES_ID_Type aesNo)
+void Sec_Eng_AES_Disable_Link([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo)
 {
     uint32_t AESx = SEC_ENG_BASE;
     uint32_t tmpVal;
@@ -906,7 +912,8 @@ void Sec_Eng_AES_Disable_Link(SEC_ENG_AES_ID_Type aesNo)
  * @return SUCCESS or ERROR
  *
 *******************************************************************************/
-BL_Err_Type Sec_Eng_AES_Link_Work(SEC_ENG_AES_ID_Type aesNo,uint32_t linkAddr,const uint8_t *in,uint32_t len,uint8_t *out)
+BL_Err_Type Sec_Eng_AES_Link_Work([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo,
+  uint32_t linkAddr, const uint8_t *in, uint32_t len, uint8_t *out)
 {
     uint32_t AESx = SEC_ENG_BASE;
     uint32_t tmpVal;
@@ -972,7 +979,7 @@ BL_Err_Type Sec_Eng_AES_Link_Work(SEC_ENG_AES_ID_Type aesNo,uint32_t linkAddr,co
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Set_Hw_Key_Src(SEC_ENG_AES_ID_Type aesNo,uint8_t src)
+void Sec_Eng_AES_Set_Hw_Key_Src([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo, uint8_t src)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
     uint32_t tmpVal;
@@ -997,7 +1004,8 @@ void Sec_Eng_AES_Set_Hw_Key_Src(SEC_ENG_AES_ID_Type aesNo,uint8_t src)
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Set_Key_IV(SEC_ENG_AES_ID_Type aesNo,SEC_ENG_AES_Key_Src_Type keySrc,const uint8_t *key,const uint8_t *iv)
+void Sec_Eng_AES_Set_Key_IV([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo, 
+  SEC_ENG_AES_Key_Src_Type keySrc, const uint8_t *key, const uint8_t *iv)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
     uint32_t tmpVal;
@@ -1078,7 +1086,8 @@ void Sec_Eng_AES_Set_Key_IV(SEC_ENG_AES_ID_Type aesNo,SEC_ENG_AES_Key_Src_Type k
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Set_Key_IV_BE(SEC_ENG_AES_ID_Type aesNo,SEC_ENG_AES_Key_Src_Type keySrc,const uint8_t *key,const uint8_t *iv)
+void Sec_Eng_AES_Set_Key_IV_BE([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo,
+  SEC_ENG_AES_Key_Src_Type keySrc, const uint8_t *key, const uint8_t *iv)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
     uint32_t tmpVal;
@@ -1157,7 +1166,7 @@ void Sec_Eng_AES_Set_Key_IV_BE(SEC_ENG_AES_ID_Type aesNo,SEC_ENG_AES_Key_Src_Typ
  * @return None
  *
 *******************************************************************************/
-void Sec_Eng_AES_Set_Counter_Byte(SEC_ENG_AES_ID_Type aesNo,SEC_ENG_AES_Counter_Type counterType)
+void Sec_Eng_AES_Set_Counter_Byte([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo, SEC_ENG_AES_Counter_Type counterType)
 {
     uint32_t AESx = SEC_ENG_BASE;
     uint32_t tmpVal;
@@ -1183,7 +1192,8 @@ void Sec_Eng_AES_Set_Counter_Byte(SEC_ENG_AES_ID_Type aesNo,SEC_ENG_AES_Counter_
  * @return SUCCESS or ERROR
  *
 *******************************************************************************/
-BL_Err_Type Sec_Eng_AES_Crypt(SEC_Eng_AES_Ctx *aesCtx,SEC_ENG_AES_ID_Type aesNo,const uint8_t *in, uint32_t len,uint8_t *out)
+BL_Err_Type Sec_Eng_AES_Crypt(SEC_Eng_AES_Ctx *aesCtx,
+  [[gnu::unused]] SEC_ENG_AES_ID_Type aesNo, const uint8_t *in, uint32_t len,uint8_t *out)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
     uint32_t tmpVal;
@@ -1250,7 +1260,7 @@ BL_Err_Type Sec_Eng_AES_Crypt(SEC_Eng_AES_Ctx *aesCtx,SEC_ENG_AES_ID_Type aesNo,
  * @return SUCCESS
  *
 *******************************************************************************/
-BL_Err_Type Sec_Eng_AES_Finish(SEC_ENG_AES_ID_Type aesNo)
+BL_Err_Type Sec_Eng_AES_Finish([[gnu::unused]] SEC_ENG_AES_ID_Type aesNo)
 {
     uint32_t AESx = SEC_ENG_BASE+SEC_ENG_AES_OFFSET;
     uint32_t tmpVal;
@@ -1895,7 +1905,7 @@ void Sec_Eng_PKA_Write_Block(uint32_t *dest,const uint32_t *src,uint32_t len)
  * @return None
  *
 *******************************************************************************/
-static void Sec_Eng_PKA_Get_Result(uint32_t *result, uint8_t retSize,uint16_t regLen)
+static void Sec_Eng_PKA_Get_Result(uint32_t *result, uint8_t retSize, [[gnu::unused]] uint16_t regLen)
 {
     uint32_t ret_data = 0x00;
     int index = 0x00;

@@ -226,14 +226,12 @@ static int BLSP_Boot2_Check_XZ_FW(PtTable_ID_Type activeID,PtTable_Stuff_Config 
 /****************************************************************************//**
  * @brief  Boot2 copy firmware from OTA region to normal region
  *
- * @param  activeID: Active partition table ID
- * @param  ptStuff: Pointer of partition table stuff
  * @param  ptEntry: Pointer of active entry
  *
  * @return BL_Err_Type
  *
 *******************************************************************************/
-static int BLSP_Boot2_Do_FW_Copy(PtTable_ID_Type activeID,PtTable_Stuff_Config *ptStuff,PtTable_Entry_Config *ptEntry)
+static int BLSP_Boot2_Do_FW_Copy(PtTable_Entry_Config *ptEntry)
 {
     uint8_t activeIndex=ptEntry->activeIndex;
     uint32_t srcAddress=ptEntry->Address[activeIndex&0x01];
@@ -304,7 +302,7 @@ static int BLSP_Boot2_Deal_One_FW(PtTable_ID_Type activeID,PtTable_Stuff_Config 
         }
         /* Check if this partition need copy */
         if(ptEntry->activeIndex>=2){
-            if(BFLB_BOOT2_SUCCESS==BLSP_Boot2_Do_FW_Copy(activeID,ptStuff,ptEntry)){
+            if(BFLB_BOOT2_SUCCESS==BLSP_Boot2_Do_FW_Copy(ptEntry)){
                 return 0;
             }
         }
@@ -341,14 +339,13 @@ static int32_t BLSP_Boot2_Rollback_PtEntry(PtTable_ID_Type activeID,PtTable_Stuf
 /****************************************************************************//**
  * @brief  Boot2 get mfg start up request
  *
- * @param  activeID: Active partition table ID
  * @param  ptStuff: Pointer of partition table stuff
  * @param  ptEntry: Pointer of active entry
  *
  * @return 0 for partition table changed,need re-parse,1 for partition table or entry parsed successfully
  *
 *******************************************************************************/
-static void BLSP_Boot2_Get_MFG_StartReq(PtTable_ID_Type activeID,PtTable_Stuff_Config *ptStuff,PtTable_Entry_Config *ptEntry,uint8_t *userFwName)
+static void BLSP_Boot2_Get_MFG_StartReq(PtTable_Stuff_Config *ptStuff,PtTable_Entry_Config *ptEntry,uint8_t *userFwName)
 {
     uint32_t ret;
     uint32_t len=0;
@@ -471,7 +468,7 @@ int main(void)
             }
             MSG_DBG("Active PT:%d,%d\r\n",activeID,ptTableStuff[activeID].ptTable.age);
 
-            BLSP_Boot2_Get_MFG_StartReq(activeID,&ptTableStuff[activeID],&ptEntry[0],userFwName);
+            BLSP_Boot2_Get_MFG_StartReq(&ptTableStuff[activeID],&ptEntry[0],userFwName);
             /* Get entry and boot */
             if (userFwName[0]=='0'){
                 ptParsed=BLSP_Boot2_Deal_One_FW(activeID,&ptTableStuff[activeID],&ptEntry[0],&userFwName[1],PT_ENTRY_FW_CPU0);

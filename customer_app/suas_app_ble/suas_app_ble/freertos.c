@@ -71,7 +71,7 @@ void vApplicationMallocFailedHook(void)
   while (1) {}
 }
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, char *pcTaskName)
 {
   printf("Stack overflow checked\r\n");
   printf("Task name: %s\r\n", pcTaskName);

@@ -31,8 +31,7 @@
 #include <cli.h>
 #include "demo.h"
 
-static void cmd_cli(char *buf, int len, int argc, char **argv)
-{
+static void cmd_cli([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv) {
     printf("hello world\r\n");
 }
 

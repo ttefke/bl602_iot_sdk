@@ -155,7 +155,7 @@ static void low_level_init(struct netif *netif)
 *       dropped because of memory failure (except for the TCP timers).
 */
 
-static err_t low_level_output(struct netif *netif, struct pbuf *p)
+static err_t low_level_output([[gnu::unused]] struct netif *netif, [[gnu::unused]] struct pbuf *p)
 {
   static int count;
 

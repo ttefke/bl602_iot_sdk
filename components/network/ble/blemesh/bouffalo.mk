@@ -54,3 +54,7 @@ COMPONENT_SRCDIRS:= src \
 ifeq ($(CONFIG_BT_MESH_MODEL), 0)
 COMPONENT_SRCDIRS+= src/mesh_models/server
 endif
+
+CFLAGS += \
+	-Wno-sign-compare \
+	-Wno-unused-parameter

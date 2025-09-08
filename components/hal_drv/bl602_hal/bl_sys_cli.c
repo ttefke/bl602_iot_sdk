@@ -55,7 +55,7 @@ static void clk(void *para)
     vTaskDelete(NULL);
 }
 
-static void cmd_clk_change(char *buf, int len, int argc, char **argv)
+static void cmd_clk_change([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     para_div clk_div;
     if (3 != argc) {

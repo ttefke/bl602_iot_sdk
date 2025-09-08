@@ -108,7 +108,7 @@ static HeapRegion_t xHeapRegions[] =
 };
 static wifi_interface_t wifi_interface;
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -134,7 +134,7 @@ void vApplicationIdleHook(void)
     /*empty*/
 }
 
-static void proc_hellow_entry(void *pvParameters)
+static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
     vTaskDelay(500);
 
@@ -323,7 +323,7 @@ static void wifi_sta_connect(char *ssid, char *password)
     wifi_mgmr_sta_connect(wifi_interface, ssid, password, NULL, NULL, 0, 0);
 }
 
-static void event_cb_wifi_event(input_event_t *event, void *private_data)
+static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     static char *ssid;
     static char *password;
@@ -434,7 +434,8 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
     }
 }
 
-static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
+static void cmd_stack_wifi([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     /*wifi fw stack and thread stuff*/
     static uint8_t stack_wifi_init  = 0;
@@ -493,7 +494,7 @@ static void __opt_feature_init(void)
 #endif
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

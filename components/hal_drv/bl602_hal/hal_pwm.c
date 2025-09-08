@@ -283,7 +283,7 @@ int32_t hal_pwm_stop_bydev(pwm_dev_t *pwm)
     return 0;
 }
 
-int32_t hal_pwm_para_chg_bydev(pwm_dev_t *pwm, pwm_config_t para)
+int32_t hal_pwm_para_chg_bydev([[gnu::unused]] pwm_dev_t *pwm, [[gnu::unused]] pwm_config_t para)
 {
     return 0;
 }
@@ -335,7 +335,7 @@ static void __pwm_duty_adjust (int id)
     }
 }
 
-static void __loop_pwm_trigger (void *p_arg)
+static void __loop_pwm_trigger ([[gnu::unused]] void *p_arg)
 {
     int id;
     uint8_t stop = 1;

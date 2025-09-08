@@ -98,13 +98,13 @@ int aos_task_new(const char *name, void (*fn)(void *), void *arg,
     return xHandle ? 0 : -1;
 }
 
-int aos_task_new_ext(aos_task_t *task, const char *name, void (*fn)(void *), void *arg,
-                     int stack_size, int prio)
+int aos_task_new_ext([[gnu::unused]] aos_task_t *task, const char *name, void (*fn)(void *), void *arg,
+                     int stack_size, [[gnu::unused]] int prio)
 {
     return aos_task_new(name, fn, arg, stack_size);
 }
 
-void aos_task_exit(int code)
+void aos_task_exit([[gnu::unused]] int code)
 {
     vTaskDelete(NULL);
 }
@@ -255,7 +255,7 @@ void aos_sem_signal_all(aos_sem_t *sem)
     aos_sem_signal(sem);
 }
 
-int aos_queue_new(aos_queue_t *queue, void *buf, unsigned int size, int max_msg)
+int aos_queue_new(aos_queue_t *queue, [[gnu::unused]] void *buf, unsigned int size, int max_msg)
 {
     xQueueHandle q;
     q = xQueueCreate(size / max_msg, max_msg);
@@ -268,13 +268,13 @@ void aos_queue_free(aos_queue_t *queue)
     vQueueDelete(queue->hdl);
 }
 
-int aos_queue_send(aos_queue_t *queue, void *msg, unsigned int size)
+int aos_queue_send(aos_queue_t *queue, void *msg, [[gnu::unused]] unsigned int size)
 {
     return xQueueSend(queue->hdl, msg, portMAX_DELAY) == pdPASS ? 0 : -1;
 }
 
 int aos_queue_recv(aos_queue_t *queue, unsigned int ms, void *msg,
-                   unsigned int *size)
+                   [[gnu::unused]] unsigned int *size)
 {
     return xQueueReceive(queue->hdl, msg, ms == AOS_WAIT_FOREVER ? portMAX_DELAY : ms2tick(ms))
            == pdPASS ? 0 : -1;
@@ -285,37 +285,37 @@ int aos_queue_is_valid(aos_queue_t *queue)
     return queue && queue->hdl != NULL;
 }
 
-void *aos_queue_buf_ptr(aos_queue_t *queue)
+void *aos_queue_buf_ptr([[gnu::unused]] aos_queue_t *queue)
 {
     return NULL;
 }
 
-int aos_timer_new(aos_timer_t *timer, void (*fn)(void *, void *),
-                  void *arg, int ms, int repeat)
+int aos_timer_new([[gnu::unused]] aos_timer_t *timer, [[gnu::unused]] void (*fn)(void *, void *),
+                  [[gnu::unused]] void *arg, [[gnu::unused]] int ms, [[gnu::unused]] int repeat)
 {
     return -1;
 }
 
-void aos_timer_free(aos_timer_t *timer)
+void aos_timer_free([[gnu::unused]] aos_timer_t *timer)
 {
 }
 
-int aos_timer_start(aos_timer_t *timer)
-{
-    return -1;
-}
-
-int aos_timer_stop(aos_timer_t *timer)
+int aos_timer_start([[gnu::unused]] aos_timer_t *timer)
 {
     return -1;
 }
 
-int aos_timer_change(aos_timer_t *timer, int ms)
+int aos_timer_stop([[gnu::unused]] aos_timer_t *timer)
 {
     return -1;
 }
 
-int aos_workqueue_create(aos_workqueue_t *workqueue, int pri, int stack_size)
+int aos_timer_change([[gnu::unused]] aos_timer_t *timer, [[gnu::unused]] int ms)
+{
+    return -1;
+}
+
+int aos_workqueue_create([[gnu::unused]] aos_workqueue_t *workqueue, [[gnu::unused]] int pri, [[gnu::unused]] int stack_size)
 {
     return -1;
 }
@@ -341,7 +341,7 @@ void aos_work_destroy(aos_work_t *work)
     vPortFree(work->hdl);
 }
 
-int aos_work_run(aos_workqueue_t *workqueue, aos_work_t *work)
+int aos_work_run([[gnu::unused]] aos_workqueue_t *workqueue, aos_work_t *work)
 {
     return aos_work_sched(work);
 }
@@ -361,7 +361,7 @@ int aos_work_sched(aos_work_t *work)
     return aos_task_new("worker", worker_entry, w, 8192);
 }
 
-int aos_work_cancel(aos_work_t *work)
+int aos_work_cancel([[gnu::unused]] aos_work_t *work)
 {
     return -1;
 }

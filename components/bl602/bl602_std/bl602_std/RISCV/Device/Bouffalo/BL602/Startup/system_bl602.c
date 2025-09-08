@@ -120,6 +120,3 @@ void SystemInit (void)
 #endif
 
 }
-void System_NVIC_SetPriority(IRQn_Type IRQn, uint32_t PreemptPriority, uint32_t SubPriority)
-{
-}

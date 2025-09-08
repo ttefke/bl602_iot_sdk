@@ -177,7 +177,7 @@ failed_nothing:
 #endif
 }
 
-void tcpclient_cmd(char *buf, int len, int argc, char **argv)
+void tcpclient_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     static uint8_t counter = 0;
     int host_len;

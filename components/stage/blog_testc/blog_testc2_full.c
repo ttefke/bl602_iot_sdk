@@ -37,7 +37,7 @@ BLOG_DECLARE(blog_testc2);
 
 void test_buf(void)
 {
-    int i;
+    unsigned int i;
     static uint8_t buf[256];
 
     for(i = 0; i < sizeof(buf); i++) {
@@ -50,7 +50,7 @@ void test_buf(void)
     blog_error_hexdump("hexdumpbuf", buf, sizeof(buf));
     blog_assert_hexdump("hexdumpbuf", buf, sizeof(buf));
 }
-void blog_testc2_entry(void *arg)
+void blog_testc2_entry([[gnu::unused]] void *arg)
 {
     aos_msleep(5000);
 

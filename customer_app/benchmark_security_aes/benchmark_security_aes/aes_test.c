@@ -148,8 +148,7 @@ static int AES_ECB_CRYPT(int mode, const unsigned char *input, uint8_t *output, 
 static int bl_aes_test(uint8_t *input, uint8_t *output, uint32_t length,
                                 uint32_t count, int key_type, AES_Type aes_type)
 {
-    int i;
-    uint32_t time_irq_start, speed_time;
+    uint32_t time_irq_start, speed_time, i;
     uint8_t iv[16]  = {0x38, 0x49, 0x32, 0x72, 0x23, 0xa4, 0x8c, 0x3f, 0x1d, 0x49, 0x27, 0x34, 0xb3, 0xd7, 0x78, 0x32};
     uint8_t key[32] = {0x2b, 0x45, 0xe4, 0x14, 0xf5, 0x62, 0x7e, 0x89, 0x32, 0x38, 0x72, 0x59, 0x29, 0x67, 0x21, 0x34,
                        0x38, 0x49, 0x32, 0x72, 0x23, 0xa4, 0x8c, 0x3f, 0x1d, 0x49, 0x27, 0x34, 0xb3, 0xd7, 0x78, 0x32};
@@ -202,7 +201,7 @@ static int __mbedtls_aes_crypt (mbedtls_aes_context *ctx,
                                 uint8_t *output,
                                 uint32_t length)
 {
-    int j;
+    uint32_t j;
 
     size_t offset = 0;
     unsigned char nonce_counter[16];
@@ -237,8 +236,7 @@ static void __mbedtls_aes_test(uint8_t *input, uint8_t *output,
                                uint32_t length, uint32_t count,
                                int key_type, AES_Type aes_type)
 {
-    int i;
-    uint32_t time_irq_start, speed_time;
+    uint32_t time_irq_start, speed_time, i;
     static uint8_t iv[16]  = {0x38, 0x49, 0x32, 0x72, 0x23, 0xa4, 0x8c, 0x3f, 0x1d, 0x49, 0x27, 0x34, 0xb3, 0xd7, 0x78, 0x32};
     static const uint8_t key[32] = {0x2b, 0x45, 0xe4, 0x14, 0xf5, 0x62, 0x7e, 0x89, 0x32, 0x38, 0x72, 0x59, 0x29, 0x67, 0x21, 0x34,
                                     0x38, 0x49, 0x32, 0x72, 0x23, 0xa4, 0x8c, 0x3f, 0x1d, 0x49, 0x27, 0x34, 0xb3, 0xd7, 0x78, 0x32};
@@ -508,14 +506,13 @@ static void __mbedtls_gcm_test (uint8_t *input, uint8_t *output,
                                 uint32_t length, uint32_t count,
                                 int key_len, uint8_t is_soft)
 {
-    uint32_t time_irq_start, speed_time;
+    uint32_t time_irq_start, speed_time, i;
     mbedtls_gcm_context ctx;
     aes_gcm_hw_t ctx_hw;
 #ifdef TEST_GCM_DECRYPT
     uint8_t *test_buf2;
 #endif
     unsigned char tag_buf[16];
-    int i;
     static const uint8_t iv[16]  = {0x38, 0x49, 0x32, 0x72, 0x23, 0xa4, 0x8c, 0x3f, 0x1d, 0x49, 0x27, 0x34, 0xb3, 0xd7, 0x78, 0x32};
     static const unsigned char key[32] =
     {
@@ -615,7 +612,7 @@ void aes_ecb_test(uint32_t length, uint32_t count,
                   aes_key_t keytype, uint8_t is_soft, ram_type_t ram_type)
 {
     uint8_t *ptr = NULL;
-    int i;
+    uint32_t i;
 
     ptr = malloc_hw(length, ram_type);
     if (ptr == NULL) {
@@ -661,7 +658,7 @@ void aes_cbc_test(uint32_t length, uint32_t count,
                   aes_key_t keytype, uint8_t is_soft, ram_type_t ram_type)
 {
     uint8_t *ptr = NULL;
-    int i;
+    uint32_t i;
 
     ptr = malloc_hw(length, ram_type);
     if (ptr == NULL) {
@@ -707,7 +704,7 @@ void aes_ctr_test(uint32_t length, uint32_t count,
                   aes_key_t keytype, uint8_t is_soft, ram_type_t ram_type)
 {
     uint8_t *ptr = NULL;
-    int i;
+    uint32_t i;
 
     ptr = malloc_hw(length, ram_type);
     if (ptr == NULL) {

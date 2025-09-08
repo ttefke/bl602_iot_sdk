@@ -27,7 +27,7 @@ void board_init() {
 }
 
 // Output number callback: turn off all LEDs
-void board_output_number(bt_mesh_output_action_t action, uint32_t number) {
+void board_output_number() {
     printf("[BOARD] Output number callback function called\r\n");
     board_reset_leds();
 }

@@ -35,7 +35,7 @@
 
 BLOG_DECLARE(blog_testc4);
 
-void blog_testc4_entry(void *arg)
+void blog_testc4_entry([[gnu::unused]] void *arg)
 {
     aos_msleep(5000);
 

@@ -11,7 +11,9 @@
 #include "conf.h"
 
 /* helper function: callback function for the result of the HTTP request */
-static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_content_len, u32_t srv_res, err_t err) {
+static void cb_httpc_result(void *arg, httpc_result_t httpc_result,
+        [[gnu::unused]] u32_t rx_content_len, [[gnu::unused]] u32_t srv_res,
+        [[gnu::unused]] err_t err) {
     /* evaluate data transfer result */
     httpc_state_t **req = (httpc_state_t **)arg;
 
@@ -23,7 +25,9 @@ static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_con
 }
 
 /* helper function: HTTP headers are received*/
-static err_t cb_httpc_headers_done_fn(httpc_state_t *connection, void *arg, struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
+static err_t cb_httpc_headers_done_fn([[gnu::unused]] httpc_state_t *connection,
+        [[gnu::unused]] void *arg, struct pbuf *hdr,
+        [[gnu::unused]] u16_t hdr_len, [[gnu::unused]] u32_t content_len)
 {
     /* headers are ignored */
     pbuf_free(hdr);
@@ -31,7 +35,8 @@ static err_t cb_httpc_headers_done_fn(httpc_state_t *connection, void *arg, stru
 }
 
 /* helper function: received the data from the queried URL*/
-static err_t cb_altcp_recv_fn(void *arg, struct altcp_pcb *conn, struct pbuf *p, err_t err)
+static err_t cb_altcp_recv_fn([[gnu::unused]] void *arg,
+        struct altcp_pcb *conn, struct pbuf *p, [[gnu::unused]] err_t err)
 {
     /* we receive nothing -> just delete data structures */
     altcp_recved(conn, p->tot_len);
@@ -41,7 +46,7 @@ static err_t cb_altcp_recv_fn(void *arg, struct altcp_pcb *conn, struct pbuf *p,
 }
 
 /* send HTTP request */
-void send_http_request(unsigned char data[])
+void send_http_request(unsigned char *data)
 {
     /* create connection data structure*/
     static httpc_connection_t connection;
@@ -68,7 +73,7 @@ void send_http_request(unsigned char data[])
 }
 
 /* http task */
-void task_http(void *pvParameters)
+void task_http([[gnu::unused]] void *pvParameters)
 {
     /* variables to identify measurements */
     unsigned long message_id = 1;

@@ -121,7 +121,7 @@ static HeapRegion_t xHeapRegions[] =
 };
 static wifi_interface_t wifi_interface;
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -359,7 +359,7 @@ static void wifi_sta_connect(char *ssid, char *password)
     wifi_mgmr_sta_connect(wifi_interface, ssid, password, NULL, NULL, 0, 0);
 }
 
-static void scan_item_cb(wifi_mgmr_ap_item_t *env, uint32_t *param1, wifi_mgmr_ap_item_t *item)
+static void scan_item_cb([[gnu::unused]] wifi_mgmr_ap_item_t *env, uint32_t *param1, wifi_mgmr_ap_item_t *item)
 {
     _wifi_item_t wifi_item;
     void (*complete)(void *) = (void (*)(void *))param1;
@@ -376,7 +376,7 @@ static void scan_item_cb(wifi_mgmr_ap_item_t *env, uint32_t *param1, wifi_mgmr_a
     }
 }
 
-static void scan_complete_cb(void *p_arg, void *param)
+static void scan_complete_cb(void *p_arg, [[gnu::unused]] void *param)
 {
     wifi_mgmr_scan_ap_all(NULL, p_arg, scan_item_cb);
 }
@@ -417,7 +417,7 @@ static void wifiprov_wifi_state_get(void *p_arg)
     }
 }
 
-static void event_cb_wifi_event(input_event_t *event, void *private_data)
+static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     struct _wifi_conn *conn_info;
 
@@ -515,7 +515,7 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
     }
 }
 
-static void event_cb_cli(input_event_t *event, void *p_arg)
+static void event_cb_cli(input_event_t *event, [[gnu::unused]] void *p_arg)
 {
     char *cmd1 = "ble_init\r\n";
     char *cmd2 = "ble_start_adv 0 0 0x100 0x100\r\n";
@@ -536,18 +536,13 @@ static void event_cb_cli(input_event_t *event, void *p_arg)
     }
 }
 
-static void __attribute__((unused)) cmd_aws(char *buf, int len, int argc, char **argv)
-{
-void aws_main_entry(void *arg);
-    xTaskCreate(aws_main_entry, (char*)"aws_iot", 4096, NULL, 10, NULL);
-}
-
 #define MAXBUF          128
 #define BUFFER_SIZE     (12*1024)
 
 #define PORT 80
 
-err_t cb_httpc_headers_done_fn(httpc_state_t *connection, void *arg, struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
+err_t cb_httpc_headers_done_fn([[gnu::unused]] httpc_state_t *connection, [[gnu::unused]] void *arg,
+        [[gnu::unused]]struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
 {
     printf("[HTTPC] hdr_len is %u, content_len is %lu\r\n", hdr_len, content_len);
     return ERR_OK;
@@ -576,7 +571,7 @@ static void stack_ble (void)
     blsync_ble_start();
 }
 
-static void cmd_blsync_ble_start(char *buf, int len, int argc, char **argv)
+static void cmd_blsync_ble_start([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     stack_wifi();
     vTaskDelay(1000);
@@ -586,7 +581,7 @@ static void cmd_blsync_ble_start(char *buf, int len, int argc, char **argv)
     aos_post_event(EV_CLI, CODE_CLI_BLSYNC_START, 0);
 }
 
-static void cmd_blsync_ble_stop(char *buf, int len, int argc, char **argv)
+static void cmd_blsync_ble_stop([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     aos_post_event(EV_CLI, CODE_CLI_BLSYNC_STOP, 0);
 }
@@ -630,7 +625,7 @@ static void __opt_feature_init(void)
 #endif
 }
 
-static void app_delayed_action_bleadv(void *arg)
+static void app_delayed_action_bleadv([[gnu::unused]] void *arg)
 {
     char *cmd1 = "ble_init\r\n";
     char *cmd2 = "ble_start_adv 0 0 0x100 0x100\r\n";
@@ -639,19 +634,19 @@ static void app_delayed_action_bleadv(void *arg)
     aos_cli_input_direct(cmd2, strlen(cmd2));
 }
 
-static void app_delayed_action_wifi(void *arg)
+static void app_delayed_action_wifi([[gnu::unused]] void *arg)
 {
     stack_wifi();
     aos_post_delayed_action(1000, app_delayed_action_bleadv, NULL);
 }
 
-static void app_delayed_action_ble(void *arg)
+static void app_delayed_action_ble([[gnu::unused]] void *arg)
 {
     stack_ble();
     aos_post_delayed_action(1000, app_delayed_action_wifi, NULL);
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

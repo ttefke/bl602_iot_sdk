@@ -73,7 +73,7 @@ static int bl_sha_test(uint8_t *input, uint8_t *output, uint32_t length,
                 uint32_t count, SHA_Type sha_type)
 {
     uint32_t time_irq_start, speed_time;
-    int i;
+    uint32_t i;
     speed_time = 0;
 
     if ((!input) || (!output)) {
@@ -115,7 +115,7 @@ static void __sha1_soft_test (uint32_t length, uint32_t count)
 {
     uint8_t *test_buf;
     uint32_t time_irq_start, speed_time;
-    int i;
+    uint32_t i;
     mbedtls_sha1_context ctx1;
     unsigned char sha1sum[20];
 
@@ -153,7 +153,7 @@ static void __sha256_soft_test (uint32_t length, uint32_t count, uint8_t is_224)
 {
     uint8_t *test_buf;
     uint32_t time_irq_start, speed_time;
-    int i;
+    uint32_t i;
     mbedtls_sha256_context ctx1;
     unsigned char sha1sum[32];
 
@@ -210,7 +210,7 @@ void sha_test(uint32_t length, uint32_t count,
               SHA_Type mode, uint8_t is_soft, ram_type_t ram_type)
 {
     uint8_t *ptr = NULL;
-    int i;
+    uint32_t i;
 
     ptr = malloc_hw(length, ram_type);
     if (ptr == NULL) {

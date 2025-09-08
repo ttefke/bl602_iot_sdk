@@ -1219,7 +1219,7 @@ static uint32_t new_env_by_kv(sector_meta_data_t sector, size_t key_len, size_t 
     return new_env(sector, env_len);
 }
 
-static bool gc_check_cb(sector_meta_data_t sector, void *arg1, void *arg2)
+static bool gc_check_cb(sector_meta_data_t sector, void *arg1, [[gnu::unused]] void *arg2)
 {
     size_t *empty_sec = arg1;
 
@@ -1231,7 +1231,7 @@ static bool gc_check_cb(sector_meta_data_t sector, void *arg1, void *arg2)
 
 }
 
-static bool do_gc(sector_meta_data_t sector, void *arg1, void *arg2)
+static bool do_gc(sector_meta_data_t sector, [[gnu::unused]] void *arg1, [[gnu::unused]] void *arg2)
 {
     struct env_node_obj env;
 
@@ -1601,7 +1601,7 @@ __exit:
     return result;
 }
 
-static bool print_env_cb(env_node_obj_t env, void *arg1, void *arg2)
+static bool print_env_cb(env_node_obj_t env, void *arg1, [[gnu::unused]] void *arg2)
 {
     bool value_is_str = true, print_value = false;
     size_t *using_size = arg1;
@@ -1714,7 +1714,7 @@ static void env_auto_update(void)
 }
 #endif /* EF_ENV_AUTO_UPDATE */
 
-static bool check_sec_hdr_cb(sector_meta_data_t sector, void *arg1, void *arg2)
+static bool check_sec_hdr_cb(sector_meta_data_t sector, void *arg1, [[gnu::unused]] void *arg2)
 {
     if (!sector->check_ok) {
         size_t *failed_count = arg1;
@@ -1727,7 +1727,7 @@ static bool check_sec_hdr_cb(sector_meta_data_t sector, void *arg1, void *arg2)
     return false;
 }
 
-static bool check_and_recovery_gc_cb(sector_meta_data_t sector, void *arg1, void *arg2)
+static bool check_and_recovery_gc_cb(sector_meta_data_t sector, [[gnu::unused]] void *arg1, [[gnu::unused]] void *arg2)
 {
     if (sector->check_ok && sector->status.dirty == SECTOR_DIRTY_GC) {
         /* make sure the GC request flag to true */
@@ -1739,7 +1739,7 @@ static bool check_and_recovery_gc_cb(sector_meta_data_t sector, void *arg1, void
     return false;
 }
 
-static bool check_and_recovery_env_cb(env_node_obj_t env, void *arg1, void *arg2)
+static bool check_and_recovery_env_cb(env_node_obj_t env, [[gnu::unused]] void *arg1, [[gnu::unused]] void *arg2)
 {
     /* recovery the prepare deleted ENV */
     if (env->crc_is_ok && env->status == ENV_PRE_DELETE) {

@@ -15,7 +15,7 @@
 
 // Sensor: waveshare HMMD mmWave: https://www.waveshare.com/wiki/HMMD_mmWave_Sensor
 
-void read_sensor(void *pvParameters)
+void read_sensor([[gnu::unused]] void *pvParameters)
 {
   printf("Task to read sensor started\r\n");
 

@@ -39,7 +39,7 @@
 #include <blog.h>
 #define USER_UNUSED(a) ((void)(a))
 
-int bl_sec_aes_enc(uint8_t *key, int keysize, uint8_t *input, uint8_t *output)
+int bl_sec_aes_enc([[gnu::unused]] uint8_t *key, [[gnu::unused]] int keysize, [[gnu::unused]] uint8_t *input, [[gnu::unused]] uint8_t *output)
 {
     return 0;
 }

@@ -31,7 +31,7 @@
 
 static audio_tts_dev_t *gp_audio_dac_dev = NULL;
 
-static audio_tts_item_t *__next_transfer (audio_framework_device_t *device)
+static audio_tts_item_t *__next_transfer ([[gnu::unused]] audio_framework_device_t *device)
 {
     audio_tts_event_t *now_ev, *next_ev;
     audio_tts_item_t *now, *next;
@@ -67,7 +67,7 @@ static audio_tts_item_t *__next_transfer (audio_framework_device_t *device)
 static void __audio_data_clear (uint8_t *ptr, size_t size)
 {
     uint16_t *p_16 = (uint16_t *)ptr;
-    int i;
+    uint32_t i;
 
     for (i = 0; i < (size >> 1); i++) {
         p_16[i] = 1UL << (DAC_AUDIO_BITS - 1);
@@ -90,13 +90,12 @@ static void __audio_dual (void *p_audio, const void *p_data, size_t size)
 }
 
 static int __transfer_complete(audio_framework_device_t *device,
-                                void *uerdata,
+                                [[gnu::unused]] void *uerdata,
                                 uint8_t *audiodata,
                                 int len,
                                 int is_underrun)
 {
-    uint32_t size, dual_len;
-    int rem_size;
+    uint32_t size, dual_len, rem_size;
     audio_tts_item_t *now = (audio_tts_item_t *)gp_audio_dac_dev->dma_irq_item;
 
     if (is_underrun) {
@@ -370,7 +369,7 @@ int audio_tts_start (audio_tts_dev_t *p_dev)
     return 0;
 }
 
-int audio_tts_stop (audio_tts_dev_t *p_dev)
+int audio_tts_stop ([[gnu::unused]] audio_tts_dev_t *p_dev)
 {
     return 0;
 }

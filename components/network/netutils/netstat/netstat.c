@@ -38,7 +38,7 @@
 
 #if LWIP_STATS
 
-static void cmd_netstat(char *buf, int len, int argc, char **argv)
+static void cmd_netstat([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
   tcpip_callback(stats_netstat, NULL);
 }

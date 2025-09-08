@@ -10,7 +10,7 @@
 
 #include "conf.h"
 
-void event_cb_i2c_event(input_event_t *event, void *private_data)
+void event_cb_i2c_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     switch (event->code) {
         case CODE_I2C_END:
@@ -31,7 +31,7 @@ void event_cb_i2c_event(input_event_t *event, void *private_data)
 }
 
 volatile unsigned long lux;
-void task_grove_dls(void *pvParameters) {
+void task_grove_dls([[gnu::unused]] void *pvParameters) {
     // yloop looping
     static StackType_t proc_stack_looprt[512];
     static StaticTask_t proc_task_looprt;

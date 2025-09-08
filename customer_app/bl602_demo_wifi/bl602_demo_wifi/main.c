@@ -121,7 +121,7 @@ static HeapRegion_t xHeapRegions[] =
 };
 static wifi_interface_t wifi_interface;
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     printf("Task Name %s\r\n", pcTaskName);
@@ -152,7 +152,7 @@ void vApplicationIdleHook(void)
 #endif
 }
 
-static void proc_hellow_entry(void *pvParameters)
+static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
     vTaskDelay(500);
 
@@ -371,7 +371,7 @@ static void wifi_sta_connect(char *ssid, char *password)
     wifi_mgmr_sta_connect(wifi_interface, ssid, password, NULL, NULL, 0, 0);
 }
 
-static void event_cb_wifi_event(input_event_t *event, void *private_data)
+static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     static char *ssid;
     static char *password;
@@ -511,64 +511,64 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
     }
 }
 
-static void __attribute__((unused)) cmd_aws(char *buf, int len, int argc, char **argv)
+static void cmd_aws([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
-void aws_main_entry(void *arg);
+    void aws_main_entry(void *arg);
     xTaskCreate(aws_main_entry, (char*)"aws_iot", 4096, NULL, 10, NULL);
 }
 
-static void cmd_pka(char *buf, int len, int argc, char **argv)
+static void cmd_pka([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_pka_test();
 }
 
-static void cmd_wifi(char *buf, int len, int argc, char **argv)
+static void cmd_wifi([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
-void mm_sec_keydump(void);
+    void mm_sec_keydump(void);
     mm_sec_keydump();
 }
 
-static void cmd_sha(char *buf, int len, int argc, char **argv)
+static void cmd_sha([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_sec_sha_test();
 }
 
-static void cmd_trng(char *buf, int len, int argc, char **argv)
+static void cmd_trng([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_sec_test();
 }
 
-static void cmd_aes(char *buf, int len, int argc, char **argv)
+static void cmd_aes([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_sec_aes_test();
 }
 
-static void cmd_cks(char *buf, int len, int argc, char **argv)
+static void cmd_cks([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_cks_test();
 }
 
-static void cmd_dma(char *buf, int len, int argc, char **argv)
+static void cmd_dma([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_dma_test();
 }
 
-static void cmd_exception_load(char *buf, int len, int argc, char **argv)
+static void cmd_exception_load([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_LOAD_MISALIGN, (void*)0x22008001);
 }
 
-static void cmd_exception_l_illegal(char *buf, int len, int argc, char **argv)
+static void cmd_exception_l_illegal([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_ACCESS_ILLEGAL, (void*)0x00200000);
 }
 
-static void cmd_exception_store(char *buf, int len, int argc, char **argv)
+static void cmd_exception_store([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_STORE_MISALIGN, (void*)0x22008001);
 }
 
-static void cmd_exception_illegal_ins(char *buf, int len, int argc, char **argv)
+static void cmd_exception_illegal_ins([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     bl_irq_exception_trigger(BL_IRQ_EXCEPTION_TYPE_ILLEGAL_INSTRUCTION, (void*)0x22008001);
 }
@@ -666,13 +666,14 @@ out:
     return 0;
 }
 
-static void http_test_cmd(char *buf, int len, int argc, char **argv)
+static void http_test_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     // http://nf.cr.dandanman.com/ddm/ContentResource/music/204.mp3
     client_demo("nf.cr.dandanman.com");
 }
 
-static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_content_len, u32_t srv_res, err_t err)
+static void cb_httpc_result(void *arg, [[gnu::unused]] httpc_result_t httpc_result, u32_t rx_content_len,
+        [[gnu::unused]] u32_t srv_res, [[gnu::unused]] err_t err)
 {
     httpc_state_t **req = (httpc_state_t**)arg;
 
@@ -680,13 +681,15 @@ static void cb_httpc_result(void *arg, httpc_result_t httpc_result, u32_t rx_con
     *req = NULL;
 }
 
-err_t cb_httpc_headers_done_fn(httpc_state_t *connection, void *arg, struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
+err_t cb_httpc_headers_done_fn([[gnu::unused]] httpc_state_t *connection, [[gnu::unused]] void *arg,
+        [[gnu::unused]] struct pbuf *hdr, u16_t hdr_len, u32_t content_len)
 {
     printf("[HTTPC] hdr_len is %u, content_len is %lu\r\n", hdr_len, content_len);
     return ERR_OK;
 }
 
-static err_t cb_altcp_recv_fn(void *arg, struct altcp_pcb *conn, struct pbuf *p, err_t err)
+static err_t cb_altcp_recv_fn([[gnu::unused]] void *arg, struct altcp_pcb *conn,
+        struct pbuf *p, [[gnu::unused]] err_t err)
 {
     //printf("[HTTPC] Received %u Bytes\r\n", p->tot_len);
     static int count = 0;
@@ -701,7 +704,7 @@ static err_t cb_altcp_recv_fn(void *arg, struct altcp_pcb *conn, struct pbuf *p,
     return ERR_OK;
 }
 
-static void cmd_httpc_test(char *buf, int len, int argc, char **argv)
+static void cmd_httpc_test([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     static httpc_connection_t settings;
     static httpc_state_t *req;
@@ -726,7 +729,7 @@ static void cmd_httpc_test(char *buf, int len, int argc, char **argv)
    );
 }
 
-static void cmd_stack_wifi(char *buf, int len, int argc, char **argv)
+static void cmd_stack_wifi([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     /*wifi fw stack and thread stuff*/
     static uint8_t stack_wifi_init  = 0;
@@ -816,7 +819,7 @@ static void __opt_feature_init(void)
 #endif
 }
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

@@ -85,7 +85,7 @@ IoT_Error_t iot_tls_init(Network *pNetwork, const char *pRootCALocation, const c
     return SUCCESS;
 }
 
-IoT_Error_t iot_tls_is_connected(Network *pNetwork) 
+IoT_Error_t iot_tls_is_connected([[gnu::unused]] Network *pNetwork) 
 {
     /* Use this to add implementation which can check for physical layer disconnect */
     return NETWORK_PHYSICAL_LAYER_CONNECTED;

@@ -52,7 +52,7 @@ static int __pack_trans (pro_handle_t handle,
 {
     struct pro_event ev;
     uint8_t *src_buf;
-    uint8_t  src_len;
+    uint32_t  src_len;
     uint8_t  dst_len;
     uint8_t  ev_id;
     uint8_t  pack_type;

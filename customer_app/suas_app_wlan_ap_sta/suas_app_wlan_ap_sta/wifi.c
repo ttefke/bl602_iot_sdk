@@ -102,7 +102,7 @@ static void _connect_sta_wifi()
 }
 
 /* React to WiFi events */
-static void event_cb_wifi_event(input_event_t *event, void *private_data)
+static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
   static char *ssid;
   static char *password;
@@ -178,7 +178,7 @@ static void event_cb_wifi_event(input_event_t *event, void *private_data)
 }
 
 /* Listener for key events */
-void event_cb_key_event(input_event_t *event, void *private_data) {
+void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data) {
   switch (event->code) {
     // Start as AP
     case KEY_1:
@@ -202,7 +202,7 @@ void event_cb_key_event(input_event_t *event, void *private_data) {
 }
 
 /* WiFi task */
-void task_wifi(void *pvParameters) {
+void task_wifi([[gnu::unused]] void *pvParameters) {
   // Setup looprt task
   uint32_t fdt = 0, offset = 0;
   static StackType_t task_looprt_stack[512];

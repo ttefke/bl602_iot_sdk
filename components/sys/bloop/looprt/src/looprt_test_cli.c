@@ -39,7 +39,7 @@ static void looprt_case_1(void)
     printf("MSG size is %d\r\n", sizeof(struct loop_msg));
 }
 
-void cmd_looprt_test(char *buf, int len, int argc, char **argv)
+void cmd_looprt_test([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     puts("====== looprt test ======\r\n");
     looprt_case_1();
@@ -47,31 +47,31 @@ void cmd_looprt_test(char *buf, int len, int argc, char **argv)
     looprt_start_auto();
 }
 
-void cmd_looprt_test_status(char *buf, int len, int argc, char **argv)
+void cmd_looprt_test_status([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     puts("====== looprt test status ======\r\n");
     looprt_evt_status_dump();
 }
 
-void cmd_looprt_test_evt(char *buf, int len, int argc, char **argv)
+void cmd_looprt_test_evt([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     puts("====== looprt EVT ======\r\n");
     looprt_evt_notify_async(LOOP_TASK_PRIORITY_HIGHEST, 0);
 }
 
-void cmd_looprt_test_evt_dump(char *buf, int len, int argc, char **argv)
+void cmd_looprt_test_evt_dump([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     puts("====== looprt EVT status ======\r\n");
     looprt_evt_notify_async(LOOP_TASK_PRIORITY_HIGHEST, LOOP_TASK_SYS_EVT_DUMP);
 }
 
-void cmd_looprt_test_schedule_evt1(char *buf, int len, int argc, char **argv)
+void cmd_looprt_test_schedule_evt1([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     puts("====== looprt Schedule EVT1 ======\r\n");
     looprt_evt_schedule(LOOP_TASK_PRIORITY_HIGHEST, LOOP_TASK_SYS_EVT_DUMP, 20000);
 }
 
-void cmd_looprt_test_schedule_evt2(char *buf, int len, int argc, char **argv)
+void cmd_looprt_test_schedule_evt2([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     puts("====== looprt Schedule EVT2 ======\r\n");
     looprt_evt_schedule(LOOP_TASK_PRIORITY_HIGHEST, LOOP_TASK_SYS_EVT_DUMP, 10000);

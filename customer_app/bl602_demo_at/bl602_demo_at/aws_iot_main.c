@@ -311,7 +311,7 @@ static int _update_mqtt_config_default(ShadowInitParameters_t *sp, ShadowConnect
     return 0;
 }
 
-void aws_main_entry(void *param)
+void aws_main_entry([[gnu::unused]] void *param)
 {
     IoT_Error_t rc = FAILURE;
     ShadowInitParameters_t sp = ShadowInitParametersDefault;

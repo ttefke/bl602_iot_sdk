@@ -25,7 +25,7 @@
 #define DISABLE_PULLDOWN 0
 
 /* LED task */
-void task_led(void *pvParameters)
+void task_led([[gnu::unused]] void *pvParameters)
 {
   printf("LED task started\r\n");
   

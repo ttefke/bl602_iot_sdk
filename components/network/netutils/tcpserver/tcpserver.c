@@ -49,7 +49,8 @@ void TCP_Server(void *pvParameters)
     int yes = 1;
     int connect_time[MAXCLIENTNUM];
 
-    int time_cur, time_diff[MAXCLIENTNUM], time_last[MAXCLIENTNUM];
+    int time_cur, time_last[MAXCLIENTNUM];
+    uint32_t time_diff[MAXCLIENTNUM];
     fd_set fdsr;
     int maxsock;
     struct timeval tv;
@@ -210,7 +211,7 @@ Failed:
     vTaskDelete(NULL);
 }
 
-static void cmd_tcp_server(char *buf, int len, int argc, char **argv)
+static void cmd_tcp_server([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (argc != 2) {
         printf("Please Input Parameter!\r\n");

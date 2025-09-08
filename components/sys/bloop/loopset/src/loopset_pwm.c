@@ -51,7 +51,7 @@ struct pwm_trigger_item {
 
 struct pwm_trigger_item *trigger;
 
-static int _pwm_bloop_evt(struct loop_ctx *loop, const struct loop_evt_handler *handler, uint32_t *bitmap_evt, uint32_t *evt_type_map)
+static int _pwm_bloop_evt([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] const struct loop_evt_handler *handler, [[gnu::unused]] uint32_t *bitmap_evt, uint32_t *evt_type_map)
 {
     uint32_t map = *evt_type_map;
 
@@ -82,7 +82,7 @@ int loopset_pwm_hook_off_looprt(void)
     return 0;
 }
 
-static void _cb_pwm_trigger(struct loop_ctx *loop, struct loop_timer *timer, void *arg)
+static void _cb_pwm_trigger([[gnu::unused]] struct loop_ctx *loop, [[gnu::unused]] struct loop_timer *timer, void *arg)
 {
     struct pwm_trigger_item *trigger = (struct pwm_trigger_item*)arg;
 

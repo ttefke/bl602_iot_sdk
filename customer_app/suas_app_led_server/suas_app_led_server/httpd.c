@@ -8,7 +8,7 @@
 #include "cgi.h"
 
 /* hello task */
-void task_httpd(void *pvParameters)
+void task_httpd([[gnu::unused]] void *pvParameters)
 {
   /* wait for half a second */
   printf("Starting up httpd\r\n");

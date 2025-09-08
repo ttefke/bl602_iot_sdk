@@ -16,7 +16,7 @@
 extern struct bt_mesh_model models[];
 
 // Provisioning completed callback
-void prov_complete(uint16_t net_idx, uint16_t addr) {
+void prov_complete([[gnu::unused]] uint16_t net_idx, [[gnu::unused]] uint16_t addr) {
 	printf("[PROVISIONING] Provisioning complete\r\n");
 	board_prov_complete();
 }

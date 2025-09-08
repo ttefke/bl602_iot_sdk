@@ -6,7 +6,7 @@
 
 #include "conf.h"
 
-void task_tcp(void *pvParameters) {
+void task_tcp([[gnu::unused]] void *pvParameters) {
     vTaskDelay(NETWORK_CONNECTION_DELAY * 1000 / portTICK_PERIOD_MS);
 
     tcpip_init(NULL, NULL);

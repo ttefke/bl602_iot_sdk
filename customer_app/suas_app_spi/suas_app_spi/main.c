@@ -78,7 +78,7 @@ static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
 }
 
 // Register AOS device tree
-static void aos_loop_proc(void *pvParameters) {
+static void aos_loop_proc([[gnu::unused]] void *pvParameters) {
   uint32_t fdt = 0, offset = 0;
   static StackType_t proc_stack_looprt[512];
   static StaticTask_t proc_task_looprt;

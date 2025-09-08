@@ -50,7 +50,8 @@ void log_step(const char *step[2])
     printf("%s   %s\r\n", step[0], step[1]);
 }
 
-void cmd_uart_flush(char *buf, int len, int argc, char **argv)
+void cmd_uart_flush([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int fd;
     const char *pbuf1 = "1>0123456789abcdefghijklmnopqrstuvwxyz>0123456789abcdefghijklmnopqrstuvwxyz>0123456789abcdefghijklmnopqrstuvwxyz>2";
@@ -192,7 +193,7 @@ void bluart_ioctl3_entry(void *arg)
     }
 }
 
-void cmd_uart_ioctl(char *buf, int len, int argc, char **argv)
+void cmd_uart_ioctl([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     if (argc != 2) {
         log_error("arg error.\r\n");
@@ -207,7 +208,8 @@ void cmd_uart_ioctl(char *buf, int len, int argc, char **argv)
     }
 }
 
-void cmd_uart_block(char *buf, int len, int argc, char **argv)
+void cmd_uart_block([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     //aos_task_new("uart0_block", bluart_block_entry, "/dev/ttyS0", 2048);
     aos_task_new("uart1_block", bluart_block_entry, "/dev/ttyS1", 2048);

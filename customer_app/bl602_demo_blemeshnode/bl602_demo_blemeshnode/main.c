@@ -81,7 +81,7 @@ static HeapRegion_t xHeapRegions[] =
 };
 
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -110,7 +110,7 @@ void vApplicationIdleHook(void)
 }
 
 #if ( configUSE_TICKLESS_IDLE != 0 )
-void vApplicationSleep( TickType_t xExpectedIdleTime_ms )
+void vApplicationSleep([[gnu::unused]]  TickType_t xExpectedIdleTime_ms )
 {
 #if defined(CFG_BLE_PDS)
     int32_t bleSleepDuration_32768cycles = 0;
@@ -173,7 +173,7 @@ void vApplicationSleep( TickType_t xExpectedIdleTime_ms )
 }
 #endif
 
-static void proc_hellow_entry(void *pvParameters)
+static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
     vTaskDelay(500);
     blemesh_node();
@@ -231,7 +231,7 @@ static void __opt_feature_init(void)
 #endif
 }
 
-static void event_cb_key_event(input_event_t *event, void *private_data)
+static void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data)
 {
     switch (event->code) {
         case KEY_1:
@@ -266,7 +266,7 @@ static void event_cb_key_event(input_event_t *event, void *private_data)
 extern void uart_init(uint8_t uartid);
 #endif
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

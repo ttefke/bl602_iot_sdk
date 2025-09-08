@@ -71,7 +71,7 @@ static HeapRegion_t xHeapRegions[] =
         { NULL, 0 } /* Terminates the array. */
 };
 
-void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName )
+void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
 {
     puts("Stack Overflow checked\r\n");
     while (1) {
@@ -127,7 +127,8 @@ static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off)
 }
 
 
-static void cmd_play_audio(char *buf, int len, int argc, char **argv)
+static void cmd_play_audio([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     int fd_audio;
     romfs_filebuf_t filebuf;
@@ -160,7 +161,7 @@ static const struct cli_command cmds_user[] STATIC_CLI_CMD_ATTRIBUTE = {
     { "play_audio", "play audio 32k 32bit", cmd_play_audio},
 };
 
-static void aos_loop_proc(void *pvParameters)
+static void aos_loop_proc([[gnu::unused]] void *pvParameters)
 {
     int fd_console;
     uint32_t fdt = 0, offset = 0;

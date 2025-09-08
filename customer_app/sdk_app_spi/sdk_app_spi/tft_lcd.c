@@ -444,7 +444,7 @@ void LCD_DrawArea(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t color
 *******************************************************************************/
 void LCD_DrawPicture(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t* picture)
 {
-    uint32_t i;
+    int i;
     LCD_Set_Addr(x1,y1,x2,y2);
     for(i=0;i<ABS16((x2-x1+1)*(y2-y1+1));i++)
     {
@@ -467,8 +467,8 @@ void LCD_DrawPicture(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t* p
 *******************************************************************************/
 void LCD_UartDrawPicture(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,UART_ID_Type uartId)
 {
-    uint32_t rxLen = 0,i;
-    uint32_t recvCnt = 0;
+    int rxLen = 0,i;
+    int recvCnt = 0;
     uint8_t uartRxBuf[UART_RX_FIFO_SIZE] = {0};
     LCD_Set_Addr(x1,y1,x2,y2);
     

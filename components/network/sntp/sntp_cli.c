@@ -5,7 +5,7 @@
 #include <cli.h>
 #include <utils_time.h>
 
-void _startup_sntp(void *arg)
+void _startup_sntp([[gnu::unused]] void *arg)
 {
     puts("--------------------------------------- Start NTP now\r\n");
     sntp_setoperatingmode(SNTP_OPMODE_POLL);
@@ -14,12 +14,12 @@ void _startup_sntp(void *arg)
     puts("--------------------------------------- Start NTP Done\r\n");
 }
 
-static void cmd_sntp_start(char *buf, int len, int argc, char **argv)
+static void cmd_sntp_start([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     tcpip_callback(_startup_sntp, NULL);
 }
 
-static void cmd_sntp_time(char *buf, int len, int argc, char **argv)
+static void cmd_sntp_time([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     uint32_t seconds = 0, frags = 0;
 
@@ -27,7 +27,7 @@ static void cmd_sntp_time(char *buf, int len, int argc, char **argv)
     printf("[NTP] time is %lu:%lu\r\n", seconds, frags);
 }
 
-static void cmd_sntp_date(char *buf, int len, int argc, char **argv)
+static void cmd_sntp_date([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     uint32_t seconds = 0, frags = 0;
     utils_time_date_t date;

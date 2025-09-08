@@ -174,14 +174,13 @@ static void BLSP_Boot2_On_Error(void *log)
 /****************************************************************************//**
  * @brief  Boot2 get mfg start up request and return startup address
  *
- * @param  activeID: Active partition table ID
  * @param  ptStuff: Pointer of partition table stuff
  * @param  ptEntry: Pointer of startup address
  *
  * @return 0 for partition table changed,need re-parse,1 for partition table or entry parsed successfully
  *
 *******************************************************************************/
-static void BLSP_Boot2_Get_MFG_StartReq_By_Addr(PtTable_ID_Type activeID,PtTable_Stuff_Config *ptStuff,PtTable_Entry_Config *ptEntry,uint32_t *startAddr)
+static void BLSP_Boot2_Get_MFG_StartReq_By_Addr(PtTable_Stuff_Config *ptStuff,PtTable_Entry_Config *ptEntry,uint32_t *startAddr)
 {
     uint32_t ret;
     uint8_t tmp[16+1]={0};
@@ -267,7 +266,7 @@ int main(void)
     uint32_t entry = 0;
     uint32_t mfgentry=0;
 
-    BLSP_Boot2_Get_MFG_StartReq_By_Addr(activeID,&ptTableStuff[activeID],&ptEntry[0],&mfgentry);
+    BLSP_Boot2_Get_MFG_StartReq_By_Addr(&ptTableStuff[activeID],&ptEntry[0],&mfgentry);
     if(mfgentry!=0){
         entry=mfgentry + BFLB_FW_IMG_OFFSET_AFTER_HEADER;
     }else{

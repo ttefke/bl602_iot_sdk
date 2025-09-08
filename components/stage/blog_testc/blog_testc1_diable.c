@@ -36,7 +36,7 @@
 #define BLOG_HARD_DECLARE_DISABLE 1
 BLOG_DECLARE(blog_testc1);
 
-void blog_testc1_entry(void *arg)
+void blog_testc1_entry([[gnu::unused]] void *arg)
 {
     aos_msleep(5000);
 

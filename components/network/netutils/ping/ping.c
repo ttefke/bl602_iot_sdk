@@ -294,7 +294,7 @@ struct ping_var *ping_api_init(u16_t interval, u16_t size, u32_t count, u16_t ti
     return env;
 }
 
-static void ping_cmd(char *buf, int len, int argc, char **argv)
+static void ping_cmd([[gnu::unused]] char *buf, [[gnu::unused]] int len, int argc, char **argv)
 {
     //
     // -i interval

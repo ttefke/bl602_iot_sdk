@@ -53,7 +53,8 @@ static void convert_data(uint32_t *data, int length)
     return;
 }
 
-static void test_irled(char *buf, int len, int argc, char **argv)
+static void test_irled([[gnu::unused]] char *buf, [[gnu::unused]] int len,
+        [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     uint32_t data[13];
     int i;

@@ -19,9 +19,9 @@ static coap_optlist_t *optlist = NULL;
 static int quit;
 
 // Handle incoming messages
-coap_response_t message_handler(coap_session_t *session,
-  const coap_pdu_t *sent, const coap_pdu_t *received,
-  const coap_mid_t id) {
+coap_response_t message_handler([[gnu::unused]] coap_session_t *session,
+  [[gnu::unused]] const coap_pdu_t *sent, const coap_pdu_t *received,
+  [[gnu::unused]] const coap_mid_t id) {
   // 0. Variables
   const uint8_t *data;
   size_t len;
@@ -188,7 +188,7 @@ int client_coap_poll() {
 }
 
 // CoAP client task
-void task_coap_client(void *pvParameters) {
+void task_coap_client([[gnu::unused]] void *pvParameters) {
   // Wait until WiFi is set up
   vTaskDelay(3 * 1000);
 

@@ -177,7 +177,7 @@ int32_t hal_uart_init(uart_dev_t *uart)
     return 0;
 }
 
-int32_t hal_uart_recv_II(uart_dev_t *uart, void *data, uint32_t expect_size, uint32_t *recv_size, uint32_t timeout)
+int32_t hal_uart_recv_II(uart_dev_t *uart, void *data, uint32_t expect_size, uint32_t *recv_size, [[gnu::unused]] uint32_t timeout)
 {
     int ch;
     uint32_t counter = 0;
@@ -191,7 +191,7 @@ int32_t hal_uart_recv_II(uart_dev_t *uart, void *data, uint32_t expect_size, uin
     return 0;
 }
 
-int32_t hal_uart_send(uart_dev_t *uart, const void *data, uint32_t size, uint32_t timeout)
+int32_t hal_uart_send(uart_dev_t *uart, const void *data, uint32_t size, [[gnu::unused]] uint32_t timeout)
 {
     uint32_t i = 0;
 
@@ -444,7 +444,7 @@ int vfs_uart_init(uint32_t fdt, uint32_t dtb_uart_offset)
     return VFS_SUCCESS;
 }
 
-int32_t hal_uart_send_flush(uart_dev_t *uart, uint32_t timeout)
+int32_t hal_uart_send_flush(uart_dev_t *uart, [[gnu::unused]] uint32_t timeout)
 {
     bl_uart_flush(uart->port);
     return 0;

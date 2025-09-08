@@ -34,7 +34,7 @@
 #include <utils_time.h>
 #include <blog.h>
 
-static void cmd_sys_time_now(char *buf, int len, int argc, char **argv)
+static void cmd_sys_time_now([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     uint64_t epoch_ms = 0;
     uint32_t seconds;

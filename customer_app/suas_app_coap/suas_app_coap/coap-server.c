@@ -14,6 +14,7 @@
 // CoAP includes
 #include <coap3/coap.h>
 #include "include/coap-log.h"
+#include "include/coap-common.h"
 #include "include/coap-server.h"
 
 // Local variable
@@ -55,9 +56,22 @@ void server_coap_init() {
   coap_set_log_handler(coap_log_handler);
   coap_set_log_level(COAP_LOG_INFO);
 
+#ifdef WITH_COAPS
+  coap_dtls_set_log_level(COAP_LOG_WARN);
+#endif
+
   // 3. Create server context
   main_coap_context = coap_new_context(NULL);
   LWIP_ASSERT("Failed to initialize context", main_coap_context != NULL);
+
+#ifdef WITH_COAPS
+  coap_dtls_spsk_t server_coaps_data;
+  memset(&server_coaps_data, 0, sizeof(server_coaps_data));
+  server_coaps_data.version = COAP_DTLS_SPSK_SETUP_VERSION;
+  server_coaps_data.psk_info.key.s = (const uint8_t *) COAPS_PSK;
+  server_coaps_data.psk_info.key.length = strlen(COAPS_PSK);
+  coap_context_set_psk2(main_coap_context, &server_coaps_data);
+#endif
 
   // 4. Set keepalive time for sessions
   coap_context_set_keepalive(main_coap_context, 60);
@@ -65,7 +79,11 @@ void server_coap_init() {
   // 5. Set connection schemes
   uint32_t schemes =
     coap_get_available_scheme_hint_bits(
+#ifdef WITH_COAPS
+      /* Use PSK */ 1,
+#else
       /* Use PSK */ 0,
+#endif
       /* Enable Websockets */ 0,
       /* IP sockets */ COAP_PROTO_NONE
   );
@@ -78,7 +96,11 @@ void server_coap_init() {
   coap_addr_info_t *info_list = coap_resolve_address_info (
     /* Address to resolve */ &ip_address_info,
     /* CoAP port */ 5683,
+#ifdef WITH_COAPS
+    /* CoAPs port */ 5684,
+#else
     /* CoAPs port */ 0,
+#endif
     /* WS port */ 0,
     /* WSS port */ 0,
     /* Additional IP address flags */ 0,

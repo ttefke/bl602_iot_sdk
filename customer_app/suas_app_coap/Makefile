@@ -14,8 +14,10 @@ export PROJECT_PATH PROJECT_BOARD
 # CoAP options
 CFLAGS += -DWITH_LWIP
 CFLAGS += -DWITH_COAP
+CFLAGS += -DWITH_COAPS
 CFLAGS += -DCOAP_CLIENT_SUPPORT
 CFLAGS += -DCOAP_SERVER_SUPPORT
+CFLAGS += -DWITH_SNIFFER
 
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)

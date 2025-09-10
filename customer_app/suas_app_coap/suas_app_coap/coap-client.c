@@ -11,6 +11,7 @@
 
 // CoAP includes
 #include <coap3/coap.h>
+#include "include/coap-common.h"
 #include "include/coap-client.h"
 #include "include/coap-log.h"
 
@@ -124,6 +125,10 @@ void client_coap_init() {
   coap_set_log_handler(coap_log_handler);
   coap_set_log_level(COAP_LOG_INFO);
 
+#ifdef WITH_COAPS
+  coap_dtls_set_log_level(COAP_LOG_WARN);
+#endif
+
   // 3. Parse URI
   len = coap_split_uri((const unsigned char *) uri_const, strlen(uri_const), &uri);
   LWIP_ASSERT("Failed to parse URI", len == 0);
@@ -143,7 +148,27 @@ void client_coap_init() {
   coap_context_set_block_mode(main_coap_context, COAP_BLOCK_USE_LIBCOAP);
 
   // 6. Create session
+#ifdef WITH_COAPS
+  if (proto == COAP_PROTO_DTLS || proto == COAP_PROTO_TLS) {
+    coap_dtls_cpsk_t client_coaps_data;
+    char client_sni[256];
+
+    memset(&client_coaps_data, 0, sizeof(client_coaps_data));
+    client_coaps_data.version = COAP_DTLS_CPSK_SETUP_VERSION;
+    snprintf(client_sni, sizeof(client_sni), "%*.*s",
+      (int) uri.host.length, (int) uri.host.length, uri.host.s);
+    client_coaps_data.client_sni = client_sni;
+    client_coaps_data.psk_info.identity.s = (const uint8_t *) COAPS_ID;
+    client_coaps_data.psk_info.identity.length = strlen(COAPS_ID);
+    client_coaps_data.psk_info.key.s = (const uint8_t *) COAPS_PSK;
+    client_coaps_data.psk_info.key.length = strlen(COAPS_PSK);
+
+    session = coap_new_client_session_psk2(main_coap_context, NULL,
+        &dst, proto, &client_coaps_data);
+  }
+#else
   session = coap_new_client_session(main_coap_context, NULL, &dst, proto);
+#endif
   LWIP_ASSERT("Failed to create session", session != NULL);
 
   // 7. Register response handler

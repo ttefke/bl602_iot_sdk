@@ -20,7 +20,7 @@ endif
 
 COMPONENTS_NETWORK := sntp dns_server
 COMPONENTS_BLSYS   := bltime blfdt blmtd blota bloop loopadc looprt loopset
-COMPONENTS_VFS     := romfs atcmd cjson
+COMPONENTS_VFS     := romfs atcmd
 ifeq ($(CONFIG_BT_TL),1)
 COMPONENTS_BLE     := blecontroller
 else

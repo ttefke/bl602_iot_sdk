@@ -177,7 +177,7 @@ static void * CJSON_CDECL internal_realloc(void *pointer, size_t size)
 #else
 #define internal_malloc malloc
 #define internal_free free
-#define internal_realloc realloc
+#define internal_realloc NULL
 #endif
 
 /* strlen of character literals resolved at compile time */

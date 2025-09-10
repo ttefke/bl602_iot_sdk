@@ -1,4 +1,5 @@
 // StdLib includes
+#include <stdbool.h>
 #include <stdio.h>
 
 // Hardware abstraction layers
@@ -26,7 +27,11 @@
 #include "include/wifi.h"
 
 // Role enum
-static enum app_wifi_role app_role;
+static enum app_wifi_role app_role = UNINITIALIZED;
+static bool is_wifi_initialized = false;
+
+// Boolean that indicates whether to send requests (see client code)
+extern bool sendRequests;
 
 // CoAP task definitions (client or server)
 static StackType_t coap_stack[1024];
@@ -64,9 +69,9 @@ static void _configure_wifi(void) {
   static bool is_initialized = false;
   if (!is_initialized) {
     // Start wifi manager
-    printf("[WIFI] Initialized\r\n");
+    printf("[%s] Initialized\r\n", __func__);
     wifi_mgmr_start_background(&conf);
-    printf("[WIFI] MGMR now running in background\r\n");
+    printf("[%s] MGMR now running in background\r\n", __func__);
     is_initialized = true;
   }
 }
@@ -86,13 +91,13 @@ static void _start_ap_wifi(void)
   snprintf(ssid_name, sizeof(ssid_name), WIFI_SSID);
   ssid_name[sizeof(ssid_name) - 1] = '\0';
 
-  printf("[WIFI] Starting up access point\r\n");
+  printf("[%s] Starting up access point\r\n", __func__);
 
   // Configure wifi manager and start access point
   _configure_wifi();
   wifi_interface = wifi_mgmr_ap_enable();
   wifi_mgmr_ap_start(wifi_interface, ssid_name, 0, WIFI_PW, channel);
-  printf("[WIFI] Started access point, should be reachable\r\n");
+  printf("[%s] Started access point, should be reachable\r\n", __func__);
 }
 
 /* Connect to a WiFi access point */
@@ -103,7 +108,7 @@ static void _connect_sta_wifi()
 
   // Connect to access point
   wifi_mgmr_sta_connect(wifi_interface, WIFI_SSID, WIFI_PW, NULL, 0, 0, 0);
-  printf("[WIFI] Connected to a network\r\n");
+  printf("[%s] Connected to a network\r\n", __func__);
 
   /* Enable automatic reconnect */
   wifi_mgmr_sta_autoconnect_enable();
@@ -121,10 +126,10 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
       _configure_wifi();
       break;
     case CODE_WIFI_ON_MGMR_DONE:
-      printf("[WIFI] MGMR done\r\n");
+      printf("[%s] WiFi MGMR done\r\n", __func__);
       if (app_role == STA) {
         /* Connect to a Wifi network*/
-        printf("[WIFI] Connecting to a network\r\n");
+        printf("[%s] Connecting to a network\r\n", __func__);
         _connect_sta_wifi();
       } else {
         /* Start an access point */
@@ -166,13 +171,13 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
       }
       break;
     case CODE_WIFI_ON_CONNECTING:
-      printf("[WIFI] Connecting to a WiFi network\r\n");
+      printf("[%s] Connecting to a WiFi network\r\n", __func__);
       break;
     case CODE_WIFI_ON_CONNECTED:
-      printf("[WIFI] Connected to a network\r\n");
+      printf("[%s] Connected to a network\r\n", __func__);
       break;
     case CODE_WIFI_ON_GOT_IP:
-      printf("[WIFI] Received an IP address\r\n");
+      printf("[%s] Received an IP address\r\n", __func__);
       if (app_role == STA) {
         // Start CoAP client
         xTaskCreateStatic(task_coap_client, (char*)"coap client",
@@ -180,10 +185,10 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
       }
       break;
     case CODE_WIFI_ON_AP_STA_ADD:
-      printf("[WIFI] New device present\r\n");
+      printf("[%s] New device present\r\n", __func__);
       break;
     case CODE_WIFI_ON_AP_STA_DEL:
-      printf("[WIFI] Device was removed\r\n");
+      printf("[%s] Device was removed\r\n", __func__);
       break;
     case CODE_WIFI_ON_SCAN_DONE_ONJOIN:
     case CODE_WIFI_ON_MGMR_DENOISE:
@@ -194,7 +199,7 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
       // nothing
       break;
     default:
-      printf("[WIFI] Unknown event\r\n");
+      printf("[%s] Unknown event\r\n", __func__);
   }
 }
 
@@ -203,23 +208,30 @@ void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data
   switch (event->code) {
     // Start as AP
     case KEY_1:
-      printf("[WIFI] Starting as AP\r\n");
-      app_role = AP;
+      if (app_role == UNINITIALIZED) {
+        printf("[%s] Starting as AP\r\n", __func__);
+        app_role = AP;
+      } else if (app_role == STA) {
+        sendRequests = false;
+      }
       break;
     case KEY_2:
       // Start as station
-      printf("[WIFI] Starting in STA mode\r\n");
+      printf("[%s] Starting in STA mode\r\n", __func__);
       app_role = STA;
       break;
     default:
-      printf("[WIFI] Key press not recognized\r\n");
+      printf("[%s] Key press not recognized\r\n", __func__);
   }
   
-  /* Start wifi firmware */
-  printf("[WIFI] Starting WiFi stack\r\n");
-  hal_wifi_start_firmware_task();
-  aos_post_event(EV_WIFI, CODE_WIFI_ON_INIT_DONE, 0);
-  printf("[WIFI] Firmware loaded\r\n");
+  /* Start wifi firmware if it is not started yet */
+  if (!is_wifi_initialized) {
+    printf("[%s] Starting WiFi stack\r\n", __func__);
+    hal_wifi_start_firmware_task();
+    aos_post_event(EV_WIFI, CODE_WIFI_ON_INIT_DONE, 0);
+    printf("[%s] Firmware loaded\r\n", __func__);
+    is_wifi_initialized = true;
+  }
 }
 
 /* WiFi task */
@@ -261,12 +273,12 @@ void task_wifi([[gnu::unused]] void *pvParameters) {
   /* Register event filter for WiFi events*/
   aos_register_event_filter(EV_WIFI, event_cb_wifi_event, NULL);
 
-  printf("[WIFI] Task ready, press key to start AP or station\r\n");
+  printf("[%s] Task ready, press key to start AP or station\r\n", __func__);
 
   /*  Start aos loop */
   aos_loop_run();
 
   /* Will hopefully never happen */
-  printf("[WIFI] Exiting WiFi task - should never happen\r\n");
+  printf("[%s] Exiting WiFi task - should never happen\r\n", __func__);
   vTaskDelete(NULL);
 }

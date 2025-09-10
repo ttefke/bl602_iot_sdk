@@ -8,7 +8,8 @@
 
 // Wifi modes
 enum app_wifi_role {
-    AP = 1,
+    UNINITIALIZED = 0,
+    AP,
     STA
 };
 

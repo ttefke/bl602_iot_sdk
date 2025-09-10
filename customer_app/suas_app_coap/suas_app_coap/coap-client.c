@@ -3,6 +3,7 @@
 #include <task.h>
 
 // StdLib include
+#include <stdbool.h>
 #include <stdio.h>
 
 // lwIP includes
@@ -13,10 +14,14 @@
 #include "include/coap-client.h"
 #include "include/coap-log.h"
 
-// Local variables
+// Local message processing variables
 static coap_context_t *main_coap_context;
-static coap_optlist_t *optlist = NULL;
-static int quit;
+static coap_session_t *session = NULL;
+static coap_uri_t uri;
+static coap_address_t dst;
+static bool firstPDU;
+static bool lastPDU;
+bool sendRequests = true;
 
 // Handle incoming messages
 coap_response_t message_handler([[gnu::unused]] coap_session_t *session,
@@ -31,12 +36,18 @@ coap_response_t message_handler([[gnu::unused]] coap_session_t *session,
   // 1. Receive PDU
   if (coap_get_data_large(received, &len, &data, &offset, &total)) {
     // 2. Print payload
-    printf("Received data: %*.*s", (int) len, (int) len, (const char *) data);
+    if (firstPDU) {
+      printf("[%s] Received data: %*.*s", __func__,
+              (int) len, (int) len, (const char *) data);
+      firstPDU = false;
+    } else {
+      printf("%s", (const char *) data);
+    }
 
     // Check if this is the last PDU of the data frame
     if (len + offset == total) {
         printf("\r\n");
-        quit = 1;
+        lastPDU = true;
     }
   }
 
@@ -97,20 +108,13 @@ int resolve_address(const char *host, const char *service,
   return ret;
 }
 
-// Initialize and send request
+// Initialize session
 void client_coap_init() {
   // 0. Variables
-  coap_session_t *session = NULL;
-  coap_pdu_t *pdu;
-  coap_pdu_type_t pdu_type = COAP_MESSAGE_CON;
-  coap_address_t dst;
   coap_proto_t proto;
   const char *uri_const = COAP_URI;
-  coap_uri_t uri;
-  coap_mid_t mid;
   char portbuf[8];
   unsigned char buf[100];
-  int res;
   int len;
 
   // 1. Initialize CoAP stack
@@ -147,44 +151,41 @@ void client_coap_init() {
 
   // 8. Register non-acknowledged handler
   coap_register_nack_handler(main_coap_context, nack_handler);
+}
 
-  // 9. Construct CoAP PDU
-  pdu = coap_pdu_init(pdu_type,
+// Send a PDU (request)
+void client_coap_send_pdu() {
+  /* 0. Check if the session is valid*/
+  if (session == NULL) {
+    printf("[%s] No session created yet!\r\n", __func__);
+    return;
+  }
+
+  // 1. Construct CoAP PDU
+  coap_pdu_t *pdu = coap_pdu_init(COAP_MESSAGE_CON,
     COAP_REQUEST_CODE_GET,
     coap_new_message_id(session),
     coap_session_max_pdu_size(session));
   LWIP_ASSERT("Failed to create PDU", pdu != NULL);
 
-  res = coap_uri_into_optlist(&uri, &dst, &optlist, 1);
+  // 2. Create list of options
+  coap_optlist_t *optlist = NULL;
+  int res = coap_uri_into_optlist(&uri, &dst, &optlist, 1);
   LWIP_ASSERT("Failed to create options", res == 1);
 
-  // Add option list
+  // 3. Add option list to PDU
   if (optlist) {
     res = coap_add_optlist_pdu(pdu, &optlist);
     LWIP_ASSERT("Failed to add options to PDU", res == 1);
   }
 
-  // 10. Send the PDU
-  mid = coap_send(session, pdu);
+  // 4. Send the PDU
+  coap_mid_t mid = coap_send(session, pdu);
   LWIP_ASSERT("Failed to send PDU", mid != COAP_INVALID_MID);
-}
 
-// Deinitialize CoAP stack after receiving response
-void client_coap_finished() {
+  // 5. Cleanup
   coap_delete_optlist(optlist);
-  optlist = NULL; // this must be set to null
-  coap_free_context(main_coap_context);
-  main_coap_context = NULL;
-  coap_cleanup();
-}
-
-// Receive input packet(s)
-int client_coap_poll() {
-  // Wait for new packet with timeout of 500ms
-  coap_io_process(main_coap_context, 500);
-
-  // Return quit variable (set in incoming message handler)
-  return quit;
+  optlist = NULL;
 }
 
 // CoAP client task
@@ -192,26 +193,34 @@ void task_coap_client([[gnu::unused]] void *pvParameters) {
   // Wait until WiFi is set up
   vTaskDelay(3 * 1000);
 
+  // Initialize 
+  client_coap_init();
+  sendRequests = true;
+
   // Send request to server once a second
-  while (1) {
+  while (sendRequests) {
     // Set message processing variables
-    quit = 0;
-    int no_more = 0;
+    firstPDU = true;
+    lastPDU = false;
 
-    // Initialize and send request
-    client_coap_init();
+    // Send request PDU
+    client_coap_send_pdu();
 
-    // Poll for incoming data
-    while (!quit && !no_more) {
-      no_more = client_coap_poll();
+    // Poll for incoming response data
+    while (!lastPDU) {
+      // Wait for new packet with timeout of 500ms
+      coap_io_process(main_coap_context, 500);
     }
-
-    // Destruct CoAP data containers
-    client_coap_finished();
-
     // Wait one second before sending next request
     vTaskDelay(1000);
   }
+
+  // Destruct CoAP data containers
+  printf("[%s] Shutting down CoAP\r\n", __func__);
+  coap_free_context(main_coap_context);
+  main_coap_context = NULL;
+  coap_cleanup();
+  printf("[%s] Done\r\n", __func__);
 
   // Remove task
   vTaskDelete(NULL);

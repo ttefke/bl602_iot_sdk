@@ -66,13 +66,13 @@ void vApplicationIdleHook(void)
 
 void vApplicationMallocFailedHook(void)
 {
-  printf("malloc failed, currently left memory in bytes: %d\r\n", xPortGetFreeHeapSize());
+  printf("[%s] malloc failed, currently left memory in bytes: %d\r\n",
+      __func__, xPortGetFreeHeapSize());
   while (1) {}
 }
 
 void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, char *pcTaskName)
 {
-  printf("Stack overflow checked\r\n");
-  printf("Task name: %s\r\n", pcTaskName);
+  printf("[%s] Stack overflow, task name: %s\r\n", __func__, pcTaskName);
   while (1) {}
 }

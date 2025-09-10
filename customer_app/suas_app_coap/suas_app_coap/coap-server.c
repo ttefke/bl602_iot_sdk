@@ -43,7 +43,7 @@ void handler_random([[gnu::unused]] coap_resource_t *resource,
   // 5. Add random number to response
   coap_add_data(response, len, buf);
 
-  printf("[%s] Sending response (time: %ld)\r\n", __func__, bl_timer_now_us());
+  printf("[%s] Sending response (value: %" PRIu32 ")\r\n", __func__, random);
 }
 
 // Initialize server

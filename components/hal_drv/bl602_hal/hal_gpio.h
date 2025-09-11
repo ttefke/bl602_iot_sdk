@@ -30,6 +30,8 @@
 #ifndef __HAL_GPIO_H__
 #define __HAL_GPIO_H__
 
+#include <stdint.h>
+
 typedef enum {
     GPIO_INT_TRIG_NEG_PULSE,            /*!< GPIO negedge pulse trigger interrupt */
     GPIO_INT_TRIG_POS_PULSE,            /*!< GPIO posedge pulse trigger interrupt */

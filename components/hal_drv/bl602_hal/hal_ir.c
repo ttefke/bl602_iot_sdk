@@ -28,6 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include <stdio.h>
+#include <stdint.h>
 #include <fdt.h>
 #include <libfdt.h>
 #include <blog.h>

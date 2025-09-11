@@ -2,8 +2,9 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-// Boolean data type
+// Data types
 #include <stdbool.h>
+#include <stdint.h>
 
 // Standard input/output
 #include <stdio.h>
@@ -76,7 +77,7 @@ void rf522_set_register_bit_mask(uint8_t reg, uint8_t mask)
 }
 
 // Cyclic redundancy check: Detect possible errors during data transmission
-uint rf522_calculate_crc(uint8_t *data, uint8_t len, uint8_t *result)
+uint32_t rf522_calculate_crc(uint8_t *data, uint8_t len, uint8_t *result)
 {
     spi_write_register(RF522_COMMAND_REG, RF522_IDLE);
     spi_write_register(RF522_DIV_IRQ_REG, 0x04);

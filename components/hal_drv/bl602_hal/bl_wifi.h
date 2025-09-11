@@ -29,6 +29,9 @@
  */
 #ifndef __BL_WIFI_H__
 #define __BL_WIFI_H__
+
+#include <stdint.h>
+
 typedef struct bl_wifi_ap_info {
     uint8_t ssid[33];
     uint8_t psk[65];

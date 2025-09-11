@@ -29,6 +29,9 @@
  */
 #ifndef __HAL_SYS_H__
 #define __HAL_SYS_H__
+
+#include <stdint.h>
+
 void hal_reboot();
 void hal_sys_reset();
 void hal_poweroff();

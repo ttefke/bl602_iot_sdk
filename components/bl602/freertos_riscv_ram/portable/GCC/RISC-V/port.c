@@ -93,6 +93,8 @@ const uint64_t *pullNextTime = &ullNextTime;
 const size_t uxTimerIncrementsForOneTick = ( size_t ) ( ( configCPU_CLOCK_HZ ) / ( configTICK_RATE_HZ ) ); /* Assumes increment won't go over 32-bits. */
 uint32_t const ullMachineTimerCompareRegisterBase = configMTIMECMP_BASE_ADDRESS;
 volatile uint64_t * pullMachineTimerCompareRegister = NULL;
+BaseType_t TrapNetCounter = 0;
+const BaseType_t  *pTrapNetCounter = &TrapNetCounter;
 
 /* Set configCHECK_FOR_STACK_OVERFLOW to 3 to add ISR stack checking to task
 stack checking.  A problem in the ISR stack will trigger an assert, not call the
@@ -158,7 +160,6 @@ extern void xPortStartFirstTask( void );
 		/* Check the least significant two bits of mtvec are 00 - indicating
 		single vector mode. */
 		__asm volatile( "csrr %0, mtvec" : "=r"( mtvec ) );
-		configASSERT( ( mtvec & 0x03UL ) == 0 );
 
 		/* Check alignment of the interrupt stack - which is the same as the
 		stack that was being used by main() prior to the scheduler being
@@ -191,6 +192,9 @@ extern void xPortStartFirstTask( void );
 		__asm volatile( "csrs mie, %0" :: "r"(0x800) );
 	}
 	#endif /* ( configMTIME_BASE_ADDRESS != 0 ) && ( configMTIMECMP_BASE_ADDRESS != 0 ) */
+
+    /*Enable mtimer interrrupt*/
+    *(volatile uint8_t*)configCLIC_TIMER_ENABLE_ADDRESS = 1;
 
 	xPortStartFirstTask();
 

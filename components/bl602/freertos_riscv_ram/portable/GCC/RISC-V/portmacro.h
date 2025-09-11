@@ -49,7 +49,6 @@ extern "C" {
 	#define portBASE_TYPE			int64_t
 	#define portUBASE_TYPE			uint64_t
 	#define portMAX_DELAY 			( TickType_t ) 0xffffffffffffffffUL
-	#define portPOINTER_SIZE_TYPE 	uint64_t
 #elif __riscv_xlen == 32
 	#define portSTACK_TYPE	uint32_t
 	#define portBASE_TYPE	int32_t
@@ -90,6 +89,7 @@ not need to be guarded with a critical section. */
 
 
 /* Scheduler utilities. */
+extern BaseType_t TrapNetCounter;
 extern void vTaskSwitchContext( void );
 #define portYIELD() __asm volatile( "ecall" );
 #define portEND_SWITCHING_ISR( xSwitchRequired ) if( xSwitchRequired ) vTaskSwitchContext()

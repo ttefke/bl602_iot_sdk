@@ -2314,6 +2314,20 @@ TickType_t xTicks;
 
 	return xTicks;
 }
+
+BaseType_t xTaskGetTickCount2( TickType_t *ticks, BaseType_t *overflow )
+{
+    //FIXME TODO potential BUG for TICK  count
+    portTICK_TYPE_ENTER_CRITICAL();
+    {
+        *ticks = xTickCount;
+        *overflow = xNumOfOverflows;
+    }
+    portTICK_TYPE_EXIT_CRITICAL();
+
+    return pdTRUE;
+}
+
 /*-----------------------------------------------------------*/
 
 TickType_t xTaskGetTickCountFromISR( void )
@@ -2624,6 +2638,60 @@ BaseType_t xYieldRequired = pdFALSE;
 }
 /*----------------------------------------------------------*/
 
+void vTaskStepTickSafe( const TickType_t xTicksToJump )
+{
+    TCB_t * pxTCB;
+    TickType_t xTickDelta = ( TickType_t ) 0 - xTickCount;
+
+    if( xTicksToJump >= xTickDelta )
+    {
+        for( ;; )
+        {
+            if( listLIST_IS_EMPTY( pxDelayedTaskList ) != pdFALSE )
+            {
+                /* The delayed list is empty. */
+                break;
+            }
+            else
+            {
+                /* The delayed list is not empty, get the value of the
+                item at the head of the delayed list.  This is the time
+                at which the task at the head of the delayed list must
+                be removed from the Blocked state. */
+                pxTCB = listGET_OWNER_OF_HEAD_ENTRY( pxDelayedTaskList ); /*lint !e9079 void * is used as this macro is used with timers and co-routines too.  Alignment is known to be fine as the type of the pointer stored and retrieved is the same. */
+
+                /* It is time to remove the item from the Blocked state. */
+                ( void ) uxListRemove( &( pxTCB->xStateListItem ) );
+
+                /* Is the task waiting on an event also?  If so remove
+                it from the event list. */
+                if( listLIST_ITEM_CONTAINER( &( pxTCB->xEventListItem ) ) != NULL )
+                {
+                    ( void ) uxListRemove( &( pxTCB->xEventListItem ) );
+                }
+                else
+                {
+                    mtCOVERAGE_TEST_MARKER();
+                }
+
+                /* Place the unblocked task into the appropriate ready
+                list. */
+                prvAddTaskToReadyList( pxTCB );
+            }
+        }
+
+        taskSWITCH_DELAYED_LISTS();
+    }
+    else
+    {
+        mtCOVERAGE_TEST_MARKER();
+    }
+
+    xTickCount += xTicksToJump;
+    traceINCREASE_TICK_COUNT( xTicksToJump );
+}
+/*-----------------------------------------------------------*/
+
 #if ( INCLUDE_xTaskAbortDelay == 1 )
 
 	BaseType_t xTaskAbortDelay( TaskHandle_t xTask )
@@ -2709,7 +2777,15 @@ BaseType_t xTaskIncrementTick( void )
 TCB_t * pxTCB;
 TickType_t xItemValue;
 BaseType_t xSwitchRequired = pdFALSE;
+uint32_t tmp;
 
+    /* Do not increment tick if FreeRTOS clock is faster than RTC clock */
+    extern int bl_sys_time_sync_state(uint32_t *xTicksToJump);
+    if( bl_sys_time_sync_state(&tmp) == 0 )
+    {
+        return pdFALSE;
+    }
+	
 	/* Called by the portable layer each time a tick interrupt occurs.
 	Increments the tick then checks to see if the new tick value will cause any
 	tasks to be unblocked. */

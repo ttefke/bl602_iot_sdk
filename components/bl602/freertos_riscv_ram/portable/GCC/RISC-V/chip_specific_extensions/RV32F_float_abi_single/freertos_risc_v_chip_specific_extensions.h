@@ -53,7 +53,8 @@
 #ifndef __FREERTOS_RISC_V_EXTENSIONS_H__
 #define __FREERTOS_RISC_V_EXTENSIONS_H__
 
-#define portasmHAS_CLINT 1
+#define portasmHAS_MTIME 1
+#define portasmHAS_SIFIVE_CLINT 1
 
 /* 34 additional registers to save and restore:
  * 32 fp, 1 fcsr, 1 padding(? even ?)

@@ -1354,6 +1354,7 @@ BaseType_t xTaskResumeAll( void ) PRIVILEGED_FUNCTION;
  * \ingroup TaskUtils
  */
 TickType_t xTaskGetTickCount( void ) PRIVILEGED_FUNCTION;
+BaseType_t xTaskGetTickCount2( TickType_t *ticks, BaseType_t *overflow ) PRIVILEGED_FUNCTION;
 
 /**
  * task. h
@@ -2491,6 +2492,7 @@ void vTaskSetTaskNumber( TaskHandle_t xTask, const UBaseType_t uxHandle ) PRIVIL
  * equal to the idle period.
  */
 void vTaskStepTick( const TickType_t xTicksToJump ) PRIVILEGED_FUNCTION;
+void vTaskStepTickSafe( const TickType_t xTicksToJump ) PRIVILEGED_FUNCTION;
 
 /* Correct the tick count value after the application code has held
 interrupts disabled for an extended period.  xTicksToCatchUp is the number

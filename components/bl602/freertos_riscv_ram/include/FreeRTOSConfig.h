@@ -87,7 +87,8 @@
 
 #define configSUPPORT_STATIC_ALLOCATION              1
 
-#define configCLINT_BASE_ADDRESS        CLINT_CTRL_ADDR
+#define configMTIME_BASE_ADDRESS 	( ( CLINT_CTRL_ADDR ) + 0xBFF8UL )
+#define configMTIMECMP_BASE_ADDRESS ( ( CLINT_CTRL_ADDR ) + 0x4000UL )
 #define configCLIC_TIMER_ENABLE_ADDRESS     (0x02800407)
 #define configUSE_PREEMPTION            1
 #define configUSE_IDLE_HOOK             1

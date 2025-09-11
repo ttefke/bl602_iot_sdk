@@ -110,9 +110,11 @@ at the top of this file. */
 .extern Timer_IRQHandler
 .extern pullMachineTimerCompareRegister
 .extern pullNextTime
+.extern pTrapNetCounter
 .extern uxTimerIncrementsForOneTick /* size_t type so 32-bit on 32-bit core and 64-bits on 64-bit core. */
 .extern xISRStackTop
 .extern portasmHANDLE_INTERRUPT
+.extern exception_entry
 
 /*-----------------------------------------------------------*/
 
@@ -154,10 +156,17 @@ freertos_risc_v_trap_handler:
 
 	portasmSAVE_ADDITIONAL_REGISTERS	/* Defined in freertos_risc_v_chip_specific_extensions.h to save any registers unique to the RISC-V implementation. */
 
+    load_x  t0, pTrapNetCounter
+    lw   t1, 0( t0 )
+    addi   t1, t1, 1
+    store_x t1, 0( t0 )
+
 	load_x  t0, pxCurrentTCB			/* Load pxCurrentTCB. */
 	store_x  sp, 0( t0 )				/* Write sp to first TCB member. */
 
 	csrr a0, mcause
+    li t0, 0x807FFFFF
+    and a0, a0, t0
 	csrr a1, mepc
 
 test_if_asynchronous:
@@ -166,9 +175,6 @@ test_if_asynchronous:
 	store_x a1, 0( sp )					/* Asynch so save unmodified exception return address. */
 
 handle_asynchronous:
-
-#if( portasmHAS_MTIME != 0 )
-
 	test_if_mtimer:						/* If there is a CLINT then the mtimer is used to generate the tick interrupt. */
 
 		addi t0, x0, 1
@@ -215,14 +221,9 @@ handle_asynchronous:
 		jal vTaskSwitchContext
 		j processed_source
 
-	test_if_external_interrupt:			/* If there is a CLINT and the mtimer interrupt is not pending then check to see if an external interrupt is pending. */
-		addi t1, t1, 4					/* 0x80000007 + 4 = 0x8000000b == Machine external interrupt. */
-		bne a0, t1, as_yet_unhandled	/* Something as yet unhandled. */
-
-#endif /* portasmHAS_MTIME */
-
+test_if_external_interrupt:			/* If there is a CLINT and the mtimer interrupt is not pending then check to see if an external interrupt is pending. */
 	load_x sp, xISRStackTop				/* Switch to ISR stack before function call. */
-	jal portasmHANDLE_INTERRUPT			/* Jump to the interrupt handler if there is no CLINT or if there is a CLINT and it has been determined that an external interrupt is pending. */
+	call portasmHANDLE_INTERRUPT			/* Jump to the interrupt handler if there is no CLINT or if there is a CLINT and it has been determined that an external interrupt is pending. */
 	j processed_source
 
 handle_synchronous:
@@ -233,20 +234,30 @@ test_if_environment_call:
 	li t0, 11 							/* 11 == environment call. */
 	bne a0, t0, is_exception			/* Not an M environment call, so some other exception. */
 	load_x sp, xISRStackTop				/* Switch to ISR stack before function call. */
-	jal vTaskSwitchContext
+	call vTaskSwitchContext
 	j processed_source
 
 is_exception:
-	csrr t0, mcause						/* For viewing in the debugger only. */
-	csrr t1, mepc						/* For viewing in the debugger only */
-	csrr t2, mstatus
-	j is_exception						/* No other exceptions handled yet. */
+	csrr a0, mcause
+	csrr a1, mepc
+	csrr a2, mtval
+	add  a3, sp, x0
+	call exception_entry
+	j processed_source
+1:
+ 	ebreak
+	j 1b
 
 as_yet_unhandled:
 	csrr t0, mcause						/* For viewing in the debugger only. */
 	j as_yet_unhandled
 
 processed_source:
+    load_x  t0, pTrapNetCounter
+    lw   t1, 0 ( t0 )
+    addi   t1, t1, -1
+    store_x t1, 0( t0 )
+
 	load_x  t1, pxCurrentTCB			/* Load pxCurrentTCB. */
 	load_x  sp, 0( t1 )				 	/* Read sp from first TCB member. */
 
@@ -303,6 +314,7 @@ xPortStartFirstTask:
 	trap handler.  Otherwise the interrupt controller will need to be configured
 	outside of this file. */
 	la t0, freertos_risc_v_trap_handler
+    addi t0, t0, 2
 	csrw mtvec, t0
 #endif /* portasmHAS_CLILNT */
 
@@ -416,9 +428,9 @@ xPortStartFirstTask:
 pxPortInitialiseStack:
 
 	csrr t0, mstatus					/* Obtain current mstatus value. */
-	addi t1, x0, 0x188					/* Generate the value 0x1880, which are the MPIE and MPP bits to set in mstatus. */
-	slli t1, t1, 4
-	or t0, t0, t1						/* Set MPIE and MPP bits in mstatus value. */
+	li   t1, 0x1880
+	or   t0, t0, t1                     /* MPP = 0b11, MPIE = 1 */
+	andi t0, t0, 0xFFFFFFF7             /* !!! MIE = 0 !!! */
 
 	addi a0, a0, -portWORD_SIZE
 	store_x t0, 0(a0)					/* mstatus onto the stack. */

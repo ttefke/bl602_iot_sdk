@@ -851,7 +851,7 @@ int bt_mesh_prov_decrypt(const u8_t key[16], u8_t nonce[13],
 }
 
 int bt_mesh_beacon_auth(const u8_t beacon_key[16], u8_t flags,
-            const u8_t net_id[8], u32_t iv_index,
+            const u8_t net_id[16], u32_t iv_index,
             u8_t auth[8])
 {
     u8_t msg[13], tmp[16];

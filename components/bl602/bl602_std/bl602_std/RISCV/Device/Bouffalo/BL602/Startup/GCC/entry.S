@@ -49,10 +49,10 @@ _enter:
     .weak __StackTop
     la sp, __StackTop
     
-    /* Intial the mtvt, MUST BE 64 bytes aligned*/
+    /* Intial the mtvt CSR, MUST BE 64 bytes aligned*/
     .weak __Vectors
     la t0, __Vectors
-    csrw mtvt, t0
+    csrw 0x307, t0 /* 0x307 corresponds to the mtvt CSR, we can't access its macro here */ 
 
 #if __riscv_float_abi_single
     /* deal with FP */

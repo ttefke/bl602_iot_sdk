@@ -1,7 +1,7 @@
 
 # Component Makefile
 #
-COMPONENT_ADD_INCLUDEDIRS += config portable/GCC/RISC-V portable/GCC/RISC-V/chip_specific_extensions/RV32F_float_abi_single panic
+COMPONENT_ADD_INCLUDEDIRS += include portable/GCC/RISC-V portable/GCC/RISC-V/chip_specific_extensions/RV32F_float_abi_single panic
 
 COMPONENT_OBJS := $(patsubst %.c,%.o, \
                     event_groups.c \

@@ -25,7 +25,7 @@ COMPONENTS_BLE     := blecontroller blestack
 
 CFLAGS += -DCONFIG_MBED_WITH_FS_IO
 
-INCLUDE_COMPONENTS += freertos_riscv_ram bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd mbedtls-bl602 vfs yloop utils cli aws-iot httpc netutils blog blog_testc audio_device audio_framework
+INCLUDE_COMPONENTS += freertos bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd mbedtls-bl602 vfs yloop utils cli aws-iot httpc netutils blog blog_testc audio_device audio_framework
 INCLUDE_COMPONENTS += easyflash4
 INCLUDE_COMPONENTS += $(COMPONENTS_NETWORK)
 INCLUDE_COMPONENTS += $(COMPONENTS_BLSYS)

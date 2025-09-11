@@ -23,7 +23,7 @@ COMPONENTS_VFS     :=
 
 CFLAGS += -DCONFIG_MBED_WITH_FS_IO
 
-INCLUDE_COMPONENTS += freertos_riscv_ram bl602 bl602_std hal_drv vfs yloop lwip utils cli blog blog_testc mbedtls-bl602
+INCLUDE_COMPONENTS += freertos bl602 bl602_std hal_drv vfs yloop lwip utils cli blog blog_testc mbedtls-bl602
 INCLUDE_COMPONENTS += $(COMPONENTS_BLSYS)
 INCLUDE_COMPONENTS += $(COMPONENTS_VFS)
 INCLUDE_COMPONENTS += $(PROJECT_NAME)

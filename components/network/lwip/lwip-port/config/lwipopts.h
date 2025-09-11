@@ -29,7 +29,7 @@
  */
 #define NO_SYS                  0
 
-#define LWIP_TIMEVAL_PRIVATE    0
+#define LWIP_TIMEVAL_PRIVATE    1
 
 /**
  * LWIP_TCPIP_CORE_LOCKING_INPUT: when LWIP_TCPIP_CORE_LOCKING is enabled,

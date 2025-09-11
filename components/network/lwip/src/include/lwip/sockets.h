@@ -492,6 +492,8 @@ typedef struct fd_set
   unsigned char fd_bits [(FD_SETSIZE+7)/8];
 } fd_set;
 
+#define _SYS_SELECT_H
+
 #elif FD_SETSIZE < (LWIP_SOCKET_OFFSET + MEMP_NUM_NETCONN)
 #error "external FD_SETSIZE too small for number of sockets"
 #else
@@ -528,10 +530,15 @@ struct pollfd
 #endif
 
 #if LWIP_TIMEVAL_PRIVATE
+#ifndef _TIMEVAL_DEFINED
+#define _TIMEVAL_DEFINED
+
 struct timeval {
   long    tv_sec;         /* seconds */
   long    tv_usec;        /* and microseconds */
 };
+
+#endif /* _TIMEVAL_DEFINED */
 #endif /* LWIP_TIMEVAL_PRIVATE */
 
 #ifdef __cplusplus

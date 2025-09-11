@@ -268,6 +268,8 @@ CPPFLAGS += -DARCH_RISCV
 COMMON_WARNING_FLAGS = \
 	-Wall \
 	-Werror=all \
+	-Wno-address \
+	-Wno-error=address \
 	-Wextra
 
 ifdef CONFIG_WARN_WRITE_STRINGS
@@ -340,6 +342,7 @@ CFLAGS := $(strip \
 	$(E21_CPU_CFLAGS) \
 	$(EXTRA_CFLAGS)) \
 	-save-temps=obj \
+	-Wno-int-conversion \
 	-Werror \
 	-Wall
 

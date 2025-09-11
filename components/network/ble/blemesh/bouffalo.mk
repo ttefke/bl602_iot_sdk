@@ -57,4 +57,5 @@ endif
 
 CFLAGS += \
 	-Wno-sign-compare \
-	-Wno-unused-parameter
+	-Wno-unused-parameter \
+	-Wno-stringop-overread

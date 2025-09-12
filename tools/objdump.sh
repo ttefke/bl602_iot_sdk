@@ -9,4 +9,4 @@ if [[ "$upd" != "customer_app" ]]; then
     exit 1
 fi
 
-../../toolchain/riscv/Linux/bin/riscv64-unknown-elf-objdump build_out/$wd.elf -x -s -S --disassemble --demangle --line-numbers --wide > $wd.S 2>&1
+../../toolchain/compiler/bin/riscv32-unknown-elf-objdump build_out/$wd.elf -x -s -S --disassemble --demangle --line-numbers --wide > $wd.S 2>&1

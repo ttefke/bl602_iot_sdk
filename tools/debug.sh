@@ -14,7 +14,7 @@ if [[ "$upd" != "customer_app" ]]; then
 fi
 
 echo "Starting openOCD"
-gnome-terminal --  bash -c "$path/../../tools/openocd/bin/openocd -f $path/../../tools/openocd/openocd.cfg; exec bash"
+gnome-terminal --  bash -c "$path/../../toolchain/openocd/bin/openocd -f $path/../../tools/debug/openocd.cfg; exec bash"
 
 echo "Creating GDB configuration"
 
@@ -26,4 +26,4 @@ EOF
 cat $(pwd)/../../tools/debug/602.init /tmp/gdb_tgt.cfg > /tmp/602.init
 
 echo "Starting GDB"
-gnome-terminal -- bash -c "$path/../../toolchain/riscv/Linux/gdb/bin/riscv64-unknown-elf-gdb -x /tmp/602.init --se=$path/build_out/$wd.elf; exec bash"
+gnome-terminal -- bash -c "$path/../../toolchain/compiler/bin/riscv32-unknown-elf-gdb -x /tmp/602.init --se=$path/build_out/$wd.elf; exec bash"

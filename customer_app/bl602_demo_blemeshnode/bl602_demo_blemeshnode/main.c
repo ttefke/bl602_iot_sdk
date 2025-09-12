@@ -80,99 +80,6 @@ static HeapRegion_t xHeapRegions[] =
         { NULL, 0 } /* Terminates the array. */
 };
 
-
-void vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
-{
-    puts("Stack Overflow checked\r\n");
-    while (1) {
-        /*empty here*/
-    }
-}
-
-void vApplicationMallocFailedHook(void)
-{
-    printf("Memory Allocate Failed. Current left size is %d bytes\r\n",
-        xPortGetFreeHeapSize()
-    );
-    while (1) {
-        /*empty here*/
-    }
-}
-
-void vApplicationIdleHook(void)
-{
-    if(!pds_start){
-        __asm volatile(
-                "   wfi     "
-        );
-        /*empty*/
-    }
-}
-
-#if ( configUSE_TICKLESS_IDLE != 0 )
-void vApplicationSleep([[gnu::unused]]  TickType_t xExpectedIdleTime_ms )
-{
-#if defined(CFG_BLE_PDS)
-    int32_t bleSleepDuration_32768cycles = 0;
-    int32_t expectedIdleTime_32768cycles = 0;
-    eSleepModeStatus eSleepStatus;
-    bool freertos_max_idle = false;
-
-    if (pds_start == 0)
-        return;
-
-    if(xExpectedIdleTime_ms + xTaskGetTickCount() == portMAX_DELAY){
-        freertos_max_idle = true;
-    }else{   
-        xExpectedIdleTime_ms -= 1;
-        expectedIdleTime_32768cycles = 32768 * xExpectedIdleTime_ms / 1000;
-    }
-
-    if((!freertos_max_idle)&&(expectedIdleTime_32768cycles < TIME_5MS_IN_32768CYCLE)){
-        return;
-    }
-
-    /*Disable mtimer interrrupt*/
-    *(volatile uint8_t*)configCLIC_TIMER_ENABLE_ADDRESS = 0;
-
-    eSleepStatus = eTaskConfirmSleepModeStatus();
-    if(eSleepStatus == eAbortSleep || ble_controller_sleep_is_ongoing())
-    {
-        /*A task has been moved out of the Blocked state since this macro was
-        executed, or a context siwth is being held pending.Restart the tick 
-        and exit the critical section. */
-        /*Enable mtimer interrrupt*/
-        *(volatile uint8_t*)configCLIC_TIMER_ENABLE_ADDRESS = 1;
-        //printf("%s:not do ble sleep\r\n", __func__);
-        return;
-    }
-
-    bleSleepDuration_32768cycles = ble_controller_sleep();
-
-	if(bleSleepDuration_32768cycles < TIME_5MS_IN_32768CYCLE)
-    {
-        /*BLE controller does not allow sleep.  Do not enter a sleep state.Restart the tick 
-        and exit the critical section. */
-        /*Enable mtimer interrrupt*/
-        //printf("%s:not do pds sleep\r\n", __func__);
-        *(volatile uint8_t*)configCLIC_TIMER_ENABLE_ADDRESS = 1;
-    }
-    else
-    {
-        printf("%s:bleSleepDuration_32768cycles=%ld\r\n", __func__, bleSleepDuration_32768cycles);
-        if(eSleepStatus == eStandardSleep && ((!freertos_max_idle) && (expectedIdleTime_32768cycles < bleSleepDuration_32768cycles)))
-        {
-           hal_pds_enter_with_time_compensation(1, expectedIdleTime_32768cycles - 40);//40);//20);
-        }
-        else
-        {
-           hal_pds_enter_with_time_compensation(1, bleSleepDuration_32768cycles - 40);//40);//20);
-        }
-    }
-#endif
-}
-#endif
-
 static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
     vTaskDelay(500);
@@ -183,8 +90,6 @@ static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
     }
     vTaskDelete(NULL);
 }
-
-
 
 #if defined(CFG_BLE_PDS)
 static void cmd_start_pds(char *buf, int len, int argc, char **argv)
@@ -321,64 +226,6 @@ static void aos_loop_proc([[gnu::unused]] void *pvParameters)
     puts("+++++++++Critical Exit From Loop++++++++++\r\n");
     puts("******************************************\r\n");
     vTaskDelete(NULL);
-}
-
-void vApplicationGetIdleTaskMemory(StaticTask_t **ppxIdleTaskTCBBuffer, StackType_t **ppxIdleTaskStackBuffer, uint32_t *pulIdleTaskStackSize)
-{
-    /* If the buffers to be provided to the Idle task are declared inside this
-    function then they must be declared static - otherwise they will be allocated on
-    the stack and so not exists after this function exits. */
-    static StaticTask_t xIdleTaskTCB;
-    //static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ];
-    static StackType_t uxIdleTaskStack[512];
-
-    /* Pass out a pointer to the StaticTask_t structure in which the Idle task's
-    state will be stored. */
-    *ppxIdleTaskTCBBuffer = &xIdleTaskTCB;
-
-    /* Pass out the array that will be used as the Idle task's stack. */
-    *ppxIdleTaskStackBuffer = uxIdleTaskStack;
-
-    /* Pass out the size of the array pointed to by *ppxIdleTaskStackBuffer.
-    Note that, as the array is necessarily of type StackType_t,
-    configMINIMAL_STACK_SIZE is specified in words, not bytes. */
-    //*pulIdleTaskStackSize = configMINIMAL_STACK_SIZE; 
-    *pulIdleTaskStackSize = 512;//size 512 words is For ble pds mode, otherwise stack overflow of idle task will happen.
-}
-
-/* configSUPPORT_STATIC_ALLOCATION and configUSE_TIMERS are both set to 1, so the
-application must provide an implementation of vApplicationGetTimerTaskMemory()
-to provide the memory that is used by the Timer service task. */
-void vApplicationGetTimerTaskMemory(StaticTask_t **ppxTimerTaskTCBBuffer, StackType_t **ppxTimerTaskStackBuffer, uint32_t *pulTimerTaskStackSize)
-{
-    /* If the buffers to be provided to the Timer task are declared inside this
-    function then they must be declared static - otherwise they will be allocated on
-    the stack and so not exists after this function exits. */
-    static StaticTask_t xTimerTaskTCB;
-    static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ];
-
-    /* Pass out a pointer to the StaticTask_t structure in which the Timer
-    task's state will be stored. */
-    *ppxTimerTaskTCBBuffer = &xTimerTaskTCB;
-
-    /* Pass out the array that will be used as the Timer task's stack. */
-    *ppxTimerTaskStackBuffer = uxTimerTaskStack;
-
-    /* Pass out the size of the array pointed to by *ppxTimerTaskStackBuffer.
-    Note that, as the array is necessarily of type StackType_t,
-    configTIMER_TASK_STACK_DEPTH is specified in words, not bytes. */
-    *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
-}
-
-void user_vAssertCalled(void) __attribute__ ((weak, alias ("vAssertCalled")));
-void vAssertCalled(void)
-{
-    volatile uint32_t ulSetTo1ToExitFunction = 0;
-
-    taskDISABLE_INTERRUPTS();
-    while( ulSetTo1ToExitFunction != 1 ) {
-        __asm volatile( "NOP" );
-    }
 }
 
 static void _dump_boot_info(void)

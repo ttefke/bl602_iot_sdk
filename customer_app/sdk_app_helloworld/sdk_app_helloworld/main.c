@@ -50,27 +50,6 @@ void helloworld(void)
     log_step(ci_table_step_end);
 }
 
-void user_vApplicationStackOverflowHook([[gnu::unused]] TaskHandle_t xTask, [[gnu::unused]] char *pcTaskName )
-{
-    /*empty*/
-}
-
-void user_vApplicationMallocFailedHook(void)
-{
-    printf("Memory Allocate Failed. Current left size is %d bytes\r\n",
-        xPortGetFreeHeapSize()
-    );
-    /*empty*/
-}
-
-void user_vApplicationIdleHook(void)
-{
-    __asm volatile(
-            "   wfi     "
-    );
-    /*empty*/
-}
-
 void bfl_main(void)
 {
     /*

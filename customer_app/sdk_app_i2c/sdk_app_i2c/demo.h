@@ -28,7 +28,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #ifndef __DEMO_H__
-#define __DEMO_H__i
+#define __DEMO_H__
 
 int i2c_cli_init(void);
 

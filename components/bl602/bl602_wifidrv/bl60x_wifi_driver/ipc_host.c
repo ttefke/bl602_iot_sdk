@@ -182,7 +182,7 @@ uint32_t ipc_host_get_status(struct ipc_host_env_tag *env)
 {
     uint32_t status;
 
-    status = ipc_emb2app_status_get(env->shared);
+    status = ipc_emb2app_status_get();
 
     return status;
 }
@@ -191,7 +191,7 @@ uint32_t ipc_host_get_rawstatus(struct ipc_host_env_tag *env)
 {
     uint32_t status;
 
-    status = ipc_emb2app_rawstatus_get(env->shared);
+    status = ipc_emb2app_rawstatus_get();
 
     return status;
 }

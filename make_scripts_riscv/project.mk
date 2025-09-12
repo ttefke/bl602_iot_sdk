@@ -341,7 +341,7 @@ E21_CPU_CFLAGS := -march=rv32imfc \
 ASMFLAGS := $(E21_CPU_CFLAGS)
 
 CFLAGS := $(strip \
-	-std=gnu17 \
+	-std=gnu23 \
 	$(OPTIMIZATION_FLAGS) \
 	$(DEBUG_FLAGS) \
 	$(COMMON_FLAGS) \
@@ -355,7 +355,7 @@ CFLAGS := $(strip \
 	-Wall
 
 CXXFLAGS := $(strip \
-	-std=c++20 \
+	-std=c++23 \
 	$(OPTIMIZATION_FLAGS) \
 	$(DEBUG_FLAGS) \
 	$(COMMON_FLAGS) \

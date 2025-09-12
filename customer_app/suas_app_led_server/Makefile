@@ -9,8 +9,11 @@ PROJECT_BOARD := evb
 export PROJECT_PATH PROJECT_BOARD
 #CONFIG_TOOLPREFIX :=
 
-
 -include ./proj_config.mk
+
+CFLAGS += -DLWIP_HTTPD_CUSTOM_FILES=1
+CFLAGS += -DLWIP_HTTPD_DYNAMIC_HEADERS=1
+CFLAGS += -DLWIP_HTTPD_CGI=1
 
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)

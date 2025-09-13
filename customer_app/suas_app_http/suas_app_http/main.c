@@ -1,8 +1,11 @@
+// FreeRTOS includes
 #include <FreeRTOS.h>
 #include <task.h>
 
+// Standard input/output
 #include <stdio.h>
 
+// HALs
 #include <bl_dma.h>
 #include <bl_irq.h>
 #include <bl_sec.h>
@@ -11,11 +14,10 @@
 #include <hal_boot2.h>
 #include <hal_board.h>
 #include <hal_hwtimer.h>
-
 #include <blog.h>
-#include <lwip/tcpip.h>
 
-#include "wifi.h"
+// IP stack
+#include <lwip/tcpip.h>
 
 /* Define heap regions */
 extern uint8_t _heap_start;
@@ -31,22 +33,13 @@ static HeapRegion_t xHeapRegions[] =
   { NULL, 0}
 };
 
-/* main function, execution starts here */
+/* Main function, execution starts here */
 void bfl_main(void)
 {
-  /* Define information containers for tasks */
+  /* Define information containers for wifi task */
   static StackType_t wifi_stack[1024];
   static StaticTask_t wifi_task;
-  
-#if WIFI_MODE_PINECONE == WIFI_MODE_AP
-  static StackType_t httpd_stack[512];
-  static StaticTask_t httpd_task;
-#endif
-  
-#if WIFI_MODE_PINECONE == WIFI_MODE_STA
-  static StackType_t http_stack[768];
-  static StaticTask_t http_task;
-#endif
+
   /* Initialize UART
    * Ports: 16+7 (TX+RX)
    * Baudrate: 2 million
@@ -66,17 +59,6 @@ void bfl_main(void)
   hal_board_cfg(0);
   
   /* Start tasks */
-#if WIFI_MODE_PINECONE == WIFI_MODE_AP
-  printf("[SYSTEM] Starting httpd task\r\n");
-  extern void task_httpd(void *pvParameters);
-  xTaskCreateStatic(task_httpd, (char*)"httpd", 512, NULL, 10, httpd_stack, &httpd_task);
-#endif
-
-#if WIFI_MODE_PINECONE == WIFI_MODE_STA
-  printf("[SYSTEM] Starting httpc task\r\n");
-  extern void task_http(void *pvParameters);
-  xTaskCreateStatic(task_http, (char*)"http", 768, NULL, 10, http_stack, &http_task);
-#endif
   printf("[SYSTEM] Starting WiFi task\r\n");
   extern void task_wifi(void *pvParameters);
   xTaskCreateStatic(task_wifi, (char*)"wifi", 1024, NULL, 16, wifi_stack, &wifi_task);
@@ -85,7 +67,7 @@ void bfl_main(void)
   printf("[SYSTEM] Starting TCP/IP stack\r\n");
   tcpip_init(NULL, NULL);
   
-  /* Start scheduler */
+  /* Start task scheduler */
   printf("[SYSTEM] Starting scheduler\r\n");
   vTaskStartScheduler();
 }

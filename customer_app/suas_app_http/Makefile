@@ -3,14 +3,15 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := suas_app_wlan_server
+PROJECT_NAME := suas_app_http
 PROJECT_PATH := $(abspath .)
 PROJECT_BOARD := evb
 export PROJECT_PATH PROJECT_BOARD
-#CONFIG_TOOLPREFIX :=
-
 
 -include ./proj_config.mk
+
+CFLAGS += -DLWIP_HTTPD_CUSTOM_FILES=1
+CFLAGS += -DLWIP_HTTPD_DYNAMIC_HEADERS=1
 
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)
@@ -20,8 +21,8 @@ COMPONENTS_NETWORK := sntp dns_server
 COMPONENTS_BLSYS   := bltime blfdt blmtd blota bloop loopadc looprt loopset
 COMPONENTS_VFS     := romfs
 
-INCLUDE_COMPONENTS += freertos bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd vfs yloop utils cli httpc netutils blog blog_testc
-INCLUDE_COMPONENTS += easyflash4 mbedtls-bl602
+INCLUDE_COMPONENTS += freertos bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd vfs yloop utils cli httpc netutils blog blog_testc mbedtls-bl602 cjson
+INCLUDE_COMPONENTS += easyflash4
 INCLUDE_COMPONENTS += $(COMPONENTS_NETWORK)
 INCLUDE_COMPONENTS += $(COMPONENTS_BLSYS)
 INCLUDE_COMPONENTS += $(COMPONENTS_VFS)

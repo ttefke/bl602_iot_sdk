@@ -16,7 +16,7 @@ COMPONENT_OBJS := $(patsubst %.c,%.o, \
                     portable/GCC/RISC-V/port.c \
                     portable/GCC/RISC-V/portASM.S \
                     bl602_port.c \
-                    portable/MemMang/heap_5.c)
+                    portable/MemMang/heap_bl602.c)
 
 COMPONENT_OBJS := $(patsubst %.S,%.o, $(COMPONENT_OBJS))
 

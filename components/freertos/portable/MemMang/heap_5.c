@@ -22,6 +22,7 @@
  * http://www.FreeRTOS.org
  * http://aws.amazon.com/freertos
  *
+ * 1 tab == 4 spaces!
  */
 
 /*
@@ -67,7 +68,6 @@
  *
  */
 #include <stdlib.h>
-#include <string.h>
 
 /* Defining MPU_WRAPPERS_INCLUDED_FROM_API_FILE prevents task.h from redefining
 all the API functions to use the MPU wrappers.  That should only be done when
@@ -150,24 +150,16 @@ void *pvReturn = NULL;
 		{
 			/* The wanted size is increased so it can contain a BlockLink_t
 			structure in addition to the requested amount of bytes. */
-            if( ( xWantedSize > 0 ) && 
-                ( ( xWantedSize + xHeapStructSize ) >  xWantedSize ) ) /* Overflow check */
+			if( xWantedSize > 0 )
 			{
 				xWantedSize += xHeapStructSize;
 
-                /* Ensure that blocks are always aligned */
+				/* Ensure that blocks are always aligned to the required number
+				of bytes. */
 				if( ( xWantedSize & portBYTE_ALIGNMENT_MASK ) != 0x00 )
 				{
-                    /* Byte alignment required. Check for overflow */
-                    if( ( xWantedSize + ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK ) ) ) >
-                         xWantedSize )
-                    {
-                        xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK ) );
-                    } 
-                    else 
-                    {
-                        xWantedSize = 0;
-                    }
+					/* Byte alignment required. */
+					xWantedSize += ( portBYTE_ALIGNMENT - ( xWantedSize & portBYTE_ALIGNMENT_MASK ) );
 				}
 				else
 				{
@@ -176,7 +168,7 @@ void *pvReturn = NULL;
 			}
 			else
 			{
-				xWantedSize = 0;
+				mtCOVERAGE_TEST_MARKER();
 			}
 
 			if( ( xWantedSize > 0 ) && ( xWantedSize <= xFreeBytesRemaining ) )
@@ -280,17 +272,6 @@ void *pvReturn = NULL;
 }
 /*-----------------------------------------------------------*/
 
-void* pvPortCalloc(size_t numElements, size_t sizeOfElement)
-{
-    void *pv = NULL;
-
-    pv = pvPortMalloc(numElements * sizeOfElement);
-    if( pv ){
-        memset(pv, 0, numElements*sizeOfElement);
-    }
-    return pv;
-}
-
 void vPortFree( void *pv )
 {
 uint8_t *puc = ( uint8_t * ) pv;
@@ -336,64 +317,6 @@ BlockLink_t *pxLink;
 		{
 			mtCOVERAGE_TEST_MARKER();
 		}
-	}
-}
-
-void *pvPortRealloc (void *pv, size_t xWantedSize )
-{
-	/* Check if pointer is null, if this is the case allocate memory with specified size */
-	if ( pv != NULL ) {
-		/* Check if size is zero */
-		/* This is undefined behavior since C23, old behavior was a free call. Stick to old behavior for compatibility. */
-		if ( xWantedSize == 0) {
-			vPortFree( pv );
-			return NULL;
-		} else {
-			/* Reallocate memory */
-
-			/* Get current data block and obtain its size */
-			uint8_t *ucpMetadataPos = ((uint8_t *) pv ) - xHeapStructSize;
-			BlockLink_t *xpMetadata = (void *) ucpMetadataPos;
-			size_t xOldSize = xpMetadata->xBlockSize - xHeapStructSize;
-
-			/* New size equals old size -> just return pointer */
-			if ( xWantedSize == xOldSize) {
-				return pv;
-			} else {
-				/* Check if the old block was actually allocated */
-				if ( ( xOldSize & xBlockAllocatedBit ) != 0 ) {
-					/* Allocate new storage block */
-					void *pvNew = pvPortCalloc( 1, xWantedSize );
-
-					/* Check if allocation was successful */
-					if (pvNew) {
-						/* Get size of data to move
-							If new size is larger than old one, move all old data to new structure
-							If new size is smaller than old one, only move the bytes that should be kept */
-						size_t xMoveSize = xWantedSize > xOldSize ? xOldSize : xWantedSize;
-
-						/* Copy data*/
-						memcpy( pvNew, pv, xMoveSize );
-
-						/* Free old pointer */
-						vPortFree( pv );
-
-						/* Return new pointer */
-						return pvNew;
-					} else {
-						/* Allocation failed -> return null
-							This should also trigger the malloc failed hook (if enabled) */
-						return NULL;
-					}
-				} else {
-					/* Old block had no data, just create new pointer */
-					return pvPortCalloc( 1, xWantedSize );				
-				}
-			}
-		}
-	} else {
-		/* Just create new pointer if the original pointer was null */
-		return pvPortCalloc( 1, xWantedSize );
 	}
 }
 /*-----------------------------------------------------------*/

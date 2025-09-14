@@ -421,6 +421,13 @@ void *malloc(size_t size)
 }
 #endif
 
+#if !defined(USE_STDLIB_MALLOC)
+void *realloc(void *ptr, size_t size)
+{
+    return pvPortRealloc(ptr, size);
+}
+#endif
+
 long long aos_now_ms(void)
 {
     long long ms;

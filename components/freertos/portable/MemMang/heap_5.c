@@ -338,6 +338,64 @@ BlockLink_t *pxLink;
 		}
 	}
 }
+
+void *pvPortRealloc (void *pv, size_t xSize )
+{
+	/* Check if pointer is null, if this is the case allocate memory with specified size */
+	if ( pv != NULL ) {
+		/* Check if size is zero */
+		/* This is undefined behavior since C23, old behavior was a free call. Stick to old behavior for compatibility. */
+		if (xSize == 0) {
+			vPortFree( pv );
+			return NULL;
+		} else {
+			/* Reallocate memory */
+
+			/* Get current data block and obtain its size */
+			uint8_t *xMetadataPos = ((uint8_t *) pv ) - xHeapStructSize;
+			BlockLink_t *xMetadata = (void *) xMetadataPos;
+			size_t xOldSize = xMetadata->xBlockSize - xHeapStructSize;
+
+			/* New size equals old size -> just return pointer */
+			if ( xSize == xOldSize) {
+				return pv;
+			} else {
+				/* Check if the old block was actually allocated */
+				if ( ( xOldSize & xBlockAllocatedBit ) != 0 ) {
+					/* Allocate new storage block */
+					void *pvNew = pvPortCalloc( 1, xSize );
+
+					/* Check if allocation was successful */
+					if (pvNew) {
+						/* Get size of data to move
+							If new size is larger than old one, move all old data to new structure
+							If new size is smaller than old one, only move the bytes that should be kept */
+						size_t xMoveSize = xSize > xOldSize ? xOldSize : xSize;
+
+						/* Copy data*/
+						memcpy( pvNew, pv, xMoveSize );
+
+						/* Free old pointer */
+						vPortFree( pv );
+
+						/* Return new pointer */
+						return pvNew;
+					} else {
+						/* Allocation failed -> return null
+							This should also trigger the malloc failed hook (if enabled) */
+						return NULL;
+					}
+				} else {
+					/* Old block had no data, just create new pointer */
+					return pvPortCalloc( 1, xSize );				
+				}
+			}
+		}
+	} else {
+		/* Just create new pointer if the original pointer was null */
+		return pvPortCalloc( 1, xSize );
+	}
+}
 /*-----------------------------------------------------------*/
 
 size_t xPortGetFreeHeapSize( void )

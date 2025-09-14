@@ -339,38 +339,38 @@ BlockLink_t *pxLink;
 	}
 }
 
-void *pvPortRealloc (void *pv, size_t xSize )
+void *pvPortRealloc (void *pv, size_t xWantedSize )
 {
 	/* Check if pointer is null, if this is the case allocate memory with specified size */
 	if ( pv != NULL ) {
 		/* Check if size is zero */
 		/* This is undefined behavior since C23, old behavior was a free call. Stick to old behavior for compatibility. */
-		if (xSize == 0) {
+		if ( xWantedSize == 0) {
 			vPortFree( pv );
 			return NULL;
 		} else {
 			/* Reallocate memory */
 
 			/* Get current data block and obtain its size */
-			uint8_t *xMetadataPos = ((uint8_t *) pv ) - xHeapStructSize;
-			BlockLink_t *xMetadata = (void *) xMetadataPos;
-			size_t xOldSize = xMetadata->xBlockSize - xHeapStructSize;
+			uint8_t *ucpMetadataPos = ((uint8_t *) pv ) - xHeapStructSize;
+			BlockLink_t *xpMetadata = (void *) ucpMetadataPos;
+			size_t xOldSize = xpMetadata->xBlockSize - xHeapStructSize;
 
 			/* New size equals old size -> just return pointer */
-			if ( xSize == xOldSize) {
+			if ( xWantedSize == xOldSize) {
 				return pv;
 			} else {
 				/* Check if the old block was actually allocated */
 				if ( ( xOldSize & xBlockAllocatedBit ) != 0 ) {
 					/* Allocate new storage block */
-					void *pvNew = pvPortCalloc( 1, xSize );
+					void *pvNew = pvPortCalloc( 1, xWantedSize );
 
 					/* Check if allocation was successful */
 					if (pvNew) {
 						/* Get size of data to move
 							If new size is larger than old one, move all old data to new structure
 							If new size is smaller than old one, only move the bytes that should be kept */
-						size_t xMoveSize = xSize > xOldSize ? xOldSize : xSize;
+						size_t xMoveSize = xWantedSize > xOldSize ? xOldSize : xWantedSize;
 
 						/* Copy data*/
 						memcpy( pvNew, pv, xMoveSize );
@@ -387,13 +387,13 @@ void *pvPortRealloc (void *pv, size_t xSize )
 					}
 				} else {
 					/* Old block had no data, just create new pointer */
-					return pvPortCalloc( 1, xSize );				
+					return pvPortCalloc( 1, xWantedSize );				
 				}
 			}
 		}
 	} else {
 		/* Just create new pointer if the original pointer was null */
-		return pvPortCalloc( 1, xSize );
+		return pvPortCalloc( 1, xWantedSize );
 	}
 }
 /*-----------------------------------------------------------*/

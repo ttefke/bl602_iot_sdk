@@ -11,22 +11,12 @@
 #include <loopset.h>
 #include <vfs.h>
 
-#include <bl_dma.h>
-#include <bl_irq.h>
 #include <bl_romfs.h>
-#include <bl_rtc.h>
-#include <bl_sec.h>
-#include <bl_sys.h>
-#include <bl_timer.h>
-#include <bl_uart.h>
 
-#include <hal_boot2.h>
 #include <hal_board.h>
 #include <hal_button.h>
-#include <hal_sys.h>
 #include <hal_uart.h>
 
-#include <blog.h>
 #include <fdt.h>
 #include <libfdt.h>
 
@@ -38,20 +28,6 @@
 #include "include/node.h"
 #include "include/provisioning.h"
 #include "include/client.h"
-
-// Head redefinition
-extern uint8_t _heap_start;
-extern uint8_t _heap_size;
-extern uint8_t _heap_wifi_start;
-extern uint8_t _heap_wifi_size;
-
-static HeapRegion_t xHeapRegions[] =
-{
-        { &_heap_start,  (unsigned int) &_heap_size},
-        { &_heap_wifi_start, (unsigned int) &_heap_wifi_size },
-        { NULL, 0 },
-        { NULL, 0 }
-};
 
 // Keepalive function
 static void keepalive([[gnu::unused]] void *pvParameters)
@@ -183,26 +159,8 @@ void bfl_main()
     static StackType_t keepalive_stack[512];
     static StaticTask_t keepalive_task;
 
-    bl_sys_early_init();
-
-    // Initialize UART
-    bl_uart_init(0, 16, 7, 255, 255, 2 * 1000 * 1000);
-
-    bl_sys_init();
-
-    // Define heap
-    vPortDefineHeapRegions(xHeapRegions);
-
-    blog_init();
-    bl_irq_init();
-    bl_sec_init(); // we need this to generate random numbers
-    bl_sec_test();
-    bl_dma_init();
-    bl_rtc_init();
-    hal_boot2_init();
-
-    // Board config is set after system is init
-    hal_board_cfg(0);
+    // Initialize system
+    vInitializeBL602();
 
     // Initialize GPIO for LED output
     board_init();

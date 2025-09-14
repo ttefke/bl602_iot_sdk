@@ -5,49 +5,20 @@
 // Input/Output
 #include <stdio.h>
 
-// UART library
-#include <bl_uart.h>
-
-// DMA library
-#include <bl_dma.h>
-
 // Our ADC header
 #include "adc.h"
-
-/* Define heap regions */
-extern uint8_t _heap_start;
-extern uint8_t _heap_size;
-extern uint8_t _heap_wifi_start;
-extern uint8_t _heap_wifi_size;
-
-static HeapRegion_t xHeapRegions[] =
-{
-  { &_heap_start, (unsigned int) &_heap_size},
-  { &_heap_wifi_start, (unsigned int) &_heap_wifi_size },
-  { NULL, 0},
-  { NULL, 0}
-};
 
 /* Size of the stack for the task */
 #define ADC_STACK_SIZE 512
 
 void bfl_main(void)
 {
-  /* Initialize UART
-   * Ports: 16+7 (TX+RX)
-   * Baudrate: 2 million
-   */
-  bl_uart_init(0, 16, 7, 255, 255, 2 * 1000 * 1000);
-  
-   /* (Re)define Heap */
-  vPortDefineHeapRegions(xHeapRegions);
-  
-  /* Initialize DMA */
-  bl_dma_init();
-  
   /* Set up ADC reading task */
   static StackType_t adc_stack[ADC_STACK_SIZE];
   static StaticTask_t adc_task;
+
+  /* Initialize system */
+  vInitializeBL602();
   
   /* Start up ADC task */
 

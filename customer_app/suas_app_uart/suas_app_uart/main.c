@@ -8,43 +8,24 @@
 // Standard input/output
 #include <stdio.h>
 
-// Own headers
-#include "main.h"
+// Own header
 #include "mmWave.h"
-#include "uart.h"
 
-/* Define heap regions */
-extern uint8_t _heap_start;
-extern uint8_t _heap_size;
-extern uint8_t _heap_wifi_start;
-extern uint8_t _heap_wifi_size;
-
-static HeapRegion_t xHeapRegions[] =
-{
-  { &_heap_start, (unsigned int) &_heap_size},
-  { &_heap_wifi_start, (unsigned int) &_heap_wifi_size },
-  { NULL, 0},
-  { NULL, 0}
-};
+// Sensor stack size
+#define SENSOR_STACK_SIZE 256
 
 void bfl_main(void)
 {
-  /* Initialize UART for USB debugging
-   * Ports: 16+7 (TX+RX)
-   * Baudrate: 2 million
-   */
-  bl_uart_init(UART_PORT_USB_CHANNEL, 16, 7, 255, 255, UART_PORT_USB_BAUDRATE);
-  printf("Initialized USB\r\n");
-
+  /* Initialize system */
+  vInitializeBL602();
+  
   /* Initialize UART for sensor
    * Ports: 3+4 (TX+RX)
    * Baudrate: 115200
    */
-  bl_uart_init(UART_PORT_SENSOR_CHANNEL, 3, 4, 255, 255, UART_PORT_SENSOR_BAUDRATE);
+  bl_uart_init(1 /* Channel 0 = USB, Channel 1 = user defined */, 3, 4,
+      255, 255, 115200 /* from manual */);
   printf("Initialized sensor\r\n");
-
-  /* Redefine heap */
-  vPortDefineHeapRegions(xHeapRegions);
 
   /* Set up sensor reading task */
   static StackType_t sensor_stack[SENSOR_STACK_SIZE];

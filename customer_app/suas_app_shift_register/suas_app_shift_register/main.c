@@ -1,8 +1,12 @@
+// Stdandard input / output
 #include <stdio.h>
+
+// BouffaloLabs HALs
 #include <bl_uart.h>
 #include <hal_hwtimer.h>
 #include <bl_timer.h>
 
+// 74HC595 library
 #include <74hc595.h>
 
 void bfl_main(void)

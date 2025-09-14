@@ -9,9 +9,7 @@
 #include <stdio.h>
 
 // Our headers
-#include "main.h"
 #include "mmWave.h"
-#include "uart.h"
 
 // Sensor: waveshare HMMD mmWave: https://www.waveshare.com/wiki/HMMD_mmWave_Sensor
 
@@ -28,7 +26,7 @@ void read_sensor([[gnu::unused]] void *pvParameters)
      * To determine human presence, only two bytes must be read, the second byte tells
      * if someone is present */
     for (uint8_t i = 0; i < DATA_ARRAY_LENGTH;) {
-      int8_t result = bl_uart_data_recv(UART_PORT_SENSOR_CHANNEL);
+      int8_t result = bl_uart_data_recv(1 /* User defined channel */);
       // drop result if invalid
       if (result < 0) {
         continue;

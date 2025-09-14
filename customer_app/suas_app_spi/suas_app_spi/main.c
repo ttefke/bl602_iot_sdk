@@ -6,7 +6,6 @@
 #include <stdio.h>
 
 // UART library
-#include <bl_uart.h>
 #include <hal_uart.h>
 
 // Hardware realtime loop
@@ -27,12 +26,7 @@
 #include "spi.h"
 
 // BL602
-#include <bl_dma.h>
-#include <bl_irq.h>
-#include <bl_sec.h>
-#include <bl_sys.h>
 #include <hal_board.h>
-#include <hal_boot2.h>
 
 // GPIO
 #include <bl602_glb.h>
@@ -40,20 +34,6 @@
 
 // Logging
 #include <blog.h>
-
-/* Define heap regions */
-extern uint8_t _heap_start;
-extern uint8_t _heap_size;
-extern uint8_t _heap_wifi_start;
-extern uint8_t _heap_wifi_size;
-
-static HeapRegion_t xHeapRegions[] =
-{
-  { &_heap_start, (unsigned int) &_heap_size},
-  { &_heap_wifi_start, (unsigned int) &_heap_wifi_size },
-  { NULL, 0},
-  { NULL, 0}
-};
 
 // Helper function to get addresses from device tree
 static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
@@ -128,42 +108,24 @@ static void aos_loop_proc([[gnu::unused]] void *pvParameters) {
   vTaskDelete(NULL);
 }
 
+#define PROC_STACK_SIZE 1024
+#define SPI_STACK_SIZE 512
+
 void bfl_main(void)
 {
-  static StackType_t aos_loop_proc_stack[1024];
+  static StackType_t aos_loop_proc_stack[PROC_STACK_SIZE];
   static StaticTask_t aos_loop_proc_task;
-  static StackType_t spi_stack[512];
+  static StackType_t spi_stack[SPI_STACK_SIZE];
   static StaticTask_t spi_task;
 
-  // Early init
-  bl_sys_early_init();
-
-  /* Initialize UART
-   * Ports: 16+7 (TX+RX)
-   * Baudrate: 2 million
-   */
-  bl_uart_init(0, 16, 7, 255, 255, 2 * 1000 * 1000);
-
-  bl_sys_init();
-
-  
-   /* (Re)define Heap */
-  vPortDefineHeapRegions(xHeapRegions);
-
-  // Initialize system
-  blog_init();
-  bl_irq_init();
-  bl_sec_init();
-  bl_sec_test();
-  hal_boot2_init();
-  bl_dma_init();
-  hal_board_cfg(0);
+  /* Initialize system */
+  vInitializeBL602();
 
   /* Create the tasks */
   xTaskCreateStatic(
     aos_loop_proc,
     (char*)"event loop",
-    1024,
+    PROC_STACK_SIZE,
     NULL,
     15,
     aos_loop_proc_stack,
@@ -173,7 +135,7 @@ void bfl_main(void)
   xTaskCreateStatic(
     spi_proc,
     (char*)"spi",
-    512,
+    SPI_STACK_SIZE,
     NULL,
     12,
     spi_stack,

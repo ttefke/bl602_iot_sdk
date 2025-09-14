@@ -5,18 +5,10 @@
 // BouffaloLabs includes
 #include <bl_dma.h>
 #include <bl_gpio.h>
-#include <bl_irq.h>
-#include <bl_rtc.h>
-#include <bl_sec.h>
-#include <bl_sys.h>
-#include <bl_uart.h>
 
-#include <hal_boot2.h>
 #include <hal_board.h>
 #include <hal_button.h>
 #include <hal_uart.h>
-
-#include <blog.h>
 
 // VFS
 #include <event_device.h>
@@ -41,20 +33,6 @@
 #include "include/central.h"
 #include "include/main.h"
 #include "include/peripheral.h"
-
-/* Define heap regions */
-extern uint8_t _heap_start;
-extern uint8_t _heap_size;
-extern uint8_t _heap_wifi_start;
-extern uint8_t _heap_wifi_size;
-
-static HeapRegion_t xHeapRegions[] =
-{
-  { &_heap_start, (unsigned int) &_heap_size},
-  { &_heap_wifi_start, (unsigned int) &_heap_wifi_size },
-  { NULL, 0},
-  { NULL, 0}
-};
 
 /* Used to differentiate between central and peripheral role */
 static enum app_ble_role app_role;
@@ -235,25 +213,19 @@ void keep_alive_entry([[gnu::unused]] void *pvParameters) {
   vTaskDelete(NULL);
 }
 
+#define KEEP_ALIVE_STACK_SIZE 512
+#define LOOPL_PROC_STACK_SIZE 1024
+
 void bfl_main(void) {
   /* Task declarations */
-  static StackType_t keep_alive_stack[512];
+  static StackType_t keep_alive_stack[KEEP_ALIVE_STACK_SIZE];
   static StaticTask_t keep_alive_task;
 
-  static StackType_t aos_loop_proc_stack[1024];
+  static StackType_t aos_loop_proc_stack[LOOPL_PROC_STACK_SIZE];
   static StaticTask_t aos_loop_proc_task;
 
   /* Initialize system */
-  bl_sys_early_init();
-
-  /* Initialize UART for USB debugging
-   * Ports: 16+7 (TX+RX)
-   * Baudrate: 2 million
-   */
-  bl_uart_init(0, 16, 7, 255, 255, 2 * 1000 * 1000);
-  printf("Initialized USB\r\n");
-
-  bl_sys_init();
+  vInitializeBL602();
 
   /* LEDs */
   bl_gpio_enable_output(LED_BLUE, 1, 0);
@@ -261,22 +233,9 @@ void bfl_main(void) {
   bl_gpio_enable_output(LED_GREEN, 1, 0);
   board_leds_off();
 
-  /* Redefine heap */
-  vPortDefineHeapRegions(xHeapRegions);
-  
-  /* Initialize hardware functions */
-  blog_init();
-  bl_irq_init();
-  bl_sec_init();
-  bl_sec_test();
-  bl_dma_init();
-  bl_rtc_init();
-  hal_boot2_init();
-  hal_board_cfg(0);
-
   /* Create tasks */
-  xTaskCreateStatic(keep_alive_entry, (char *) "keepalive", 512, NULL, 15, keep_alive_stack, &keep_alive_task);
-  xTaskCreateStatic(aos_loop_proc, (char *) "event loop", 1024, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
+  xTaskCreateStatic(keep_alive_entry, (char *) "keepalive", KEEP_ALIVE_STACK_SIZE, NULL, 15, keep_alive_stack, &keep_alive_task);
+  xTaskCreateStatic(aos_loop_proc, (char *) "event loop", LOOPL_PROC_STACK_SIZE, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
 
   /* Start tasks */
   vTaskStartScheduler();

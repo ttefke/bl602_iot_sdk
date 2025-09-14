@@ -83,7 +83,7 @@ void send_http_request(void)
     static httpc_state_t *request;
     
     /* 2. Send request */
-    printf("Creating HTTPS request\r\n");
+    printf("Creating HTTP request\r\n");
     httpc_get_file_dns(
         "192.168.169.1", /* Hardcoded IP address of lwIP server */
         80, /* Port */

@@ -3,6 +3,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+/* BouffaloLabs HALs */
+#include <blog.h>
+#include <bl_dma.h>
+#include <bl_irq.h>
+#include <bl_rtc.h>
+#include <bl_sec.h>
+#include <bl_sys.h>
+#include <bl_uart.h>
+#include <hal_board.h>
+#include <hal_boot2.h>
 #ifdef REBOOT_ON_EXCEPTION
 #include <bl_sys.h>
 #endif
@@ -12,6 +22,48 @@
 
 volatile uint32_t uxTopUsedPriority __attribute__((used)) = configMAX_PRIORITIES - 1;
 extern bool pds_start;
+
+/* Define heap regions */
+extern uint8_t _heap_start;
+extern uint8_t _heap_size;
+extern uint8_t _heap_wifi_start;
+extern uint8_t _heap_wifi_size;
+
+static HeapRegion_t xHeapRegions[] =
+{
+  { &_heap_start, (unsigned int) &_heap_size},
+  { &_heap_wifi_start, (unsigned int) &_heap_wifi_size },
+  { NULL, 0},
+  { NULL, 0}
+};
+
+[[gnu::weak]] void vInitializeBL602(void)
+{
+  // Early init
+  bl_sys_early_init();
+
+  /* Initialize UART
+   * Ports: 16+7 (TX+RX)
+   * Baudrate: 2 million
+   */
+  bl_uart_init(0, 16, 7, 255, 255, 2 * 1000 * 1000);
+  printf("[BL602] Starting up!\r\n");
+
+  // System init
+  bl_sys_init();
+
+  /* Define Heap */
+  vPortDefineHeapRegions(xHeapRegions);
+  
+  /* Initialize system */
+  blog_init();
+  bl_irq_init();
+  bl_sec_init();
+  bl_dma_init();
+  bl_rtc_init();
+  hal_boot2_init();
+  hal_board_cfg(0);
+}
 
 [[gnu::weak]] void vAssertCalled(void)
 {

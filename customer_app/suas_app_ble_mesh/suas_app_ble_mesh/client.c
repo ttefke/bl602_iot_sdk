@@ -11,7 +11,7 @@
 #include "include/node.h"
 
 // Payload string for message encoding/decoding
-const char *const onoff_str[] = { "off", "on" };
+static const char *const onoff_str[] = { "off", "on" };
 
 // Access model information from node.c
 extern struct bt_mesh_model models[];

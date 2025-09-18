@@ -18,7 +18,7 @@
 #include "include/peripheral.h"
 
 /* Connection data structure */
-extern struct bt_conn *default_conn;
+static struct bt_conn *default_conn;
 
 /* Function prototypes */
 void ble_bl_ccc_cfg_changed(const struct bt_gatt_attr *attr, u16_t vblfue);
@@ -36,10 +36,10 @@ static struct bt_conn_cb conn_callbacks = {
 };
 
 /* Is notify feature enabled? */
-bool notify_flag = false;
+static bool notify_flag = false;
 
 /* Advertising data */
-const struct bt_data advertising_data[] = {
+static const struct bt_data advertising_data[] = {
     /* Gerneral discoverable, BR/EDR nor supported (BLE only) */
     BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
 
@@ -77,7 +77,7 @@ static struct bt_gatt_attr blattrs[] = {
 };
 
 /* Create server data structure*/
-struct bt_gatt_service ble_bl_server = BT_GATT_SERVICE(blattrs);
+static struct bt_gatt_service ble_bl_server = BT_GATT_SERVICE(blattrs);
 
 /* Send notification */
 void ble_peripheral_send_notification() {

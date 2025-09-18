@@ -17,7 +17,7 @@
 #include "include/coap-common.h"
 #include "include/coap-server.h"
 
-// Local variable
+// Local variable to store coap state information
 static coap_context_t *main_coap_context;
 
 // Resource handler: generate random number and return it

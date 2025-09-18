@@ -5,9 +5,6 @@
 // Standard input/output
 #include <stdio.h>
 
-// Own header
-//#include "include/health.h"
-
 // Define health service
 void attention_on([[gnu::unused]] struct bt_mesh_model *mod) {
 	printf("[HEALTH] Attention on\r\n");

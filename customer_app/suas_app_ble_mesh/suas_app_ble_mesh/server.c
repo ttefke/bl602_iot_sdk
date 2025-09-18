@@ -1,25 +1,9 @@
 // Include: Bluetooth HAL
-//#include <conn.h>
-//#include <gatt.h>
-//#include <bluetooth.h>
-//#include <ble_lib_api.h>
-//#include <main.h>
-//#include <mesh.h>
-//#include <net.h>
-//#include <transport.h>
-//#include <hci_driver.h>
-//#include <health_srv.h>
-//#include <cfg_srv.h>
 #include <common_srv.h>
 #include <gen_srv.h>
-//#include <foundation.h>
 #include <mesh_backports.h>
-//#include <bl_sec.h>
 #include <access.h>
-//#include <cfg_srv.h>
-//#include <gap.h>
 #include <mesh_model_opcode.h>
-//#include <aos/kernel.h>
 #include <stdio.h>
 
 #include "include/board.h"

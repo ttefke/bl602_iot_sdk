@@ -15,37 +15,7 @@
 
 #include "adc.h"        // Our own header
 
-// ADC task implementation for FreeRTOS
-void task_adc([[gnu::unused]] void *pvParameters)
-{
-  printf("ADC task started\r\n");
-  
-  // Set GPIO pin for ADC. You can change this to any pin that supports ADC and has a sensor connected.
-  int result = init_adc(5);
-  if (result != 0) {
-    printf("ADC initialization failed, exiting\r\n");
-    vTaskDelete(NULL);
-  } else {
-    printf("ADC initialized successfully\r\n");  
-    // Wait until initialization finished
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
-    
-    // Print current ADC values every second
-    while (1) {
-      printf("Current value of digitized analog signal: %"PRIu32"\r\n", read_adc());
-#if DEBUG == 1
-      vTaskDelay(5000 / portTICK_PERIOD_MS);
-#else
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
-#endif
-    } 
-    
-    // Should never happen but would delete the task and free allocated resources
-    vTaskDelete(NULL);
-  }
-}
-
-void set_adc_gain(uint32_t gain1, uint32_t gain2) {
+static void set_adc_gain(uint32_t gain1, uint32_t gain2) {
   // Read configuration hardware register
   uint32_t reg = BL_RD_REG(AON_BASE, AON_GPADC_REG_CONFIG2);
   
@@ -72,10 +42,9 @@ void set_adc_gain(uint32_t gain1, uint32_t gain2) {
   BL_WR_REG(AON_BASE, AON_GPADC_REG_CONFIG2, reg);
 }
 
-
 // NOTE: pin must be of the following 4, 5, 6, 9, 10, 11, 12, 13, 14, 15
 // Otherwise you may damage your device!
-int init_adc(uint8_t pin) {
+static int init_adc(uint8_t pin) {
   // Ensure a valid pin was selected
   if (adc_channel_exists(pin) == -1) {
     printf("Invalid pin selected for ADC\r\n");
@@ -111,7 +80,7 @@ int init_adc(uint8_t pin) {
   return 0;
 }
 
-uint32_t read_adc() {
+static uint32_t read_adc() {
   // Array storing samples statically
   static uint32_t adc_data[NUMBER_OF_SAMPLES];
   
@@ -150,4 +119,34 @@ uint32_t read_adc() {
   // Scale down mean and return
   uint32_t scaled_mean = ((mean & 0xFFFF) * 4096) >> 16;  
   return scaled_mean;
+}
+
+// ADC task implementation for FreeRTOS
+void task_adc([[gnu::unused]] void *pvParameters)
+{
+  printf("ADC task started\r\n");
+  
+  // Set GPIO pin for ADC. You can change this to any pin that supports ADC and has a sensor connected.
+  int result = init_adc(5);
+  if (result != 0) {
+    printf("ADC initialization failed, exiting\r\n");
+    vTaskDelete(NULL);
+  } else {
+    printf("ADC initialized successfully\r\n");  
+    // Wait until initialization finished
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    
+    // Print current ADC values every second
+    while (1) {
+      printf("Current value of digitized analog signal: %"PRIu32"\r\n", read_adc());
+#if DEBUG == 1
+      vTaskDelay(5000 / portTICK_PERIOD_MS);
+#else
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
+#endif
+    } 
+    
+    // Should never happen but would delete the task and free allocated resources
+    vTaskDelete(NULL);
+  }
 }

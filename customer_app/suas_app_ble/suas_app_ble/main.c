@@ -34,11 +34,12 @@
 #include "include/main.h"
 #include "include/peripheral.h"
 
-/* Used to differentiate between central and peripheral role */
-static enum app_ble_role app_role;
+/* Loop task - Thread Local Storage:
 
-/* Connection data structure */
-struct bt_conn *default_conn;
+Index   Type                Description
+0       enum app_ble_role   Used to differentiate between central and peripheral
+                            role in the event listeners (BLE event, key presses)
+*/
 
 /* Helper function to turn off all LEDs */
 void board_leds_off() {
@@ -84,14 +85,21 @@ void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data
 
       // Wait 5s and retry to connect
       vTaskDelay(5000);
+      
+      // Get app role from Thread Local Storage
+      enum app_ble_role app_role = (enum app_ble_role) (uintptr_t) pvTaskGetThreadLocalStoragePointer(
+        /* Task */ NULL,
+        /* Index */ 0
+      );
 
+      // Central: start scanning
       if (app_role == CENTRAL) {
         ble_central_start_scanning();
-      } else { // Peripheral
+      } else { // Peripheral: start advertising
         ble_peripheral_start_advertising();
       }
       break;
-    /* Only called by client: exchange MTU size*/
+    /* Only called by central: exchange MTU size*/
     case BLE_DEV_SUBSCRIBED:
       bl_gpio_output_set(LED_GREEN, 0);
       ble_central_exchange_mtu();
@@ -104,20 +112,48 @@ void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data
 
 /* Listener for key events */
 void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data) {
+  /* Get current app role enum */
+  enum app_ble_role app_role = (enum app_ble_role) (uintptr_t) pvTaskGetThreadLocalStoragePointer(
+    /* Task */ NULL,
+    /* Index */ 0
+  );
+
   switch (event->code) {
     // Short key press (read a high value on GPIO pin 2 for 100-3000ms)
     // -> start as peripheral
     case KEY_1:
-      printf("[KEY] Short press detected\r\n");
-      app_role = PERIPHERAL;
-      start_peripheral_application();
+      if (app_role == UNINITIALIZED) {
+        printf("[KEY] Short press detected - starting as peripheral\r\n");
+
+        // Update app role
+        app_role = PERIPHERAL;
+        vTaskSetThreadLocalStoragePointer(
+          /* Task */ NULL,
+          /* Index */ 0,
+          /* Value */ (void *) (uintptr_t) app_role
+        );
+
+        // Start
+        start_peripheral_application();
+      }
       break;
     // Long key press (read a high value on GPIO pin 2 for 6-10s)
     // -> start as central
     case KEY_2:
-      printf("[KEY] Long press detected\r\n");
-      app_role = CENTRAL;
-      start_central_application();
+      if (app_role == UNINITIALIZED) {
+        printf("[KEY] Long press detected - starting as central\r\n");
+
+        // Update app role
+        app_role = CENTRAL;
+        vTaskSetThreadLocalStoragePointer(
+          /* Task */ NULL,
+          /* Index */ 0,
+          /* Value */ (void *) (uintptr_t) app_role
+        );
+
+        // Start
+        start_central_application();
+      }
       break;
     // Very long key press (read a high value on GPIO pin 2 for at least 15s)
     // -> send data
@@ -126,7 +162,7 @@ void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data
       if (app_role == CENTRAL) {
         // Invoke ATT Command
         ble_central_write();
-      } else {
+      } else if (app_role == PERIPHERAL) {
         // Invoke ATT Notification
         ble_peripheral_send_notification();
       }
@@ -195,6 +231,14 @@ void aos_loop_proc([[gnu::unused]] void *pvParameters) {
     aos_poll_read_fd(fd_console, aos_cli_event_cb_read_get(), (void *) 0x12345678);
   }
 
+  /* Store app role enumeration */
+  enum app_ble_role app_role = UNINITIALIZED;
+  vTaskSetThreadLocalStoragePointer(
+    /* Task */ NULL,
+    /* Index */ 0,
+    /* Value */ (void *) (uintptr_t) app_role
+  );
+
   /* Register event filters */
   aos_register_event_filter(EV_KEY, event_cb_key_event, NULL);
   aos_register_event_filter(EV_BLE_TEST, event_cb_ble_event, NULL);
@@ -205,21 +249,10 @@ void aos_loop_proc([[gnu::unused]] void *pvParameters) {
   vTaskDelete(NULL);
 }
 
-/* Keepalive task */
-void keep_alive_entry([[gnu::unused]] void *pvParameters) {
-  while(1) {
-    vTaskDelay(60 * 1000);
-  }
-  vTaskDelete(NULL);
-}
-
-#define KEEP_ALIVE_STACK_SIZE 512
 #define LOOPL_PROC_STACK_SIZE 1024
 
 void bfl_main(void) {
   /* Task declarations */
-  static StackType_t keep_alive_stack[KEEP_ALIVE_STACK_SIZE];
-  static StaticTask_t keep_alive_task;
 
   static StackType_t aos_loop_proc_stack[LOOPL_PROC_STACK_SIZE];
   static StaticTask_t aos_loop_proc_task;
@@ -234,7 +267,6 @@ void bfl_main(void) {
   board_leds_off();
 
   /* Create tasks */
-  xTaskCreateStatic(keep_alive_entry, (char *) "keepalive", KEEP_ALIVE_STACK_SIZE, NULL, 15, keep_alive_stack, &keep_alive_task);
   xTaskCreateStatic(aos_loop_proc, (char *) "event loop", LOOPL_PROC_STACK_SIZE, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
 
   /* Start tasks */

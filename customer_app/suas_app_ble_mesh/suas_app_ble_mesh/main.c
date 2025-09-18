@@ -29,8 +29,8 @@
 #include "include/provisioning.h"
 #include "include/client.h"
 
-// Keepalive function
-static void keepalive([[gnu::unused]] void *pvParameters)
+// Mesh init function
+static void mesh([[gnu::unused]] void *pvParameters)
 {
     // Wait half a second for system initialization
     vTaskDelay(500);
@@ -151,13 +151,15 @@ static void aos_loop_proc([[gnu::unused]] void *pvParameters)
     vTaskDelete(NULL);
 }
 
+#define MASH_STACK_SIZE 512
+#define LOOP_STACK_SIZE 512
 // Main function
 void bfl_main()
 {
-    static StackType_t aos_loop_proc_stack[1024];
+    static StackType_t aos_loop_proc_stack[LOOP_STACK_SIZE];
     static StaticTask_t aos_loop_proc_task;
-    static StackType_t keepalive_stack[512];
-    static StaticTask_t keepalive_task;
+    static StackType_t mesh_stack[MASH_STACK_SIZE];
+    static StaticTask_t mesh_task;
 
     // Initialize system
     vInitializeBL602();
@@ -166,7 +168,7 @@ void bfl_main()
     board_init();
 
     // Create and start tasks
-    xTaskCreateStatic(keepalive, (char*)"keepalive", 512, NULL, 15, keepalive_stack, &keepalive_task);
-    xTaskCreateStatic(aos_loop_proc, (char*)"event_loop", 1024, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
+    xTaskCreateStatic(mesh, (char*)"mesh", MASH_STACK_SIZE, NULL, 15, mesh_stack, &mesh_task);
+    xTaskCreateStatic(aos_loop_proc, (char*)"event_loop", LOOP_STACK_SIZE, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
     vTaskStartScheduler();
 }

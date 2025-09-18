@@ -1,5 +1,5 @@
-#ifndef TT_CGI_H
-#define TT_CGI_H 1
+#ifndef __SUAS_CGI_H
+#define __SUAS_CGI_H
 
 /* show errors if dependencies are not included */
 

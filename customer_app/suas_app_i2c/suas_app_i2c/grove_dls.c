@@ -13,8 +13,8 @@
 #include "grove_dls.h"
 
 // Data to exchange with the sensor
-const uint8_t POWER_UP_DATA = 0x03;
-const uint8_t POWER_DOWN_DATA =  0x00;
+static const uint8_t POWER_UP_DATA = 0x03;
+static const uint8_t POWER_DOWN_DATA =  0x00;
 
 // Global variables
 uint16_t ch0, ch1;

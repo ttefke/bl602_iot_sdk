@@ -37,16 +37,10 @@
 
 // Define function prototypes
 // (needed for compiler, functions are implemented in c file)
-
 void task_adc(void *pvParameters);
-// set_adc_gain should not be available outside from adc.c,
-// therefore it is omitted here
-int init_adc(uint8_t pin);
-uint32_t read_adc();
 
 // Give this function a second name which
 // has a name that suits our use case better
-
 #define adc_channel_exists(x) bl_adc_get_channel_by_gpio(x)
 
 // Header guard end

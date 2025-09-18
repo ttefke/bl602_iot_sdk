@@ -8,7 +8,8 @@
 
 // Define roles
 enum app_ble_role {
-    CENTRAL = 1,
+    UNINITIALIZED = 0,
+    CENTRAL,
     PERIPHERAL
 };
 

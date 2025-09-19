@@ -21,8 +21,8 @@ void task_one([[gnu::unused]] void *pvParameters)
     printf("%s: looped %d times\r\n",
       __func__, i);
 
-    // Wait 1000 ticks
-    vTaskDelay(1000);
+    // Wait one second
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
 
   // Delete task (this will never be called but should be stated nevertheless)
@@ -40,8 +40,8 @@ void task_two(void *pvParameters)
     // Print handed over number
     printf("%s: received number %d\r\n", __func__, number);
 
-    // Wait 5000 ticks
-    vTaskDelay(5000);
+    // Wait 5 seconds
+    vTaskDelay(pdMS_TO_TICKS(5000));
   }
 
   // Delete task
@@ -96,8 +96,8 @@ void task_three(void *pvParameters)
     task_three_function_one();
     task_three_function_two();
 
-    // Wait 3000 ticks
-    vTaskDelay(3000);
+    // Wait 3 seconds
+    vTaskDelay(pdMS_TO_TICKS(3000));
   }
 
   // Delete task two

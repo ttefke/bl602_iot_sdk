@@ -84,7 +84,7 @@ void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data
       bl_gpio_output_set(LED_RED, 0);
 
       // Wait 5s and retry to connect
-      vTaskDelay(5000);
+      vTaskDelay(pdMS_TO_TICKS(5000));
       
       // Get app role from Thread Local Storage
       enum app_ble_role app_role = (enum app_ble_role) (uintptr_t) pvTaskGetThreadLocalStoragePointer(

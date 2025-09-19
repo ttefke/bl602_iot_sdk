@@ -402,12 +402,12 @@ int bl_ble_sync_stop(bl_ble_sync_t *index)
 
     if (xTaskGetCurrentTaskHandle() == gp_index->task_handle) {
         while(gp_index->scaning == 1) {
-            vTaskDelay(10);
+            vTaskDelay(pdMS_TO_TICKS(10));
         }
         vTaskDelete(index->task_handle);
     } else {
         while((gp_index->scaning == 1) || (index->task_runing == 1)) {
-            vTaskDelay(10);
+            vTaskDelay(pdMS_TO_TICKS(10));
         }
     }
     return 0;

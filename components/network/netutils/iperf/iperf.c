@@ -119,7 +119,7 @@ static void iperf_client_tcp(void *arg)
         if (sock < 0)
         {
             printf("create socket failed!\r\n");
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
             continue;
         }
 
@@ -133,7 +133,7 @@ static void iperf_client_tcp(void *arg)
             printf("Connect failed!\r\n");
             closesocket(sock);
 
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
             continue;
         }
 
@@ -193,7 +193,7 @@ static void iperf_client_tcp(void *arg)
 
         closesocket(sock);
 
-        vTaskDelay(1000*2);
+        vTaskDelay(pdMS_TO_TICKS(2000));
         printf("disconnected!\r\n");
     }
     printf("iper stop\r\n");
@@ -242,7 +242,7 @@ static void iperf_client_udp(void *arg)
         if (sock < 0)
         {
             printf("create socket failed!\r\n");
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
             vPortFree(arg);
             return;
         }
@@ -258,7 +258,7 @@ static void iperf_client_udp(void *arg)
             printf("Bind failed!\r\n");
             lwip_close(sock);
 
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
             vPortFree(arg);
             return;
         }
@@ -327,7 +327,7 @@ retry:
 
         lwip_close(sock);
 
-        vTaskDelay(1000*2);
+        vTaskDelay(pdMS_TO_TICKS(2000));
         printf("disconnected! ret %d\r\n",  ret);
         vTaskDelete(NULL);
 }
@@ -489,7 +489,7 @@ static void iperf_server_udp(void *arg)
     // 等待接收退出信号
     //xSemaphoreTake(context.comp_sig_handle, portMAX_DELAY);
     while (!context.exit_flag) {
-        vTaskDelay(1000);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
     printf("ipus exit..\r\n");

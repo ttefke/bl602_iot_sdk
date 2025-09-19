@@ -122,11 +122,11 @@ static wifi_interface_t wifi_interface;
 
 static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
-    vTaskDelay(500);
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     while (1) {
         printf("%s: RISC-V rv32imafc\r\n", __func__);
-        vTaskDelay(10000);
+        vTaskDelay(pdMS_TO_TICKS(10000));
     }
     vTaskDelete(NULL);
 }
@@ -615,7 +615,7 @@ static int client_demo(char *hostname)
             if (0 == ((debug_counter++) & 0xFF)) {
                 printf("total = %d, ret = %d\n\r", total, ret);
             }
-            //vTaskDelay(2);
+            //vTaskDelay(pdMS_TO_TICKS(2));
             if (total > 82050000) {
                 ticks_end = xTaskGetTickCount();
                 time_consumed = ((uint32_t)(((int32_t)ticks_end) - ((int32_t)ticks_start))) / 1000;

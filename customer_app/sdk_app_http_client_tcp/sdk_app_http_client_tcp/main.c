@@ -112,11 +112,11 @@ static wifi_interface_t wifi_interface;
 
 static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
-    vTaskDelay(500);
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     while (1) {
         printf("%s: RISC-V rv32imafc\r\n", __func__);
-        vTaskDelay(10000);
+        vTaskDelay(pdMS_TO_TICKS(10000));
     }
     vTaskDelete(NULL);
 }

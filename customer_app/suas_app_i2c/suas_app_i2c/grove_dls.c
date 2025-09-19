@@ -38,7 +38,7 @@ int init_grove_dls() {
     }
 
     // Wait 25 ms
-    vTaskDelay(25 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(25));
 
     // Send initialization data: clear timing register
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
@@ -52,7 +52,7 @@ int init_grove_dls() {
     }
 
     // Wait 25 ms
-    vTaskDelay(25 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(25));
 
     // Send initialization data: clear interrupt register
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
@@ -66,7 +66,7 @@ int init_grove_dls() {
     }
 
     // Wait 25 ms
-    vTaskDelay(25 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(25));
     
     // Send initialization data: power down
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
@@ -80,7 +80,7 @@ int init_grove_dls() {
     }
 
     // Wait 25 ms
-    vTaskDelay(25 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(25));
     
     // Return 0 (initialization successful)
     return 0;
@@ -106,7 +106,7 @@ int8_t getLux() {
     }
 
     // Wait 14 ms
-    vTaskDelay(14 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(14));
 
     // Read lower part of channel 0, destination: readings[0]
     result = hal_i2c_read_block(GROVE_DLS_1_1_DEVICE_ADDRESS, readings,

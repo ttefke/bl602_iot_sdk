@@ -55,12 +55,12 @@ void task_grove_dls([[gnu::unused]] void *pvParameters) {
     }
     
     // wait until wifi is available
-    vTaskDelay(NETWORK_CONNECTION_DELAY * 1000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(NETWORK_CONNECTION_DELAY * 1000));
 
     // endless loop to get data twice per second
     while (1) {
         lux = readVisibleLux();
-        vTaskDelay(500 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
 
 #ifdef REBOOT_ON_EXCEPTION

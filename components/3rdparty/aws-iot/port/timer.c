@@ -28,6 +28,7 @@ extern "C" {
 #include "timer_platform.h"
 #include <FreeRTOS.h>
 #include <task.h>
+#include <projdefs.h>
 
 #define BFL_LOGD(TAG, format, ...) puts(TAG);printf("DEBUG" format "\r\n", ##__VA_ARGS__)
 #define BFL_LOGE(TAG, format, ...) puts(TAG);printf("ERROR" format "\r\n", ##__VA_ARGS__)
@@ -47,7 +48,7 @@ bool has_timer_expired(Timer *timer)
        things progress elsewhere.
     */
     if (!expired && now == timer->last_polled_ticks) {
-        vTaskDelay(1);
+        vTaskDelay(pdMS_TO_TICKS(1));
     }
     timer->last_polled_ticks = now;
     return expired;

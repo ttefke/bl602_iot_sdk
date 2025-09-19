@@ -28,7 +28,7 @@ int init_grove_dls() {
         return result;
     }
 
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
         (char*) power_down, ONE_BYTE, GROVE_DLS_1_1_SUBADDRESS_LENGTH,
@@ -39,7 +39,7 @@ int init_grove_dls() {
         return result;
     }
 
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
 
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
         (char*) power_down, ONE_BYTE, GROVE_DLS_1_1_SUBADDRESS_LENGTH,
@@ -50,7 +50,7 @@ int init_grove_dls() {
         return result;
     }
 
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(100));
     
     result = hal_i2c_write_block(GROVE_DLS_1_1_DEVICE_ADDRESS,
         (char*) power_down, ONE_BYTE, GROVE_DLS_1_1_SUBADDRESS_LENGTH,
@@ -79,7 +79,7 @@ int8_t getLux() {
         goto error;
     }
 
-    vTaskDelay(14 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(14));
 
     result = hal_i2c_read_block(GROVE_DLS_1_1_DEVICE_ADDRESS, readings,
         ONE_BYTE, GROVE_DLS_1_1_SUBADDRESS_LENGTH, GROVE_DLS_1_1_CHANNEL_0L);

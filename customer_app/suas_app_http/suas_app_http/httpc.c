@@ -101,7 +101,7 @@ void task_http([[gnu::unused]] void *pvParameters)
     while (1)
     {
         send_http_request();
-        vTaskDelay(5 * 1000);
+        vTaskDelay(pdMS_TO_TICKS(5 * 1000));
     }
     
     // Stop task if loop exists - should not happen

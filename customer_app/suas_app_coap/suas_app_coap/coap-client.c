@@ -216,7 +216,7 @@ void client_coap_send_pdu() {
 // CoAP client task
 void task_coap_client([[gnu::unused]] void *pvParameters) {
   // Wait until WiFi is set up
-  vTaskDelay(3 * 1000);
+  vTaskDelay(pdMS_TO_TICKS(3 * 1000));
 
   // Initialize 
   client_coap_init();
@@ -237,7 +237,7 @@ void task_coap_client([[gnu::unused]] void *pvParameters) {
       coap_io_process(main_coap_context, 500);
     }
     // Wait one second before sending next request
-    vTaskDelay(1000);
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
 
   // Destruct CoAP data containers

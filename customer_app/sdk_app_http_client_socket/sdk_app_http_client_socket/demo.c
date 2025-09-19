@@ -111,7 +111,7 @@ static int client_demo(char *hostname)
             if (0 == ((debug_counter++) & 0xFF)) {
                 printf("total = %d, ret = %d\n\r", total, ret);
             }
-            //vTaskDelay(2);
+            //vTaskDelay(pdMS_TO_TICKS(2));
             if (total > 820500) {
                 ticks_end = xTaskGetTickCount();
                 time_consumed = ((uint32_t)(((int32_t)ticks_end) - ((int32_t)ticks_start))) / 1000;

@@ -7,12 +7,12 @@
 #include "conf.h"
 
 void task_tcp([[gnu::unused]] void *pvParameters) {
-    vTaskDelay(NETWORK_CONNECTION_DELAY * 1000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(NETWORK_CONNECTION_DELAY * 1000));
 
     tcpip_init(NULL, NULL);
     while (1) {
         /* wait forever */
-        vTaskDelay(60 * 1000 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(60 * 1000));
     }
 #ifdef REBOOT_ON_EXCEPTION
     bl_sys_reset_system();

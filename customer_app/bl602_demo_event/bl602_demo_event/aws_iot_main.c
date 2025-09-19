@@ -203,7 +203,7 @@ static int _update_mqtt_config(ShadowInitParameters_t *sp, ShadowConnectParamete
         //TODO use ASSERT here
         printf("NULL pHost %d\r\n", __LINE__);
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
     memcpy(sp->pHost, c_ptr - len, len);
@@ -223,7 +223,7 @@ static int _update_mqtt_config(ShadowInitParameters_t *sp, ShadowConnectParamete
     if (len > 5) {
         printf("Too long port\r\n");
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
     memcpy(port, c_ptr - len, len);
@@ -252,7 +252,7 @@ static int _update_mqtt_config(ShadowInitParameters_t *sp, ShadowConnectParamete
         //TODO use ASSERT here
         printf("NULL pMqttClientId %d\r\n", __LINE__);
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
     memcpy((void*)scp->pMqttClientId, c_ptr - len, len);
@@ -275,7 +275,7 @@ static int _update_mqtt_config(ShadowInitParameters_t *sp, ShadowConnectParamete
         //TODO use ASSERT here
         printf("NULL pMyThingName %d\r\n", __LINE__);
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
     memcpy((void*)scp->pMyThingName, c_ptr - len, len);
@@ -349,7 +349,7 @@ void aws_main_entry([[gnu::unused]] void *param)
     if(SUCCESS != rc) {
         printf("aws_iot_shadow_init returned error %d, aborting...\r\n", rc);
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
 
@@ -358,7 +358,7 @@ void aws_main_entry([[gnu::unused]] void *param)
     if(SUCCESS != rc) {
         printf("aws_iot_shadow_connect returned error %d, aborting...\r\n", rc);
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
 
@@ -371,7 +371,7 @@ void aws_main_entry([[gnu::unused]] void *param)
     if(SUCCESS != rc) {
         printf("Unable to set Auto Reconnect to true - %d, aborting...\r\n", rc);
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
 
@@ -380,7 +380,7 @@ void aws_main_entry([[gnu::unused]] void *param)
     if(SUCCESS != rc) {
         printf("Shadow Register Delta Error\r\n");
         while (1) {
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
         }
     }
     temperature = STARTING_ROOMTEMPERATURE;
@@ -415,7 +415,7 @@ void aws_main_entry([[gnu::unused]] void *param)
         printf("*****************************************************************************************\r\n");
         printf("Stack remaining for task '%s' is %ld bytes\r\n", pcTaskGetTaskName(NULL), uxTaskGetStackHighWaterMark(NULL));
 
-        vTaskDelay(1000 / portTICK_RATE_MS);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 
     if(SUCCESS != rc) {

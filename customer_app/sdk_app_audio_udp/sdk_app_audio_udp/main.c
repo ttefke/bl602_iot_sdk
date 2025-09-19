@@ -123,11 +123,11 @@ static wifi_interface_t wifi_interface;
 
 static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
-    vTaskDelay(500);
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     while (1) {
         printf("%s: RISC-V rv32imafc\r\n", __func__);
-        vTaskDelay(10000);
+        vTaskDelay(pdMS_TO_TICKS(10000));
     }
     vTaskDelete(NULL);
 }
@@ -512,9 +512,9 @@ int bl602_dac_device_fake(void);
     audio_tts_init(&audio, "bl602_dac");
 
     cmd_stack_wifi(NULL, 0, NULL, NULL);
-    vTaskDelay(2000);
+    vTaskDelay(pdMS_TO_TICKS(2000));
     aos_cli_input_direct("wifi_ap_start\r\n", strlen("wifi_ap_start\r\n"));
-    vTaskDelay(2000);
+    vTaskDelay(pdMS_TO_TICKS(2000));
 
     recv_buf = (uint8_t *) pvPortMalloc (IPERF_BUFSZ_UDP);
     if (!recv_buf) {
@@ -526,7 +526,7 @@ int bl602_dac_device_fake(void);
     if (sock < 0)
     {
         printf("create socket failed!\r\n");
-        vTaskDelay(1000);
+        vTaskDelay(pdMS_TO_TICKS(1000));
         vPortFree(p_arg);
         goto __exit;
     }
@@ -542,7 +542,7 @@ int bl602_dac_device_fake(void);
         printf("Bind failed!\r\n");
         lwip_close(sock);
 
-        vTaskDelay(1000);
+        vTaskDelay(pdMS_TO_TICKS(1000));
         vPortFree(p_arg);
         goto __exit;
     }
@@ -562,13 +562,13 @@ int bl602_dac_device_fake(void);
             audio_tts_start(&audio);
             printf("receive %lld.%02d\r\n", num_int, num_decimal);
         }
-        vTaskDelay(10);
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 
 __exit:
 
     lwip_close(sock);
-    vTaskDelay(1000*2);
+    vTaskDelay(pdMS_TO_TICKS(2000));
     vTaskDelete(NULL);
 }
 

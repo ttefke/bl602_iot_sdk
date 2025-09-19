@@ -80,7 +80,7 @@ void task_http([[gnu::unused]] void *pvParameters)
     extern volatile unsigned long lux;
 
     /* delay sending data until WiFi is available */
-    vTaskDelay((NETWORK_CONNECTION_DELAY + 3) * 1000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS((NETWORK_CONNECTION_DELAY + 3) * 1000));
 
     while (1)
     {
@@ -98,7 +98,7 @@ void task_http([[gnu::unused]] void *pvParameters)
         cJSON_Delete(request_data);
         free(json_data);
         message_id++;
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
     
     /* while loop should never exit */

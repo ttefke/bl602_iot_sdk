@@ -43,7 +43,7 @@ void task_led_pwm([[gnu::unused]] void *pvParameters)
       bl_pwm_set_duty(LED_R_PWM_CHANNEL, value);
          
       /* Wait for 20ms */
-      vTaskDelay(20 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(20));
     }
   }
   

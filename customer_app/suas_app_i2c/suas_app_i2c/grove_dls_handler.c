@@ -44,7 +44,7 @@ void grove_handler([[gnu::unused]] void *pvParameters) {
         printf("IR luminosity: %d\r\n", readIRLuminosity());
         printf("Full spectrum luminosity: %d\r\n", readFSLuminosity());
         printf("Visible Lux: %ld\r\n", readVisibleLux());
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(5000));
     }
 
     // Show error message if tasks exists and remove task from lists of tasks

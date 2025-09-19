@@ -444,7 +444,7 @@ static void _dma_test_case1(void)
 
     /*Arg will be set in callback*/
     while (first->arg) {
-        vTaskDelay(2);
+        vTaskDelay(pdMS_TO_TICKS(2));
     }
 
     vPortFree((void*)first->src);

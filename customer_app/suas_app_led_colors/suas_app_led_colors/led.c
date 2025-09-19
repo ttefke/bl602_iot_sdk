@@ -35,7 +35,7 @@ void task_led([[gnu::unused]] void *pvParameters)
   bl_gpio_enable_output(LED_B_PIN, DISABLE_PULLUP, DISABLE_PULLDOWN);
   
   // wait for 100ms
-  vTaskDelay(100 / portTICK_PERIOD_MS);
+  vTaskDelay(pdMS_TO_TICKS(100));
   
   // counter
   unsigned char counter = 0;
@@ -69,7 +69,7 @@ void task_led([[gnu::unused]] void *pvParameters)
     }
     
     // wait for 1s
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
   
   // should never happen but would delete the task and free allocated resources

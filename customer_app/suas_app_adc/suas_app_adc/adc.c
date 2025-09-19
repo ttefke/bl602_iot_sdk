@@ -134,15 +134,15 @@ void task_adc([[gnu::unused]] void *pvParameters)
   } else {
     printf("ADC initialized successfully\r\n");  
     // Wait until initialization finished
-    vTaskDelay(2000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(2000));
     
     // Print current ADC values every second
     while (1) {
       printf("Current value of digitized analog signal: %"PRIu32"\r\n", read_adc());
 #if DEBUG == 1
-      vTaskDelay(5000 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(5000));
 #else
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
+      vTaskDelay(pdMS_TO_TICKS(1000));
 #endif
     } 
     

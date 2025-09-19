@@ -105,7 +105,7 @@ static void tcpc_entry(void* arg)
         } else {
             printf(DEBUG_HEADER "[%d] [%d] recv success with ret %d, %s\r\n", counter, counter_shared, ret, send_buf);
         }
-        vTaskDelay(1000);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
     closesocket(sock);
 
@@ -169,7 +169,7 @@ failed_nothing:
 
         closesocket(sock);
 
-        vTaskDelay(1000*2);
+        vTaskDelay(pdMS_TO_TICKS(2000));
         printf("disconnected!\r\n");
     }
     printf("iper stop\r\n");

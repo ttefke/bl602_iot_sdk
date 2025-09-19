@@ -20,7 +20,7 @@ void task_httpd([[gnu::unused]] void *pvParameters)
   cgi_init();
   while(1) {
     printf("httpd keepalive\r\n");
-    vTaskDelay(5*60*1000);
+    vTaskDelay(pdMS_TO_TICKS(5*60*1000));
   }
   
   /* will never happen */

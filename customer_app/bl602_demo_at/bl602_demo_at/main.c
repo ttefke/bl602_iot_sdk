@@ -482,7 +482,7 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
         {
             printf("[APP] [EVT] [PROV] [DISCONNECT] %lld\r\n", aos_now_ms());
             wifi_mgmr_sta_disconnect();
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
             wifi_mgmr_sta_disable(NULL);
         }
         break;

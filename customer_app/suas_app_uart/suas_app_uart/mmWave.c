@@ -49,7 +49,7 @@ void read_sensor([[gnu::unused]] void *pvParameters)
     }
 
     // Wait for a second
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(1000));
   }
 
   // Delete task -- should never happen

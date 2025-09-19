@@ -33,14 +33,14 @@
 static void mesh([[gnu::unused]] void *pvParameters)
 {
     // Wait half a second for system initialization
-    vTaskDelay(500);
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     // Initialize mesh
     mesh_init();
 
     // Keep alive: endless loop
     while (1) {
-        vTaskDelay(60 * 1000);
+        vTaskDelay(pdMS_TO_TICKS(60 * 1000));
     }
 
     printf("[MAIN] Keepalive task ended - should never happen\r\n");

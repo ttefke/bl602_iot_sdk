@@ -314,7 +314,7 @@ static void _bloop_handle_set(struct loop_ctx *loop)
 void bloop_wait_startup(struct loop_ctx *loop)
 {
     while (NULL == loop->looper) {
-        vTaskDelay(1);
+        vTaskDelay(pdMS_TO_TICKS(1));
     }
 }
 

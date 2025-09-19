@@ -187,7 +187,7 @@ static void system_thread_init()
 
 static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
-    vTaskDelay(500);
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     void psm_test_cmd(char *buf, int len, int argc, char **argv);
     psm_test_cmd(NULL, 0, 0, NULL);

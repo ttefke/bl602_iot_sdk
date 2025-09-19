@@ -72,7 +72,7 @@ int i2c_data_test(void)
     msgs[0].i2cx = 0;
     i2c_transfer_msgs_block(msgs, 1, 0);
 
-    vTaskDelay(200 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(200));
     data_len = 31;
     msgs[0].addr = 0x50;
     msgs[0].subflag = 1;
@@ -86,7 +86,7 @@ int i2c_data_test(void)
     msgs[0].i2cx = 0;
     i2c_transfer_msgs_block(msgs, 1, 0);
 
-    vTaskDelay(200 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(200));
     data_len = 31;
     msgs[0].addr = 0x50;
     msgs[0].subflag = 1;
@@ -100,7 +100,7 @@ int i2c_data_test(void)
     msgs[0].i2cx = 0;
     i2c_transfer_msgs_block(msgs, 1, 0);
 
-    vTaskDelay(200 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(200));
 
 
     //read
@@ -191,7 +191,7 @@ static void test_i2c_api([[gnu::unused]] char *buf, [[gnu::unused]] int len,
     }
 
     hal_i2c_write_block(0x50, (char *)test_arr, 32, 2, 0x04);
-    vTaskDelay(80 / portTICK_PERIOD_MS);//eeprom, when write ,should be delay ,then it could be read
+    vTaskDelay(pdMS_TO_TICKS(80));//eeprom, when write ,should be delay ,then it could be read
 
     hal_i2c_read_block(0x50, (char *)recv_arr, 32, 2, 0x04);
 
@@ -200,10 +200,10 @@ static void test_i2c_api([[gnu::unused]] char *buf, [[gnu::unused]] int len,
     }
 
     hal_i2c_write_no_block(0x50, (char *)test_arr, 32, 2, 0x04);
-    vTaskDelay(80 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(80));
     memset(recv_nob, 0, 32);
     hal_i2c_read_no_block(0x50, (char *)recv_nob, 32, 2, 0x04);
-    vTaskDelay(200 / portTICK_PERIOD_MS);
+    vTaskDelay(pdMS_TO_TICKS(200));
     for (i = 0; i < 32; i++) {
         printf("test[%d] = %d  recv_nob[%d] = %d \r\n", i, test_arr[i], i, recv_nob[i]);
     }

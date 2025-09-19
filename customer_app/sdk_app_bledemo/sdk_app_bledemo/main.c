@@ -95,11 +95,11 @@ static HeapRegion_t xHeapRegions[] =
 static void proc_hellow_entry([[gnu::unused]] void *pvParameters)
 {
    
-    vTaskDelay(500);
+    vTaskDelay(pdMS_TO_TICKS(500));
 
     while (1) {
         printf("%s: RISC-V rv32imafc\r\n", __func__);
-        vTaskDelay(10000);
+        vTaskDelay(pdMS_TO_TICKS(10000));
     }
     vTaskDelete(NULL);
 }
@@ -221,7 +221,7 @@ static void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *priva
             bl_gpio_output_set(LED_RED_PIN,0);
 
             printf("ble dev disconnnected\r\n");
-            vTaskDelay(5000);
+            vTaskDelay(pdMS_TO_TICKS(5000));
             if(app_role==PERIPHERAL){
 
                 bleapps_adv_starting();

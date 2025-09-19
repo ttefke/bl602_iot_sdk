@@ -146,7 +146,7 @@ error:
 // CoAP server task
 void task_coap_server([[gnu::unused]] void *pvParameters) {
   // Wait until WiFi is set up
-  vTaskDelay(3 * 1000);
+  vTaskDelay(pdMS_TO_TICKS(3 * 1000));
 
   // Initialize CoAP server
   server_coap_init();
@@ -154,7 +154,7 @@ void task_coap_server([[gnu::unused]] void *pvParameters) {
 
   // Keep task alive
   while (1) {
-    vTaskDelay(60 * 1000);
+    vTaskDelay(pdMS_TO_TICKS(60 * 1000));
   }
 
   /* Loop ended - terminate server process - clean up */

@@ -297,7 +297,7 @@ static void _bl_cks_test_case5()
     /*Arg will be set in callback*/
     /*XXX volatile may needed*/
     while (first.arg) {
-        vTaskDelay(2);
+        vTaskDelay(pdMS_TO_TICKS(2));
     }
     if (0x6DF1 == cks_result) {
         blog_info("====== Success %04X Checksum=====\r\n", cks_result);

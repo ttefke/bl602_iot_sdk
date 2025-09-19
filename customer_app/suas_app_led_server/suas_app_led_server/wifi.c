@@ -158,7 +158,7 @@ void task_wifi([[gnu::unused]] void *pvParameters)
     
   printf("[WIFI] Firmware loaded\r\n");
   /* wait */
-  vTaskDelay(500);
+  vTaskDelay(pdMS_TO_TICKS(500));
   
   /* start access point */
   uint8_t mac[6];

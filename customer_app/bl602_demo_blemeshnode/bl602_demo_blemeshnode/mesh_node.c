@@ -490,7 +490,7 @@ static void bt_enable_cb(int err)
 	if (!err) {
 		blemesh_init();
 		mesh_gen_srv_callback_register(model_gen_cb);
-		vTaskDelay(500);
+		vTaskDelay(pdMS_TO_TICKS(500));
 		blemesh_pb_gatt();
 	}
 }

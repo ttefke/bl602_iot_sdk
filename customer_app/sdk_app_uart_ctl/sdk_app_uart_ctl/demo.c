@@ -71,11 +71,11 @@ void cmd_uart_flush([[gnu::unused]] char *buf, [[gnu::unused]] int len,
         //bl_uart_flush(1);
         aos_ioctl(fd, IOCTL_UART_IOC_BAUD_MODE, 115200);
         aos_ioctl(fd, IOCTL_UART_IOC_BAUD_MODE, 4800);
-        vTaskDelay(2000);
+        vTaskDelay(pdMS_TO_TICKS(2000));
         aos_write(fd, pbuf2, strlen(pbuf2));
         aos_ioctl(fd, IOCTL_UART_IOC_BAUD_MODE, 115200);
         aos_ioctl(fd, IOCTL_UART_IOC_BAUD_MODE, 4800);
-        vTaskDelay(2000);
+        vTaskDelay(pdMS_TO_TICKS(2000));
    }
 }
 
@@ -98,7 +98,7 @@ void bluart_block_entry(void *arg)
             log_info("%s name.length = %d:\r\n", name, length);
             aos_write(fd, buf_recv, length);
         }
-        vTaskDelay(500);
+        vTaskDelay(pdMS_TO_TICKS(500));
         log_info("test.\r\n");
         count++;
 

@@ -84,7 +84,7 @@ void task_httpd([[gnu::unused]] void *pvParameters)
 
   // Keep this task (and consequently the server) running
   while(1) {
-    vTaskDelay(60*1000);
+    vTaskDelay(pdMS_TO_TICKS(60*1000));
   }
   
   /* Should never happen */

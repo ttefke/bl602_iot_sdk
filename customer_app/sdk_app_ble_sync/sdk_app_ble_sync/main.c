@@ -423,7 +423,7 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
                 aos_now_ms(),
                 wifi_mgmr_status_code_str(event->value)
             );
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
             wifi_mgmr_sta_disable(NULL);
         }
         break;
@@ -464,7 +464,7 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
         {
             printf("[APP] [EVT] [PROV] [DISCONNECT] %lld\r\n", aos_now_ms());
             wifi_mgmr_sta_disconnect();
-            vTaskDelay(1000);
+            vTaskDelay(pdMS_TO_TICKS(1000));
             wifi_mgmr_sta_disable(NULL);
 
         }
@@ -548,9 +548,9 @@ static void stack_ble (void)
 static void cmd_blsync_ble_start([[gnu::unused]] char *buf, [[gnu::unused]] int len, [[gnu::unused]] int argc, [[gnu::unused]] char **argv)
 {
     stack_wifi();
-    vTaskDelay(1000);
+    vTaskDelay(pdMS_TO_TICKS(1000));
     stack_ble();
-    vTaskDelay(1000);
+    vTaskDelay(pdMS_TO_TICKS(1000));
 
     aos_post_event(EV_CLI, CODE_CLI_BLSYNC_START, 0);
 }

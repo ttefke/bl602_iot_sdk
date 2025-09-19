@@ -42,7 +42,7 @@ static void proc_entry_looprt([[gnu::unused]] void *pvParameters)
     /* Never Reach Here*/
     while (1) {
         puts("--->>> Error terminated looprt\r\n");
-        vTaskDelay(1000);
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 

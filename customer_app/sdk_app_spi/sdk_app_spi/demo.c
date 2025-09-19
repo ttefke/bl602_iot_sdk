@@ -138,7 +138,7 @@ void spi_loop_master([[gnu::unused]] char *buf, [[gnu::unused]] int len,
     int i = 0;
     for (i = 0; i < 100; i++) {
         demo_spi_master(NULL, 1, 1, NULL);
-        vTaskDelay(3000);
+        vTaskDelay(pdMS_TO_TICKS(3000));
     }
     
     return;
@@ -150,7 +150,7 @@ void spi_loop_slave([[gnu::unused]] char *buf, [[gnu::unused]] int len,
     int i = 0;
     for (i = 0; i < 100; i++) {
         demo_spi_slave(NULL, 1, 1, NULL);
-        vTaskDelay(200);
+        vTaskDelay(pdMS_TO_TICKS(200));
     }
     
     return;

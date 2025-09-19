@@ -40,7 +40,7 @@ void task_sender(void *pvParameters)
     value++;
 
     /* Wait for 2.5 s */
-    vTaskDelay(2500);
+    vTaskDelay(pdMS_TO_TICKS(2500));
   }
 
   vTaskDelete(NULL);
@@ -75,7 +75,7 @@ void task_receiver(void *pvParameters) {
       }
     }
     /* Wait for 2.5 s */
-    vTaskDelay(2500);
+    vTaskDelay(pdMS_TO_TICKS(2500));
   }
 
   vTaskDelete(NULL);

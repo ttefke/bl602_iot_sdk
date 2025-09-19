@@ -67,7 +67,7 @@ static void uart_echo_task(void *arg)
     aos_write(fd, send_recv_log, strlen(send_recv_log));
     log_step(ci_table_step_send);
 
-    vTaskDelay(1000);
+    vTaskDelay(pdMS_TO_TICKS(1000));
     length = 0;
 
     while (1) {
@@ -82,7 +82,7 @@ static void uart_echo_task(void *arg)
             log_step(ci_table_step_recv);
             break;
         }
-        vTaskDelay(10);
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
     aos_close(fd);
     log_step(ci_table_step_end);

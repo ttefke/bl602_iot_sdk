@@ -420,7 +420,7 @@ static void wifi_disconnect_cmd(char *buf, int len, int argc, char **argv)
 {
     wifi_mgmr_sta_disconnect();
     /*XXX Must make sure sta is already disconnect, otherwise sta disable won't work*/
-    vTaskDelay(1000);
+    vTaskDelay(pdMS_TO_TICKS(1000));
     wifi_mgmr_sta_disable(NULL);
 }
 

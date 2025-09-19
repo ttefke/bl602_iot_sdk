@@ -23,7 +23,7 @@ void rc522_reset() {
     spi_write_register(RF522_COMMAND_REG, RF522_SOFT_RESET);
     do {
         // delay 75 ms
-        vTaskDelay(75 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(75));
     } while ((spi_read_register(RF522_COMMAND_REG) & (1 << 4)) && (++count) < 3);
 }
 
@@ -87,7 +87,7 @@ uint32_t rf522_calculate_crc(uint8_t *data, uint8_t len, uint8_t *result)
 
     for (uint8_t attempts = 10; attempts > 0; attempts--) {
         uint8_t n = spi_read_register(RF522_DIV_IRQ_REG);
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(10));
 
         if (n & 0x04) {
             spi_write_register(RF522_COMMAND_REG, RF522_IDLE);
@@ -123,7 +123,7 @@ uint8_t rf522_communicate_with_picc(uint8_t command, uint8_t waitIRq, uint8_t *s
 
     for (uint8_t attempts = 5; attempts > 0; attempts--) {
         uint8_t n = spi_read_register(RF522_COM_IRQ_REG);
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(pdMS_TO_TICKS(10));
 
         if (n & waitIRq) {
             completed = true;
@@ -263,7 +263,7 @@ uint8_t rc522_is_new_card_present()
 // Our task handle
 void spi_proc([[gnu::unused]] void *pvParameters) {
     // Wait until event loop initialized SPI handle
-    vTaskDelay(2500);
+    vTaskDelay(pdMS_TO_TICKS(2500));
     printf("Hello from spi proc\r\n");
 
     // Initialize card reader
@@ -277,7 +277,7 @@ void spi_proc([[gnu::unused]] void *pvParameters) {
             printf("No new card detect\r\n");
         }
 
-        vTaskDelay(2000);
+        vTaskDelay(pdMS_TO_TICKS(2000));
     }
     vTaskDelete(NULL);
 }

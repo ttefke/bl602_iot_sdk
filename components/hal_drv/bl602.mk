@@ -17,6 +17,7 @@ COMPONENT_SRCS := bl602_hal/bl_uart.c \
                   bl602_hal/bl_sec.c \
                   bl602_hal/bl_boot2.c \
                   bl602_hal/bl_timer.c \
+                  bl602_hal/bl_timer_asm.S \
                   bl602_hal/bl_gpio.c \
                   bl602_hal/bl_gpio_cli.c \
                   bl602_hal/bl_hbn.c \
@@ -55,8 +56,9 @@ COMPONENT_SRCS := bl602_hal/bl_uart.c \
 
 COMPONENT_SRCDIRS := bl602_hal platform_hal
 
-COMPONENT_OBJS := $(patsubst %.c,%.o, $(COMPONENT_SRCS))
-COMPONENT_OBJS := $(patsubst %.cpp,%.o, $(COMPONENT_OBJS))
+COMPONENT_OBJS := $(pathsubst %.S,%.o, $(COMPONENT_SRCS))
+COMPONENT_OBJS := $(pathsubst %.c,%.o, $(COMPONENT_SRCS))
+COMPONENT_OBJS := $(pathsubst %.cpp,%.o, $(COMPONENT_OBJS))
 
 ##
 ifeq ($(CONFIG_BT),1)

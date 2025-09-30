@@ -35,6 +35,7 @@
 #include <task.h>
 
 #define MTIMER_TICKS_PER_US     (10)
+#if 0
 static inline uint64_t timer_us_now()
 {
     uint32_t tick_low, tick_high, tick_tmp;
@@ -50,6 +51,9 @@ static inline uint64_t timer_us_now()
     tick64 = (((uint64_t)tick_high) << 32) | tick_low;
     return tick64;
 }
+#else
+extern uint64_t timer_us_now();
+#endif
 
 uint32_t bl_timer_now_us(void)
 {
@@ -61,6 +65,7 @@ uint64_t bl_timer_now_us64(void)
     return timer_us_now() / MTIMER_TICKS_PER_US;
 }
 
+#if 0
 void bl_timer_delay_us(uint32_t us)
 {
     uint32_t tick_now, tick_start;
@@ -74,6 +79,9 @@ void bl_timer_delay_us(uint32_t us)
         diff = (int32_t)tick_now - (int32_t)tick_start;
     } while (diff < ticks);
 }
+#else
+extern void bl_timer_delay_us(uint32_t us);
+#endif
 
 static BL_Err_Type Timer_INT_Case(TIMER_CFG_Type *timerCfg)
 {

@@ -11,6 +11,7 @@
 #include <bl_sec.h>
 #include <bl_sys.h>
 #include <bl_uart.h>
+#include <bl_timer.h>
 #include <hal_board.h>
 #include <hal_boot2.h>
 #ifdef REBOOT_ON_EXCEPTION
@@ -63,6 +64,11 @@ static HeapRegion_t xHeapRegions[] =
   bl_rtc_init();
   hal_boot2_init();
   hal_board_cfg(0);
+  
+  /* Run timer throwaways */
+  for (uint8_t i = 0; i < 5; i++) {
+    bl_timer_delay_us(50);
+  }
 }
 
 [[gnu::weak]] void vAssertCalled(void)

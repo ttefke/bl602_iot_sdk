@@ -56,9 +56,9 @@ COMPONENT_SRCS := bl602_hal/bl_uart.c \
 
 COMPONENT_SRCDIRS := bl602_hal platform_hal
 
-COMPONENT_OBJS := $(pathsubst %.S,%.o, $(COMPONENT_SRCS))
-COMPONENT_OBJS := $(pathsubst %.c,%.o, $(COMPONENT_SRCS))
-COMPONENT_OBJS := $(pathsubst %.cpp,%.o, $(COMPONENT_OBJS))
+COMPONENT_OBJS := $(COMPONENT_SRCS:.S=.o)
+COMPONENT_OBJS := $(COMPONENT_OBJS:.c=.o)
+COMPONENT_OBJS := $(COMPONENT_OBJS:.cpp=.o)
 
 ##
 ifeq ($(CONFIG_BT),1)

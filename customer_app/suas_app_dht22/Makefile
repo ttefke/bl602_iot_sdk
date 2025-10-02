@@ -3,8 +3,6 @@ PROJECT_PATH := $(abspath .)
 PROJECT_BOARD := evb
 export PROJECT_PATH PROJECT_BOARD
 
-CFLAGS += -DWITH_SUAS_DHT22
-
 -include ./proj_config.mk
 
 ifeq ($(origin BL60X_SDK_PATH), undefined)
@@ -15,7 +13,7 @@ COMPONENTS_BLSYS   := bltime blfdt blmtd bloop loopadc looprt loopset
 COMPONENTS_VFS     := romfs
 
 INCLUDE_COMPONENTS += freertos bl602 bl602_std hal_drv vfs yloop utils cli blog blog_testc
-INCLUDE_COMPONENTS += suas_ic
+INCLUDE_COMPONENTS += suas_drivers
 INCLUDE_COMPONENTS += $(COMPONENTS_BLSYS)
 INCLUDE_COMPONENTS += $(COMPONENTS_VFS)
 INCLUDE_COMPONENTS += $(PROJECT_NAME)

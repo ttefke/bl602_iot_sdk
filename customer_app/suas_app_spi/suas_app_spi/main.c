@@ -2,38 +2,20 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-// Input/Output
-#include <stdio.h>
-
-// UART library
-#include <hal_uart.h>
-
-// Hardware realtime loop
-#include <looprt.h>
-#include <loopset.h>
-
-// Virtual file system
-#include <event_device.h>
-#include <libfdt.h>
-#include <vfs.h>
-
-// AOS loop
-#include <aos/yloop.h>
+#include <stdio.h>        // IO
+#include <blog.h>         // Logging
+#include <hal_uart.h>     // UART
+#include <looprt.h>       // Real-time loop
+#include <loopset.h>      // Real-time loop
+#include <event_device.h> // VFS
+#include <libfdt.h>       // VFS
+#include <vfs.h>          // VFS
+#include <aos/yloop.h>    // aos porting layer
+#include <hal_board.h>    // Board
+#include <bl_gpio.h>      // GPIO for LEDs
 
 // SPI implementation
-#include <hal_spi.h>
-#include "spi_adapter.h"
 #include "spi.h"
-
-// BL602
-#include <hal_board.h>
-
-// GPIO
-#include <bl602_glb.h>
-#include <bl_gpio.h>
-
-// Logging
-#include <blog.h>
 
 // Helper function to get addresses from device tree
 static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
@@ -63,7 +45,7 @@ static void aos_loop_proc([[gnu::unused]] void *pvParameters) {
   static StackType_t proc_stack_looprt[512];
   static StaticTask_t proc_task_looprt;
 
-  /*Init bloop stuff*/
+  /* Init bloop stuff */
   looprt_start(proc_stack_looprt, 512, &proc_task_looprt);
   loopset_led_hook_on_looprt();
 
@@ -74,25 +56,6 @@ static void aos_loop_proc([[gnu::unused]] void *pvParameters) {
   // UART
   if (get_dts_addr("uart", &fdt, &offset) == 0) {
     vfs_uart_init(fdt, offset);
-  }
-
-  // SPI
-  if (get_dts_addr("spi", &fdt, &offset) == 0) {
-    vfs_spi_fdt_init(fdt, offset);
-
-    // Reconfigure CS pin
-    GLB_GPIO_Type cs_pin[1];
-    cs_pin[0] = 2; // from device tree specification
-    GLB_GPIO_Func_Init(
-      GPIO_FUN_SWGPIO, // Configure as GPIO
-      cs_pin, // Pin to be configure
-      sizeof(cs_pin) / sizeof(cs_pin[0]) // PIN size
-    );
-
-    // Configure real CS pin
-    bl_gpio_enable_output(CS_PIN, 0, 0);
-    bl_gpio_output_set(CS_PIN, CS_DISABLE);
-    printf("Initialized spi\r\n");
   }
 
   // ROMFS
@@ -121,26 +84,13 @@ void bfl_main(void)
   /* Initialize system */
   vInitializeBL602();
 
+  /* Initialize GPIO pins for LED */
+  bl_gpio_enable_output(LED_GREEN, /* No pullup */ 0, /* No pulldown */ 0);
+  bl_gpio_enable_output(LED_RED, /* No pullup */ 0, /* No pulldown */ 0);
+
   /* Create the tasks */
-  xTaskCreateStatic(
-    aos_loop_proc,
-    (char*)"event loop",
-    PROC_STACK_SIZE,
-    NULL,
-    15,
-    aos_loop_proc_stack,
-    &aos_loop_proc_task   
-  );
-  
-  xTaskCreateStatic(
-    spi_proc,
-    (char*)"spi",
-    SPI_STACK_SIZE,
-    NULL,
-    12,
-    spi_stack,
-    &spi_task
-  );
+  xTaskCreateStatic(aos_loop_proc, (char*)"event loop", PROC_STACK_SIZE, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
+  xTaskCreateStatic(spi_proc, (char*)"spi", SPI_STACK_SIZE, NULL, 20, spi_stack, &spi_task);
 
   /* Start tasks */
   vTaskStartScheduler();

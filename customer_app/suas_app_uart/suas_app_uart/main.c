@@ -8,25 +8,39 @@
 // Standard input/output
 #include <stdio.h>
 
-// Own header
-#include "mmWave.h"
+// Sensor header
+#include <suas_mmWave.h>
 
 // Sensor stack size
 #define SENSOR_STACK_SIZE 256
+
+void read_sensor([[gnu::unused]] void *pvParameters)
+{
+  /* Initialize sensor */
+  suas_init_mmwave();
+
+  /* Read sensor */
+  while (1) {
+    if (suas_mmwave_is_human_present()) {
+      printf("Human presence detected\r\n");
+    } else {
+      printf("Nobody present\r\n");
+    }
+    
+    // Wait for a second
+    vTaskDelay(pdMS_TO_TICKS(1000));
+  }
+
+  // Delete task -- should never happen
+  vTaskDelete(NULL);
+}
+
 
 void bfl_main(void)
 {
   /* Initialize system */
   vInitializeBL602();
   
-  /* Initialize UART for sensor
-   * Ports: 3+4 (TX+RX)
-   * Baudrate: 115200
-   */
-  bl_uart_init(1 /* Channel 0 = USB, Channel 1 = user defined */, 3, 4,
-      255, 255, 115200 /* from manual */);
-  printf("Initialized sensor\r\n");
-
   /* Set up sensor reading task */
   static StackType_t sensor_stack[SENSOR_STACK_SIZE];
   static StaticTask_t sensor_task;

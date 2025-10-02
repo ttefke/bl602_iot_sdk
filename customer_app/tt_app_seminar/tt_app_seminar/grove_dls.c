@@ -5,52 +5,26 @@
 #include <looprt.h>
 #include <loopset_i2c.h>
 #include <hal_i2c.h>
-#include <grove_dls.h>
+#include <suas_dls.h>
 #include <bl_sys.h>
 
 #include "conf.h"
-
-void event_cb_i2c_event(input_event_t *event, [[gnu::unused]] void *private_data)
-{
-    switch (event->code) {
-        case CODE_I2C_END:
-            printf("TRANS FINISH %lld\r\n", aos_now_ms());
-            break;
-        case CODE_I2C_ARB:
-             printf("TRANS ERROR ARB %lld\r\n", aos_now_ms());
-            break;
-        case CODE_I2C_NAK:
-            printf("TRANS ERROR NAK %lld\r\n", aos_now_ms());
-            break;
-        case CODE_I2C_FER:
-            printf("TRANS ERROR FER %lld\r\n", aos_now_ms());
-            break;
-        default:
-             printf("[I2C] [EVT] Unknown code %u, %lld\r\n", event->code, aos_now_ms());
-    }
-}
 
 volatile unsigned long lux;
 void task_grove_dls([[gnu::unused]] void *pvParameters) {
     // yloop looping
     static StackType_t proc_stack_looprt[512];
     static StaticTask_t proc_task_looprt;
-    
     looprt_start(proc_stack_looprt, 512, &proc_task_looprt);
-    loopset_i2c_hook_on_looprt();
-    
-    //register i2c
-    aos_register_event_filter(EV_I2C, event_cb_i2c_event, NULL);
-    hal_i2c_init(0, 500);
 
     printf("Initializing Grove Digital Light Sensor\r\n");
 
-    if (init_grove_dls() != 0) {
+    if (suas_init_grove_dls() != 0) {
 #ifdef REBOOT_ON_EXCEPTION
         bl_sys_reset_system();
 #else
         // retry once if initialization fails
-        init_grove_dls();
+        suas_init_grove_dls();
 #endif
     }
     
@@ -59,7 +33,7 @@ void task_grove_dls([[gnu::unused]] void *pvParameters) {
 
     // endless loop to get data twice per second
     while (1) {
-        lux = readVisibleLux();
+        lux = suas_read_visible_lux();
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 

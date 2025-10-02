@@ -30,11 +30,11 @@ void bfl_main(void)
       .pin_master_reset = 4,
       .number_of_registers = 2};
 
-  configure_74hc595(&sr_config);
+  suas_configure_74hc595(&sr_config);
 
   for (uint8_t i = 0; i < 129; i++)
   {
     bl_timer_delay_us(1 * 1000 * 1000);
-    store_data_74hc595(&sr_config, i);
+    suas_store_data_74hc595(&sr_config, i);
   }
 }

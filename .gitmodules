@@ -8,3 +8,6 @@
 [submodule "components/security/mbedtls-bl602"]
 	path = components/security/mbedtls-bl602
 	url = git@github.com:ttefke/mbedtls.git
+[submodule "components/3rdparty/suas_drivers"]
+	path = components/3rdparty/suas_drivers
+	url = git@github.com:ttefke/bl602_suas_drivers.git

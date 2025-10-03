@@ -54,6 +54,9 @@ static bool is_card_allowed(uid_t card) {
     return false;
 }
 
+#define SCANS_PER_SECOND      4
+#define RESTART_AFTER_SECONDS 15
+
 // Our task handle
 void spi_proc([[gnu::unused]] void *pvParameters) {
     // Turn LEDs off
@@ -63,33 +66,41 @@ void spi_proc([[gnu::unused]] void *pvParameters) {
     // Wait until event loop initialized SPI handle
     vTaskDelay(pdMS_TO_TICKS(1000));
 
-    // Initialize card reader
-    suas_rfid_init();
-    printf("Scanning for cards...\r\n");
-
     while (1) {
-        // Frequently check for new cards
-        if (suas_rfid_is_new_card_present() && suas_rfid_read_card()) {
-            printf("Card is present: ");
+        // (Re)nitialize card reader regularly to avoid some SPI HAL hiccups
+        suas_rfid_init();
+        printf("Scanning for cards...\r\n");
 
-            // Get id stored on the card and show it
-            uid_t card_data = suas_get_uid();
-            for (uint8_t i = 0; i < card_data.size; i++) {
-                printf("%02x", card_data.uid_byte[i]);
+        for (uint16_t i = 0; i < (SCANS_PER_SECOND * RESTART_AFTER_SECONDS); i++) {
+            // Frequently check for new cards
+            if (suas_rfid_is_new_card_present() && suas_rfid_read_card()) {
+                printf("Card is present: ");
+
+                // Get id stored on the card and show it
+                uid_t card_data = suas_get_uid();
+                for (uint8_t i = 0; i < card_data.size; i++) {
+                    printf("%02x", card_data.uid_byte[i]);
+                }
+
+                printf("\r\n");
+
+                // Check if LED is in allowed_cards array and set LEDs accordingly
+                if (is_card_allowed(card_data)) {
+                    bl_gpio_output_set(LED_GREEN, LED_ON);
+                    bl_gpio_output_set(LED_RED, LED_OFF);
+                } else {
+                    bl_gpio_output_set(LED_GREEN, LED_OFF);
+                    bl_gpio_output_set(LED_RED, LED_ON);
+                }
             }
 
-            printf("\r\n");
-
-            // Check if LED is in allowed_cards array and set LEDs accordingly
-            if (is_card_allowed(card_data)) {
-                bl_gpio_output_set(LED_GREEN, LED_ON);
-                bl_gpio_output_set(LED_RED, LED_OFF);
-            } else {
-                bl_gpio_output_set(LED_GREEN, LED_OFF);
-                bl_gpio_output_set(LED_RED, LED_ON);
-            }
+            vTaskDelay(pdMS_TO_TICKS(1000 / SCANS_PER_SECOND));
         }
-        vTaskDelay(pdMS_TO_TICKS(250));
+
+        // Let's have a look at the memory usiage here
+        printf("Free stack size: %ld, free heap size: %d\r\n",
+            uxTaskGetStackHighWaterMark(NULL),
+            xPortGetFreeHeapSize()); 
     }
     vTaskDelete(NULL);
 }

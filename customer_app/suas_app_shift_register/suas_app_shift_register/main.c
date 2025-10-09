@@ -9,6 +9,17 @@
 // 74HC595 library
 #include <suas_74hc595.h>
 
+/* Connection setup
+    744hc595  PineCone
+    VCC       3V3
+    GND       GND
+    OE        0
+    DS        1
+    SHCP      2
+    STCP      3
+    MR     4
+*/
+
 void bfl_main(void)
 {
   /* Initialize UART
@@ -20,7 +31,8 @@ void bfl_main(void)
 
   hal_hwtimer_init();
 
-  struct config_74hc595 sr_config = {
+  // Configure shift register
+  suas_74hc595_conf_t sr_config = {
       .with_output_enable = 1,
       .pin_output_enable = 0,
       .pin_data_signal = 1,
@@ -30,11 +42,12 @@ void bfl_main(void)
       .pin_master_reset = 4,
       .number_of_registers = 2};
 
-  suas_configure_74hc595(&sr_config);
+  suas_74hc595_config(&sr_config);
 
+  // Shift out data
   for (uint8_t i = 0; i < 129; i++)
   {
     bl_timer_delay_us(1 * 1000 * 1000);
-    suas_store_data_74hc595(&sr_config, i);
+    suas_74hc595_store(&sr_config, i);
   }
 }

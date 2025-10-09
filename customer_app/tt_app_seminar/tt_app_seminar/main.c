@@ -11,6 +11,14 @@
 #define TCP_STACK_SIZE    1024
 #define HTTP_STACK_SIZE   768
 
+/* Connection setup
+    DLS     PineCone
+    GND     GND
+    VCC     3V3
+    SCL     IO4
+    SDA     IO3
+*/
+
 /* main function, execution starts here */
 void bfl_main(void)
 {

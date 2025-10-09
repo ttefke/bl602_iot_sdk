@@ -19,12 +19,12 @@ void task_grove_dls([[gnu::unused]] void *pvParameters) {
 
     printf("Initializing Grove Digital Light Sensor\r\n");
 
-    if (suas_init_grove_dls() != 0) {
+    if (suas_dls_init() != 0) {
 #ifdef REBOOT_ON_EXCEPTION
         bl_sys_reset_system();
 #else
         // retry once if initialization fails
-        suas_init_grove_dls();
+        suas_dls_init();
 #endif
     }
     
@@ -33,7 +33,7 @@ void task_grove_dls([[gnu::unused]] void *pvParameters) {
 
     // endless loop to get data twice per second
     while (1) {
-        lux = suas_read_visible_lux();
+        lux = suas_dls_read_visible_lux();
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 

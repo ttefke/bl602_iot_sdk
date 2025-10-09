@@ -15,7 +15,7 @@ void task_adc([[gnu::unused]] void *pvParameters)
   printf("ADC task started\r\n");
 
   // Create ADC configuration
-  adc_conf_t conf = {
+  suas_adc_conf_t conf = {
     .pin = 5,
     .conversion_mode = NORMAL_ADC_CONVERSION_MODE,
     .number_of_samples = 50,
@@ -23,7 +23,7 @@ void task_adc([[gnu::unused]] void *pvParameters)
   };
   
   // Set GPIO pin for ADC. You can change this to any pin that supports ADC and has a sensor connected.
-  int result = suas_init_adc(&conf);
+  int result = suas_adc_init(&conf);
   if (result != 0) {
     printf("ADC initialization failed, exiting\r\n");
     vTaskDelete(NULL);
@@ -34,7 +34,7 @@ void task_adc([[gnu::unused]] void *pvParameters)
     
     // Print current ADC values every second
     while (1) {
-      printf("Current value of digitized analog signal: %"PRIu32"\r\n", suas_read_adc(&conf));
+      printf("Current value of digitized analog signal: %"PRIu32"\r\n", suas_adc_read(&conf));
       vTaskDelay(pdMS_TO_TICKS(1000));
     } 
     

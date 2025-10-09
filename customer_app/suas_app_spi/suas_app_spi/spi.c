@@ -38,7 +38,7 @@ static uint8_t allowed_cards[5][MAX_CARD_LEN] = {
 };
 
 // Check if the card is in the list of allowed cards
-static bool is_card_allowed(uid_t card) {
+static bool is_card_allowed(suas_rfc_uid_t card) {
     // Iterates over all cards
     for (uint8_t i = 0; i < sizeof(allowed_cards) / MAX_CARD_LEN; i++) {
         // Iterate over the individual bytes of each card
@@ -77,7 +77,7 @@ void spi_proc([[gnu::unused]] void *pvParameters) {
                 printf("Card is present: ");
 
                 // Get id stored on the card and show it
-                uid_t card_data = suas_get_uid();
+                suas_rfc_uid_t card_data = suas_rfid_get_uid();
                 for (uint8_t i = 0; i < card_data.size; i++) {
                     printf("%02x", card_data.uid_byte[i]);
                 }

@@ -11,11 +11,18 @@
 #define DATA_PIN 2 // GPIO pin used to connect to DHT22
 #define DHT22_STACK_SIZE 256
 
+/* Connection setup
+    DHT22   PineCone
+    GND     GND
+    VCC     3V3
+    DATA    IO2
+*/
+
 void task_dht22([[gnu::unused]] void *pvParameters) {
     while (1) {
-        printf("Current temperature: %.1f\r\n", suas_get_temperature(DATA_PIN));
+        printf("Current temperature: %.1f\r\n", suas_dht22_get_temperature(DATA_PIN));
         vTaskDelay(pdMS_TO_TICKS(2500));
-        printf("Current humidity: %.1f\r\n", suas_get_humidity(DATA_PIN));
+        printf("Current humidity: %.1f\r\n", suas_dht22_get_humidity(DATA_PIN));
         vTaskDelay(pdMS_TO_TICKS(2500));
     }
 

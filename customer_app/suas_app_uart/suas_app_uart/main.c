@@ -14,10 +14,19 @@
 // Sensor stack size
 #define SENSOR_STACK_SIZE 256
 
+/* Connection setup
+    mmWave  PineCone
+    GND     GND
+    VCC     3V3
+    TX      IO4
+    RX      IO3    
+*/
+
+
 void read_sensor([[gnu::unused]] void *pvParameters)
 {
   /* Initialize sensor */
-  suas_init_mmwave();
+  suas_mmwave_init();
 
   /* Read sensor */
   while (1) {

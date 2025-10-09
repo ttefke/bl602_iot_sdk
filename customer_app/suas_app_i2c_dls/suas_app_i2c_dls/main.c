@@ -13,6 +13,14 @@
 
 #define GROVE_STACK_SIZE 512
 
+/* Connection setup
+    DLS     PineCone
+    GND     GND
+    VCC     3V3
+    SCL     IO4
+    SDA     IO3
+*/
+
 // Function implementing the task to query sensor regularly
 void grove_handler([[gnu::unused]] void *pvParameters) {
     // Set up real-time looping to listen for hardware events (separate thread)
@@ -24,14 +32,14 @@ void grove_handler([[gnu::unused]] void *pvParameters) {
 
     // Initialize sensor (see separate function below)
     printf("Initializing Grove Digital Light Sensor V1.1\r\n");
-    suas_init_grove_dls();
+    suas_dls_init();
 
     // Constantly get data and print it (see function definitions below)
     while (1) {
         printf("========================================\r\n");
-        printf("IR luminosity: %d\r\n", suas_read_ir_luminosity());
-        printf("Full spectrum luminosity: %d\r\n", suas_read_fs_luminosity());
-        printf("Visible Lux: %ld\r\n", suas_read_visible_lux());
+        printf("IR luminosity: %d\r\n", suas_dls_read_ir());
+        printf("Full spectrum luminosity: %d\r\n", suas_dls_read_fs());
+        printf("Visible Lux: %ld\r\n", suas_dls_read_visible_lux());
         vTaskDelay(pdMS_TO_TICKS(5000));
     }
 

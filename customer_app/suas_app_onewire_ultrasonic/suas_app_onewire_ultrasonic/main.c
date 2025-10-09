@@ -14,12 +14,19 @@
 #define DATA_PIN 2 // GPIO pin used to connect to Ultrasonic ranger
 #define ULTRASONIC_STACK_SIZE 256
 
+/* Connection setup
+    Sensor  PineCone
+    GND     GND
+    VCC     3V3
+    DATA    IO2
+*/
+
 // Task that regularly queries the sensor
 void task_dht_ultrasonic([[gnu::unused]] void *pvParameters) {
     while (1) {
-        printf("Distance: %"PRIu32" cm, ", suas_measure_in_centimeters(DATA_PIN));
+        printf("Distance: %"PRIu32" cm, ", suas_ultrasonic_measure_in_centimeters(DATA_PIN));
         vTaskDelay(pdMS_TO_TICKS(200));
-        printf("%"PRIu32" mm\r\n", suas_measure_in_millimeters(DATA_PIN));
+        printf("%"PRIu32" mm\r\n", suas_ultrasonic_measure_in_millimeters(DATA_PIN));
         vTaskDelay(pdMS_TO_TICKS(200));
     }
 

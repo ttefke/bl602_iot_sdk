@@ -1,4 +1,4 @@
-PROJECT_NAME := suas_app_dht22
+PROJECT_NAME := suas_app_onewire_ultrasonic
 PROJECT_PATH := $(abspath .)
 PROJECT_BOARD := evb
 export PROJECT_PATH PROJECT_BOARD

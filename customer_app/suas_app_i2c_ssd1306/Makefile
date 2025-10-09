@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := suas_app_i2c
+PROJECT_NAME := suas_app_i2c_ssd1306
 PROJECT_PATH := $(abspath .)
 PROJECT_BOARD := evb
 export PROJECT_PATH PROJECT_BOARD

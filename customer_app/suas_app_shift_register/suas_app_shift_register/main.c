@@ -7,7 +7,7 @@
 #include <bl_timer.h>
 
 // 74HC595 library
-#include <74hc595.h>
+#include <suas_74hc595.h>
 
 void bfl_main(void)
 {

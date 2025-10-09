@@ -1,4 +1,4 @@
-PROJECT_NAME := suas_app_led_pwm
+PROJECT_NAME := suas_app_pwm_led
 PROJECT_PATH := $(abspath .)
 PROJECT_BOARD := evb
 export PROJECT_PATH PROJECT_BOARD
@@ -12,7 +12,7 @@ endif
 COMPONENTS_BLSYS   := bltime blfdt blmtd bloop loopadc looprt loopset
 COMPONENTS_VFS     := romfs
 
-INCLUDE_COMPONENTS += freertos bl602 bl602_std hal_drv vfs yloop utils cli blog blog_testc
+INCLUDE_COMPONENTS += freertos bl602 bl602_std hal_drv vfs yloop utils cli blog blog_testc suas_drivers
 INCLUDE_COMPONENTS += $(COMPONENTS_BLSYS)
 INCLUDE_COMPONENTS += $(COMPONENTS_VFS)
 INCLUDE_COMPONENTS += $(PROJECT_NAME)

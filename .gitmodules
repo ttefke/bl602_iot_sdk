@@ -11,3 +11,6 @@
 [submodule "components/3rdparty/suas_drivers"]
 	path = components/3rdparty/suas_drivers
 	url = git@github.com:ttefke/bl602_suas_drivers.git
+[submodule "components/3rdparty/etl"]
+	path = components/3rdparty/etl
+	url = git@github.com:ttefke/etl.git

@@ -104,11 +104,10 @@ int ble_blf_recv([[gnu::unused]] struct bt_conn *conn,
     [[gnu::unused]] const struct bt_gatt_attr *attr, const void *buf,
     u16_t len, [[gnu::unused]] u16_t offset, [[gnu::unused]] u8_t flags)
 {
-    // Allocate storage to hold received data
-    uint8_t *recv_buffer;
-    recv_buffer = pvPortMalloc(sizeof(uint8_t) * len);
+    // Get storage to hold received data
+    uint8_t recv_buffer[len];
 
-    // Copy received data to allocated storage
+    // Copy received data to storage
     memcpy(recv_buffer, buf, len);
 
     // Print received data byte-wise, interpreted as character
@@ -117,9 +116,6 @@ int ble_blf_recv([[gnu::unused]] struct bt_conn *conn,
         printf("%c", recv_buffer[i]);
     }
     printf("'\r\n");
-
-    // Free data structure and return
-    vPortFree(recv_buffer);
     return 0;
 }
 

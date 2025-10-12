@@ -6,7 +6,6 @@ digraph {
     subgraph cluster_main {
         label="main.c";
         main [label="bfl_main()\nProgram entry"];
-        keep_alive_entry [label="keep_alive_entry()\nKeep-Alive thread"];
         aos_loop_proc [label="aos_loop_proc()\r\nEvent thread"];
         event_cb_key_event [label="event_cb_key_event()\nKey callback function"];
         event_cb_ble_event [label="event_cb_ble_event()\nBLE event callback function"];
@@ -46,7 +45,6 @@ digraph {
         "Provides functions linked into the application:\nuser_vAssertCalled()\nvAssertCalled()\nvApplicationGetIdleTaskMemory()\nvApplicationGetTimerTaskMemory()\nvApplicationIdleHook()\nvApplicationMallocFailedHook()\nvApplicationStackOverflowHook()" [labeljust=l,shape=rect];
     }
 
-    main -> keep_alive_entry [label="Creates task",style="dashed"];
     main -> aos_loop_proc [label="Creates task",style="dashed"];
     aos_loop_proc -> event_cb_key_event [label="Register callback", style="dashed"];
     aos_loop_proc -> event_cb_ble_event [label="Register callback", style="dashed"];

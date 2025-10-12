@@ -11,9 +11,13 @@ export PROJECT_PATH PROJECT_BOARD
 
 -include ./proj_config.mk
 
-CFLAGS += -DLWIP_HTTPD_CUSTOM_FILES=1
-CFLAGS += -DLWIP_HTTPD_DYNAMIC_HEADERS=1
-CFLAGS += -DLWIP_HTTPD_CGI=1
+NETWORK_FLAGS := -DLWIP_HTTPD_CUSTOM_FILES=1 \
+	-DLWIP_HTTPD_DYNAMIC_HEADERS=1 \
+	-DLWIP_HTTPD_CGI=1
+
+CFLAGS += $(NETWORK_FLAGS)
+CPPFLAGS += $(NETWORK_FLAGS)
+CXXFLAGS += $(NETWORK_FLAGS)
 
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)
@@ -22,7 +26,7 @@ endif
 COMPONENTS_NETWORK := sntp dns_server
 COMPONENTS_BLSYS   := bltime blfdt blmtd blota bloop loopadc looprt loopset
 COMPONENTS_VFS     := romfs
-COMPONENTS_UTILS   := cjson
+COMPONENTS_UTILS   := cjson etl
 
 INCLUDE_COMPONENTS += freertos bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd vfs yloop utils cli httpc netutils blog blog_testc
 INCLUDE_COMPONENTS += easyflash4 mbedtls-bl602

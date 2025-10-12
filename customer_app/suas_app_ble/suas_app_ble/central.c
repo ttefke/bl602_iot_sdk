@@ -54,8 +54,7 @@ uint8_t ble_central_notify_function([[gnu::unused]] struct bt_conn *conn,
     /* Print received message */
     if (length > 0) {
         // Create buffer
-        uint8_t *recv_buffer;
-        recv_buffer = pvPortMalloc(sizeof(uint8_t) * length);
+        uint8_t recv_buffer[length];
 
         // Copy message into buffer
         memcpy(recv_buffer, data, length);
@@ -65,9 +64,6 @@ uint8_t ble_central_notify_function([[gnu::unused]] struct bt_conn *conn,
         for (uint16_t i = 0; i < length; i++) {
             printf("%c", recv_buffer[i]);
         }
-
-        // Free allocated data
-        vPortFree(recv_buffer);
         printf("'\r\n");
     }
 
@@ -102,8 +98,8 @@ void ble_central_exchange_mtu() {
 
 // Discover offered services
 uint8_t ble_central_discovery_function(struct bt_conn *conn,
-    const struct bt_gatt_attr *attr, struct bt_gatt_discover_params *params) {
-    
+    const struct bt_gatt_attr *attr, struct bt_gatt_discover_params *params)
+{    
     int err;
 
     // Empty attribute table
@@ -189,7 +185,6 @@ void ble_central_connected(struct bt_conn *conn, uint8_t conn_err) {
 
     // Post event to message broker
     aos_post_event(EV_BLE_TEST, BLE_DEV_CONN, NULL);
-
 
     // Check if the device we connected to is the same as
     // device whose advertisement packets we used to instanciate the connection

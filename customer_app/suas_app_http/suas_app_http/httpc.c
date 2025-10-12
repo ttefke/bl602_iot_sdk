@@ -20,12 +20,9 @@ static void cb_httpc_result(void *arg, httpc_result_t httpc_result,
 {
     httpc_state_t **req = (httpc_state_t **)arg;
 
-    if (httpc_result == HTTPC_RESULT_OK)
-    {
+    if (httpc_result == HTTPC_RESULT_OK) {
         printf("[HTTPC] Data transfer finished successfully\r\n");
-    }
-    else
-    {
+    } else {
         printf("[HTTPC] Data transfer failed.\r\n");
     }
 
@@ -49,8 +46,8 @@ static err_t cb_altcp_recv_fn([[gnu::unused]] void *arg,
     1 packet only. Must be modified to receive multiple packets. 
     See lwip/src/include/lwip/pbuf.h*/
 
-    // 1. Allocate memory for response
-    char *response = (char*) calloc(p->tot_len, sizeof(char));
+    // 1. Create buffer for response
+    char response[p->tot_len];
 
     // 2. Copy respoinse into own data structure
     strncpy(response, p->payload, p->tot_len);
@@ -63,8 +60,6 @@ static err_t cb_altcp_recv_fn([[gnu::unused]] void *arg,
     // 4. Cleanup data structures
     altcp_recved(conn, p->tot_len);
     pbuf_free(p);
-    free(response);
-    response = NULL;
 
     // 5. Return result (no errors here)
     return ERR_OK;

@@ -1,27 +1,30 @@
-// FreeRTOS includes
-#include <FreeRTOS.h>
-#include <task.h>
+extern "C" {
+  // FreeRTOS includes
+  #include <FreeRTOS.h>
+  #include <task.h>
 
-// lwIP includes
-#include <lwip/apps/httpd.h>
-#include <lwip/apps/fs.h>
-#include <lwip/mem.h>
+  // lwIP includes
+  #include <lwip/apps/httpd.h>
+  #include <lwip/apps/fs.h>
+  #include <lwip/mem.h>
 
-// Standard library
-#include <stdio.h>
-#include <string.h>
+  // Standard library
+  #include <stdio.h>
+  #include <string.h>
 
-// Own header
-#include "httpd.h"
+  // Own header
+  #include "httpd.h"
+}
+
+#include <etl/memory.h>
 
 /* Opening (creating) the in real-time created file (page) */
-int fs_open_custom(struct fs_file *file, const char *name)
+extern "C" int fs_open_custom(struct fs_file *file, const char *name)
 {
     /* 1. Check if this is the supported custom endpoint 
         You can use multiple comparisons to set up multiple endpoints
         (see LED server example) */
-    if (strcmp(name, CUSTOM_ENDPOINT) != 0)
-    {
+    if (strcmp(name, CUSTOM_ENDPOINT) != 0) {
         return 0;
     }
 
@@ -31,11 +34,17 @@ int fs_open_custom(struct fs_file *file, const char *name)
 
     /* 3. Allocate memory */
     memset(file, 0, sizeof(struct fs_file));
-    file->pextension = mem_malloc(response_size);
-    if (file->pextension != NULL)
-    {
-        /* Copy data to output data structure */
-        memcpy(file->pextension, response, response_size);
+    
+    // Copy response into response buffer
+    auto data = etl::unique_ptr<char[]>(new char[response_size]);
+    memset(data.get(), 0, response_size);
+    memcpy(data.get(), response, response_size);
+
+    // Note: This creates a raw pointer from the smart pointer
+    // We must delete that one manually!
+    file->pextension = data.release();
+
+    if (file->pextension != nullptr) {
         file->data = (const char *)file->pextension;
         file->len = response_size;
         file->index = file->len;
@@ -45,37 +54,28 @@ int fs_open_custom(struct fs_file *file, const char *name)
     }
 
     /* 4. Return whether data was sent */
-    if (file->pextension != NULL)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+    return file->pextension != nullptr;
 }
 
 /* Close the custom file (free the memory) */
-void fs_close_custom(struct fs_file *file)
+extern "C" void fs_close_custom(struct fs_file *file)
 {
   if (file && file->pextension)
   {
-    mem_free(file->pextension);
-    file->pextension = NULL;
+    delete[] static_cast<char*>(file->pextension);
+    file->pextension = nullptr;
   }
 }
 
 /* Read the custom file (nothing has to be done here, but function must be defined */
-int fs_read_custom(struct fs_file *file, char *buffer, int count)
+extern "C" int fs_read_custom([[gnu::unused]] struct fs_file *file,
+  [[gnu::unused]] char *buffer, [[gnu::unused]] int count)
 {
-  LWIP_UNUSED_ARG(file);
-  LWIP_UNUSED_ARG(buffer);
-  LWIP_UNUSED_ARG(count);
   return FS_READ_EOF;
 }
 
 /* HTTP server task */
-void task_httpd([[gnu::unused]] void *pvParameters)
+extern "C" void task_httpd([[gnu::unused]] void *pvParameters)
 {
   // Start HTTP server
   printf("[HTTPD] Starting server\r\n");

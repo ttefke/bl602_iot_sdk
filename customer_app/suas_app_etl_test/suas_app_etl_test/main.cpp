@@ -55,29 +55,46 @@ void example_vector() {
 /* Smart pointer example */
 struct SmartPointerExample {
   SmartPointerExample(int i) : value(i) {
-    printf("Smart pointer constructed\r\n");
+    printf("Smart pointer %d constructed\r\n", value);
   }
-  ~SmartPointerExample() { printf("Smart pointer destroyed\r\n"); }
+  ~SmartPointerExample() { printf("Smart pointer %d destroyed\r\n", value); }
   int value;
 };
 
-void example_pointer() {
-  etl::unique_ptr<SmartPointerExample> ptr(new SmartPointerExample(42));
-  printf("Smart pointer value: %d\r\n", ptr->value);
+etl::unique_ptr<SmartPointerExample> example_pointer() {
+  // Create a smart pointer that only lives within this function
+  etl::unique_ptr<SmartPointerExample> ptr1(new SmartPointerExample(1));
+  printf("Smart pointer 1 value: %d\r\n", ptr1->value);
+
+  // Create a smart pointer that is returned (and transferred)
+  etl::unique_ptr<SmartPointerExample> ptr2(new SmartPointerExample(2));
+  printf("Smart pointer 2 value: %d\r\n", ptr2->value);
 
   // Transfer ownership
-  etl::unique_ptr<SmartPointerExample> ptr2 = etl::move(ptr);
-  if (!ptr) {
-    printf("Original pointer is now null!\r\n");
+  etl::unique_ptr<SmartPointerExample> ptr3 = etl::move(ptr2);
+  if (!ptr2) {
+    printf("Original pointer 2 is now null\r\n");
   }
+
+  return etl::move(ptr3);
 }
 
 void examples([[gnu::unused]] void *pvParameters) {
-  example_string();
-  example_array();
-  example_vector();
-  example_pointer();
+  // We need to put the code into curly braces here.
+  // When the task exists, vTaskDelete is called and it deletes the current task
+  // immediately. The stack may is reclaimed before local variables go out of
+  // scope. This would prevent the smart pointer from being freed.We have to add
+  // the curly braces here to ensure the smart pointer goes out of scope before
+  // calling vTaskDelete so that it is freed properly.
+  {
+    example_string();
+    example_array();
+    example_vector();
 
+    auto smartPointer = example_pointer();
+    printf("Smart pointer value in calling function: %d\r\n",
+           smartPointer->value);
+  }
   /* End task */
   vTaskDelete(nullptr);
 }

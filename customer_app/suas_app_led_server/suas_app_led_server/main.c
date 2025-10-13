@@ -17,12 +17,11 @@
 // LED state
 struct led_state led_state;
 
-#define WIFI_STACK_SIZE   1024
-#define HTTPD_STACK_SIZE  512
+#define WIFI_STACK_SIZE 1024
+#define HTTPD_STACK_SIZE 512
 
 /* main function, execution starts here */
-void bfl_main(void)
-{
+void bfl_main(void) {
   /* Define information containers for tasks */
   static StackType_t wifi_stack[WIFI_STACK_SIZE];
   static StaticTask_t wifi_task;
@@ -47,11 +46,13 @@ void bfl_main(void)
   /* Start tasks */
   printf("[SYSTEM] Starting httpd task\r\n");
   extern void task_httpd(void *pvParameters);
-  xTaskCreateStatic(task_httpd, (char *)"httpd", HTTPD_STACK_SIZE, NULL, 10, httpd_stack, &httpd_task);
+  xTaskCreateStatic(task_httpd, (char *)"httpd", HTTPD_STACK_SIZE, NULL, 10,
+                    httpd_stack, &httpd_task);
 
   printf("[SYSTEM] Starting WiFi task\r\n");
   extern void task_wifi(void *pvParameters);
-  xTaskCreateStatic(task_wifi, (char *)"wifi", WIFI_STACK_SIZE, NULL, 16, wifi_stack, &wifi_task);
+  xTaskCreateStatic(task_wifi, (char *)"wifi", WIFI_STACK_SIZE, NULL, 16,
+                    wifi_stack, &wifi_task);
 
   /* Start TCP/IP stack */
   printf("[SYSTEM] Starting TCP/IP stack\r\n");

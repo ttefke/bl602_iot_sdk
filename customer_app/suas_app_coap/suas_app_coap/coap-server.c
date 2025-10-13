@@ -13,8 +13,9 @@
 
 // CoAP includes
 #include <coap3/coap.h>
-#include "include/coap-log.h"
+
 #include "include/coap-common.h"
+#include "include/coap-log.h"
 #include "include/coap-server.h"
 
 // Local variable to store coap state information
@@ -22,9 +23,10 @@ static coap_context_t *main_coap_context;
 
 // Resource handler: generate random number and return it
 void handler_random([[gnu::unused]] coap_resource_t *resource,
-  [[gnu::unused]] coap_session_t *session, [[gnu::unused]] const coap_pdu_t *request,
-  [[gnu::unused]] const coap_string_t *query,
-  coap_pdu_t *response) {
+                    [[gnu::unused]] coap_session_t *session,
+                    [[gnu::unused]] const coap_pdu_t *request,
+                    [[gnu::unused]] const coap_string_t *query,
+                    coap_pdu_t *response) {
   // 0. Create variable: buffer to hold response data
   unsigned char buf[30];
 
@@ -32,14 +34,15 @@ void handler_random([[gnu::unused]] coap_resource_t *resource,
   coap_pdu_set_code(response, COAP_RESPONSE_CODE(205));
 
   // 2. Set response content format
-  coap_add_option(response, COAP_OPTION_CONTENT_FORMAT,
-    coap_encode_var_safe(buf, sizeof(buf), COAP_MEDIATYPE_TEXT_PLAIN), buf);
+  coap_add_option(
+      response, COAP_OPTION_CONTENT_FORMAT,
+      coap_encode_var_safe(buf, sizeof(buf), COAP_MEDIATYPE_TEXT_PLAIN), buf);
 
   // 3. Generate random number
   uint32_t random = bl_sec_get_random_word();
 
   // 4. Get string length of random number
-  size_t len = snprintf((char *) buf, sizeof(buf), "%u", (unsigned int) random);
+  size_t len = snprintf((char *)buf, sizeof(buf), "%u", (unsigned int)random);
 
   // 5. Add random number to response
   coap_add_data(response, len, buf);
@@ -68,7 +71,7 @@ void server_coap_init() {
   coap_dtls_spsk_t server_coaps_data;
   memset(&server_coaps_data, 0, sizeof(server_coaps_data));
   server_coaps_data.version = COAP_DTLS_SPSK_SETUP_VERSION;
-  server_coaps_data.psk_info.key.s = (const uint8_t *) COAPS_PSK;
+  server_coaps_data.psk_info.key.s = (const uint8_t *)COAPS_PSK;
   server_coaps_data.psk_info.key.length = strlen(COAPS_PSK);
   coap_context_set_psk2(main_coap_context, &server_coaps_data);
 #endif
@@ -77,51 +80,50 @@ void server_coap_init() {
   coap_context_set_keepalive(main_coap_context, 60);
 
   // 5. Set connection schemes
-  uint32_t schemes =
-    coap_get_available_scheme_hint_bits(
+  uint32_t schemes = coap_get_available_scheme_hint_bits(
 #ifdef WITH_COAPS
       /* Use PSK */ 1,
 #else
       /* Use PSK */ 0,
 #endif
       /* Enable Websockets */ 0,
-      /* IP sockets */ COAP_PROTO_NONE
-  );
+      /* IP sockets */ COAP_PROTO_NONE);
 
   // 6. Set IP address to listen to (listen on all interfaces)
   const uint8_t ip_address[] = "0.0.0.0";
-  coap_str_const_t ip_address_info = { strlen((char*)ip_address), ip_address };
+  coap_str_const_t ip_address_info = {strlen((char *)ip_address), ip_address};
 
   // 7. Create server properties container
-  coap_addr_info_t *info_list = coap_resolve_address_info (
-    /* Address to resolve */ &ip_address_info,
-    /* CoAP port */ 5683,
+  coap_addr_info_t *info_list = coap_resolve_address_info(
+      /* Address to resolve */ &ip_address_info,
+      /* CoAP port */ 5683,
 #ifdef WITH_COAPS
-    /* CoAPs port */ 5684,
+      /* CoAPs port */ 5684,
 #else
-    /* CoAPs port */ 0,
+      /* CoAPs port */ 0,
 #endif
-    /* WS port */ 0,
-    /* WSS port */ 0,
-    /* Additional IP address flags */ 0,
-    /* Supported URI schemes */ schemes,
-    /* Connection type */ COAP_RESOLVE_TYPE_REMOTE
-  );
+      /* WS port */ 0,
+      /* WSS port */ 0,
+      /* Additional IP address flags */ 0,
+      /* Supported URI schemes */ schemes,
+      /* Connection type */ COAP_RESOLVE_TYPE_REMOTE);
 
   // 8. Register CoAP endpoint on all interfaces
   for (coap_addr_info_t *info = info_list; info != NULL; info = info->next) {
-    coap_endpoint_t *ep = coap_new_endpoint(main_coap_context, &info->addr, info->proto);
+    coap_endpoint_t *ep =
+        coap_new_endpoint(main_coap_context, &info->addr, info->proto);
     LWIP_ASSERT("Failed to initiialize context", ep != NULL);
   }
 
   // 9. Deallocate server properties container
   coap_free_address_info(info_list);
 
-  //10. Limit number of idle connections (this is strictly required!)
+  // 10. Limit number of idle connections (this is strictly required!)
 #if MEMP_NUM_COAPSESSION < 2
 #error Insufficient amount of possible sessions, need at least two!
 #else
-  coap_context_set_max_idle_sessions(main_coap_context, MEMP_NUM_COAPSESSION -1);
+  coap_context_set_max_idle_sessions(main_coap_context,
+                                     MEMP_NUM_COAPSESSION - 1);
 #endif
 
   // 11. Initialize resource
@@ -131,7 +133,7 @@ void server_coap_init() {
   if (!r) {
     goto error;
   }
-  
+
   // 12. Register handler
   coap_register_handler(r, COAP_REQUEST_GET, handler_random);
 

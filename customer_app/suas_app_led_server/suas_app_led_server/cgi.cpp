@@ -1,39 +1,33 @@
 /*
- * Implementation of CGI handlers and adoption of generated JSON to sensors use case.
+ * Implementation of CGI handlers and adoption of generated JSON to sensors use
+ * case.
  */
 
 extern "C" {
-  #include "lwip/apps/httpd.h"
-  #include "lwip/opt.h"
+#include "cgi.h"
 
-  #include "lwip/apps/fs.h"
-  #include "lwip/def.h"
-  #include "lwip/mem.h"
+#include <bl_gpio.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-  #include <stdio.h>
-  #include <inttypes.h>
-
-  #include <stdlib.h>
-  #include <string.h>
-
-  #include <bl_gpio.h>
-
-  #include "cJSON.h"
-
-  #include "cgi.h"
-  #include "leds.h"
+#include "cJSON.h"
+#include "leds.h"
+#include "lwip/apps/fs.h"
+#include "lwip/apps/httpd.h"
+#include "lwip/def.h"
+#include "lwip/mem.h"
+#include "lwip/opt.h"
 }
 
 #include <etl/memory.h>
 
 // Prototype
-static const char *
-cgi_handler_led(int iIndex, int iNumParams,
-  char *pcParam[], char *pcValue[]);
+static const char *cgi_handler_led(int iIndex, int iNumParams, char *pcParam[],
+                                   char *pcValue[]);
 
-static const tCGI cgi_handlers[] = {
-    {SET_LED_ENDPOINT,
-     cgi_handler_led}};
+static const tCGI cgi_handlers[] = {{SET_LED_ENDPOINT, cgi_handler_led}};
 
 // Custom deleter for cJSON data structures
 struct cJSONDeleter {
@@ -44,11 +38,10 @@ struct cJSONDeleter {
   }
 };
 
-static const char *
-cgi_handler_led(int iIndex, int iNumParams,
-  char *pcParam[], char *pcValue[])
-{
-  printf("iIndex: %d, iNumParams: %d, pcParam: %s, pcValue: %s\r\n", iIndex, iNumParams, pcParam[0], pcValue[0]);
+static const char *cgi_handler_led(int iIndex, int iNumParams, char *pcParam[],
+                                   char *pcValue[]) {
+  printf("iIndex: %d, iNumParams: %d, pcParam: %s, pcValue: %s\r\n", iIndex,
+         iNumParams, pcParam[0], pcValue[0]);
   if (iNumParams == 2) {
     enum selected_led led;
     uint8_t state;
@@ -83,17 +76,17 @@ cgi_handler_led(int iIndex, int iNumParams,
 
       // Change led state
       switch (led) {
-      case LED_RED:
-        led_state.state_led_red = state;
-        break;
-      case LED_GREEN:
-        led_state.state_led_green = state;
-        break;
-      case LED_BLUE:
-        led_state.state_led_blue = state;
-        break;
-      default:
-        printf("Invalid LED selected");
+        case LED_RED:
+          led_state.state_led_red = state;
+          break;
+        case LED_GREEN:
+          led_state.state_led_green = state;
+          break;
+        case LED_BLUE:
+          led_state.state_led_blue = state;
+          break;
+        default:
+          printf("Invalid LED selected");
       }
 
       printf("State: %d\r\n", state);
@@ -113,37 +106,46 @@ cgi_handler_led(int iIndex, int iNumParams,
 extern "C" int fs_open_custom(struct fs_file *file, const char *name) {
   // Pointer to response object
   etl::unique_ptr<char[]> response;
-  
+
   // Match response endpoints
-  if (!strcmp(name, LED_ENDPOINT))
-  {
+  if (!strcmp(name, LED_ENDPOINT)) {
     // Initialize response: up to 350 chars
     response.reset(new char[350]);
     memset(response.get(), 0, 350);
     /* Show links to control LEDs */
     if (led_state.state_led_red == LED_OFF) {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT "?led=red&state=1\">Turn on red LED</a></br>");
+      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
+                             "?led=red&state=1\">Turn on red LED</a></br>");
     } else {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT "?led=red&state=0\">Turn off red LED</a></br>");
+      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
+                             "?led=red&state=0\">Turn off red LED</a></br>");
     }
 
     if (led_state.state_led_green == LED_OFF) {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT "?led=green&state=1\">Turn on green LED</a></br>");
+      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
+                             "?led=green&state=1\">Turn on green LED</a></br>");
     } else {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT "?led=green&state=0\">Turn off green LED</a></br>");
+      strcat(response.get(),
+             "<a href=\"" SET_LED_ENDPOINT
+             "?led=green&state=0\">Turn off green LED</a></br>");
     }
 
     if (led_state.state_led_blue == LED_OFF) {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT "?led=blue&state=1\">Turn on blue LED</a></br>");
+      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
+                             "?led=blue&state=1\">Turn on blue LED</a></br>");
     } else {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT "?led=blue&state=0\">Turn off blue LED</a></br>");
+      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
+                             "?led=blue&state=0\">Turn off blue LED</a></br>");
     }
   } else if (!strcmp(name, GET_LED_STATUS_ENDPOINT)) {
     // Initialize cJSON response
     etl::unique_ptr<cJSON, cJSONDeleter> json_response(cJSON_CreateObject());
-    cJSON_AddNumberToObject(json_response.get(), "led_red", led_state.state_led_red);
-    cJSON_AddNumberToObject(json_response.get(), "led_green", led_state.state_led_green);
-    cJSON_AddNumberToObject(json_response.get(), "led_blue", led_state.state_led_blue);
+    cJSON_AddNumberToObject(json_response.get(), "led_red",
+                            led_state.state_led_red);
+    cJSON_AddNumberToObject(json_response.get(), "led_green",
+                            led_state.state_led_green);
+    cJSON_AddNumberToObject(json_response.get(), "led_blue",
+                            led_state.state_led_blue);
 
     // Reponse is now the formatted JSON string
     response.reset(cJSON_PrintUnformatted(json_response.get()));
@@ -159,7 +161,7 @@ extern "C" int fs_open_custom(struct fs_file *file, const char *name) {
   memset(file, 0, sizeof(struct fs_file));
 
   /* copy response to file handler */
-  /* NOTE: The smart pointer is a raw pointer now! 
+  /* NOTE: The smart pointer is a raw pointer now!
   We must delete it in the close function */
   file->pextension = response.release();
 
@@ -179,27 +181,26 @@ extern "C" int fs_open_custom(struct fs_file *file, const char *name) {
 /* closing the custom file (nothing to do) */
 extern "C" void fs_close_custom(struct fs_file *file) {
   if (file && file->pextension) {
-    delete[] static_cast<char*>(file->pextension);
+    delete[] static_cast<char *>(file->pextension);
     file->pextension = nullptr;
   }
 }
 
-/* reading the custom file (nothing has to be done here, but function must be defined */
+/* reading the custom file (nothing has to be done here, but function must be
+ * defined */
 extern "C" int fs_read_custom([[gnu::unused]] struct fs_file *file,
-  [[gnu::unused]] char *buffer, [[gnu::unused]] int count)
-{
+                              [[gnu::unused]] char *buffer,
+                              [[gnu::unused]] int count) {
   return FS_READ_EOF;
 }
 
 /* initialization functions */
-extern "C" void custom_files_init(void)
-{
+extern "C" void custom_files_init(void) {
   printf("Initializing module for generating JSON output\r\n");
   /* Nothing to do as of now, should be initialized automatically */
 }
 
-extern "C" void cgi_init(void)
-{
+extern "C" void cgi_init(void) {
   printf("Initializing module for CGI\r\n");
   http_set_cgi_handlers(cgi_handlers, LWIP_ARRAYSIZE(cgi_handlers));
 }

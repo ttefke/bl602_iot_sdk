@@ -1,29 +1,28 @@
 // Includes
-#include <stdio.h>
+#include "wifi.h"
 
+#include <aos/yloop.h>
 #include <bl_wifi.h>
+#include <blog.h>
+#include <event_device.h>
 #include <hal_board.h>
 #include <hal_button.h>
 #include <hal_gpio.h>
 #include <hal_sys.h>
-#include <hal_wifi.h>
 #include <hal_uart.h>
-
-#include <aos/yloop.h>
-#include <event_device.h>
-#include <blog.h>
+#include <hal_wifi.h>
 #include <libfdt.h>
 #include <looprt.h>
 #include <loopset.h>
+#include <stdio.h>
 #include <vfs.h>
 #include <wifi_mgmr_ext.h>
 
 #include "mqtt.h"
-#include "wifi.h"
 
 /* WiFi configuration */
 static wifi_conf_t conf = {
-  .country_code = "EU",
+    .country_code = "EU",
 };
 
 /* Helper function to read device tree */
@@ -61,8 +60,7 @@ static void _configure_wifi(void) {
 }
 
 /* Connect to a WiFi access point */
-static void _connect_sta_wifi()
-{
+static void _connect_sta_wifi() {
   // Enable station mode
   wifi_interface_t wifi_interface = wifi_mgmr_sta_enable();
 
@@ -75,13 +73,12 @@ static void _connect_sta_wifi()
 }
 
 /* React to WiFi events */
-static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
-{
+static void event_cb_wifi_event(input_event_t *event,
+                                [[gnu::unused]] void *private_data) {
   static char *ssid;
   static char *password;
 
-  switch (event->code)
-  {
+  switch (event->code) {
     case CODE_WIFI_ON_INIT_DONE:
       _configure_wifi();
       break;
@@ -147,7 +144,8 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
 }
 
 /* Listener for key events */
-void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data) {
+void event_cb_key_event(input_event_t *event,
+                        [[gnu::unused]] void *private_data) {
   if (event->code == KEY_3) {
     // Disconnect on long button press
     printf("[MQTT] Disconnecting\r\n");
@@ -180,7 +178,7 @@ void task_wifi([[gnu::unused]] void *pvParameters) {
   }
 
   if (get_dts_addr("gpio", &fdt, &offset) == 0) {
-    fdt_button_module_init((const void *)fdt, (int) offset);
+    fdt_button_module_init((const void *)fdt, (int)offset);
   }
 
   /* Initialize command line */

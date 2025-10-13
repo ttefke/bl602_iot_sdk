@@ -2,15 +2,11 @@
 #define __MAIN_H
 
 // LED pins
-#define LED_BLUE    11
-#define LED_RED     17
-#define LED_GREEN   14
+#define LED_BLUE 11
+#define LED_RED 17
+#define LED_GREEN 14
 
 // Define roles
-enum app_ble_role {
-    UNINITIALIZED = 0,
-    CENTRAL,
-    PERIPHERAL
-};
+enum app_ble_role { UNINITIALIZED = 0, CENTRAL, PERIPHERAL };
 
 #endif

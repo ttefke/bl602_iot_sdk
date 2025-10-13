@@ -5,9 +5,9 @@
 #include <main.h>
 
 // LED GPIO pins
-#define LED_RED_PIN     17
-#define LED_GREEN_PIN   14
-#define LED_BLUE_PIN    11
+#define LED_RED_PIN 17
+#define LED_GREEN_PIN 14
+#define LED_BLUE_PIN 11
 
 // Function prototypes
 void board_init();

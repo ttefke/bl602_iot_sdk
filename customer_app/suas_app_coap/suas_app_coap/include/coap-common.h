@@ -1,7 +1,7 @@
 #ifndef __COAP__COMMON_H
-#define __COAP__COMMON_H// Define URI to request data from
+#define __COAP__COMMON_H  // Define URI to request data from
 #ifdef COAP_URI
-#undef COAP_URI // undefine standard URI
+#undef COAP_URI  // undefine standard URI
 #endif
 
 #ifdef WITH_COAPS

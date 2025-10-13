@@ -10,16 +10,12 @@
 #define LED_OFF 1
 
 /* data structures */
-enum selected_led {
-   LED_RED,
-   LED_GREEN,
-   LED_BLUE
-};
+enum selected_led { LED_RED, LED_GREEN, LED_BLUE };
 
 struct led_state {
-   uint8_t state_led_red;
-   uint8_t state_led_green;
-   uint8_t state_led_blue;
+  uint8_t state_led_red;
+  uint8_t state_led_green;
+  uint8_t state_led_blue;
 };
 
 extern struct led_state led_state;

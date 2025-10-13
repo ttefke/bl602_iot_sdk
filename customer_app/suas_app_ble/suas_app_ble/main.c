@@ -5,7 +5,6 @@
 // BouffaloLabs includes
 #include <bl_dma.h>
 #include <bl_gpio.h>
-
 #include <hal_board.h>
 #include <hal_button.h>
 #include <hal_uart.h>
@@ -16,10 +15,10 @@
 #include <vfs.h>
 
 // AOS real-time loop
-#include <looprt.h>
-#include <loopset.h>
 #include <aos/yloop.h>
 #include <cli.h>
+#include <looprt.h>
+#include <loopset.h>
 
 // Standard input/output
 #include <stdio.h>
@@ -49,7 +48,8 @@ void board_leds_off() {
 }
 
 /* Listener for BLE events */
-void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data) {
+void event_cb_ble_event(input_event_t *event,
+                        [[gnu::unused]] void *private_data) {
   /* Turn off LEDS */
   board_leds_off();
 
@@ -85,17 +85,17 @@ void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data
 
       // Wait 5s and retry to connect
       vTaskDelay(pdMS_TO_TICKS(5000));
-      
+
       // Get app role from Thread Local Storage
-      enum app_ble_role app_role = (enum app_ble_role) (uintptr_t) pvTaskGetThreadLocalStoragePointer(
-        /* Task */ NULL,
-        /* Index */ 0
-      );
+      enum app_ble_role app_role =
+          (enum app_ble_role)(uintptr_t)pvTaskGetThreadLocalStoragePointer(
+              /* Task */ NULL,
+              /* Index */ 0);
 
       // Central: start scanning
       if (app_role == CENTRAL) {
         ble_central_start_scanning();
-      } else { // Peripheral: start advertising
+      } else {  // Peripheral: start advertising
         ble_peripheral_start_advertising();
       }
       break;
@@ -111,12 +111,13 @@ void event_cb_ble_event(input_event_t *event, [[gnu::unused]] void *private_data
 }
 
 /* Listener for key events */
-void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data) {
+void event_cb_key_event(input_event_t *event,
+                        [[gnu::unused]] void *private_data) {
   /* Get current app role enum */
-  enum app_ble_role app_role = (enum app_ble_role) (uintptr_t) pvTaskGetThreadLocalStoragePointer(
-    /* Task */ NULL,
-    /* Index */ 0
-  );
+  enum app_ble_role app_role =
+      (enum app_ble_role)(uintptr_t)pvTaskGetThreadLocalStoragePointer(
+          /* Task */ NULL,
+          /* Index */ 0);
 
   switch (event->code) {
     // Short key press (read a high value on GPIO pin 2 for 100-3000ms)
@@ -128,10 +129,9 @@ void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data
         // Update app role
         app_role = PERIPHERAL;
         vTaskSetThreadLocalStoragePointer(
-          /* Task */ NULL,
-          /* Index */ 0,
-          /* Value */ (void *) (uintptr_t) app_role
-        );
+            /* Task */ NULL,
+            /* Index */ 0,
+            /* Value */ (void *)(uintptr_t)app_role);
 
         // Start
         start_peripheral_application();
@@ -146,10 +146,9 @@ void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data
         // Update app role
         app_role = CENTRAL;
         vTaskSetThreadLocalStoragePointer(
-          /* Task */ NULL,
-          /* Index */ 0,
-          /* Value */ (void *) (uintptr_t) app_role
-        );
+            /* Task */ NULL,
+            /* Index */ 0,
+            /* Value */ (void *)(uintptr_t)app_role);
 
         // Start
         start_central_application();
@@ -158,7 +157,7 @@ void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data
     // Very long key press (read a high value on GPIO pin 2 for at least 15s)
     // -> send data
     case KEY_3:
-      printf("[KEY] Very long press detected\r\n");      
+      printf("[KEY] Very long press detected\r\n");
       if (app_role == CENTRAL) {
         // Invoke ATT Command
         ble_central_write();
@@ -175,10 +174,10 @@ void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data
 /* Read device tree*/
 int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
   uint32_t addr = hal_board_get_factory_addr();
-  const void *fdt = (const void *) addr;
+  const void *fdt = (const void *)addr;
   uint32_t offset;
 
-  if (!name || !start || ! off) {
+  if (!name || !start || !off) {
     return -1;
   }
 
@@ -188,7 +187,7 @@ int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
     return -1;
   }
 
-  *start = (uint32_t) fdt;
+  *start = (uint32_t)fdt;
   *off = offset;
 
   return 0;
@@ -209,15 +208,13 @@ void aos_loop_proc([[gnu::unused]] void *pvParameters) {
 
   /* Initialize UART */
   uint32_t fdt = 0, offset = 0;
-  if (get_dts_addr("uart", &fdt, &offset) == 0)
-  {
+  if (get_dts_addr("uart", &fdt, &offset) == 0) {
     vfs_uart_init(fdt, offset);
   }
 
   /* Initialize GPIO button */
-  if (get_dts_addr("gpio", &fdt, &offset) == 0)
-  {
-    fdt_button_module_init((const void *)fdt, (int) offset);
+  if (get_dts_addr("gpio", &fdt, &offset) == 0) {
+    fdt_button_module_init((const void *)fdt, (int)offset);
   }
 
   /* Start loop */
@@ -228,16 +225,16 @@ void aos_loop_proc([[gnu::unused]] void *pvParameters) {
   if (fd_console >= 0) {
     printf("[SYS] Console initialization");
     aos_cli_init(0);
-    aos_poll_read_fd(fd_console, aos_cli_event_cb_read_get(), (void *) 0x12345678);
+    aos_poll_read_fd(fd_console, aos_cli_event_cb_read_get(),
+                     (void *)0x12345678);
   }
 
   /* Store app role enumeration */
   enum app_ble_role app_role = UNINITIALIZED;
   vTaskSetThreadLocalStoragePointer(
-    /* Task */ NULL,
-    /* Index */ 0,
-    /* Value */ (void *) (uintptr_t) app_role
-  );
+      /* Task */ NULL,
+      /* Index */ 0,
+      /* Value */ (void *)(uintptr_t)app_role);
 
   /* Register event filters */
   aos_register_event_filter(EV_KEY, event_cb_key_event, NULL);
@@ -267,7 +264,8 @@ void bfl_main(void) {
   board_leds_off();
 
   /* Create tasks */
-  xTaskCreateStatic(aos_loop_proc, (char *) "event loop", LOOPL_PROC_STACK_SIZE, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
+  xTaskCreateStatic(aos_loop_proc, (char *)"event loop", LOOPL_PROC_STACK_SIZE,
+                    NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
 
   /* Start tasks */
   vTaskStartScheduler();

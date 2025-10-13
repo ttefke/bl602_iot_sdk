@@ -1,18 +1,17 @@
 // FreeRTOS includes
 #include <FreeRTOS.h>
+#include <aos/yloop.h>     // aos porting layer
+#include <bl_gpio.h>       // GPIO for LEDs
+#include <blog.h>          // Logging
+#include <event_device.h>  // VFS
+#include <hal_board.h>     // Board
+#include <hal_uart.h>      // UART
+#include <libfdt.h>        // VFS
+#include <looprt.h>        // Real-time loop
+#include <loopset.h>       // Real-time loop
+#include <stdio.h>         // IO
 #include <task.h>
-
-#include <stdio.h>        // IO
-#include <blog.h>         // Logging
-#include <hal_uart.h>     // UART
-#include <looprt.h>       // Real-time loop
-#include <loopset.h>      // Real-time loop
-#include <event_device.h> // VFS
-#include <libfdt.h>       // VFS
-#include <vfs.h>          // VFS
-#include <aos/yloop.h>    // aos porting layer
-#include <hal_board.h>    // Board
-#include <bl_gpio.h>      // GPIO for LEDs
+#include <vfs.h>  // VFS
 
 // SPI implementation
 #include "spi.h"
@@ -20,10 +19,10 @@
 // Helper function to get addresses from device tree
 static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
   uint32_t addr = hal_board_get_factory_addr();
-  const void *fdt = (const void*)addr;
+  const void *fdt = (const void *)addr;
   uint32_t offset;
 
-  if (!name || !start  || !off) {
+  if (!name || !start || !off) {
     return -1;
   }
 
@@ -33,7 +32,7 @@ static int get_dts_addr(const char *name, uint32_t *start, uint32_t *off) {
     return -1;
   }
 
-  *start = (uint32_t) fdt;
+  *start = (uint32_t)fdt;
   *off = offset;
 
   return 0;
@@ -58,10 +57,10 @@ static void aos_loop_proc([[gnu::unused]] void *pvParameters) {
     vfs_uart_init(fdt, offset);
   }
 
-  // ROMFS
-  #ifdef CONF_USER_ENABLE_VFS_ROMFS
-    romfs_register();
-  #endif 
+// ROMFS
+#ifdef CONF_USER_ENABLE_VFS_ROMFS
+  romfs_register();
+#endif
 
   // Start loop
   aos_loop_init();
@@ -74,8 +73,7 @@ static void aos_loop_proc([[gnu::unused]] void *pvParameters) {
 #define PROC_STACK_SIZE 1024
 #define SPI_STACK_SIZE 512
 
-void bfl_main(void)
-{
+void bfl_main(void) {
   static StackType_t aos_loop_proc_stack[PROC_STACK_SIZE];
   static StaticTask_t aos_loop_proc_task;
   static StackType_t spi_stack[SPI_STACK_SIZE];
@@ -89,8 +87,10 @@ void bfl_main(void)
   bl_gpio_enable_output(LED_RED, /* No pullup */ 0, /* No pulldown */ 0);
 
   /* Create the tasks */
-  xTaskCreateStatic(aos_loop_proc, (char*)"event loop", PROC_STACK_SIZE, NULL, 15, aos_loop_proc_stack, &aos_loop_proc_task);
-  xTaskCreateStatic(spi_proc, (char*)"spi", SPI_STACK_SIZE, NULL, 20, spi_stack, &spi_task);
+  xTaskCreateStatic(aos_loop_proc, (char *)"event loop", PROC_STACK_SIZE, NULL,
+                    15, aos_loop_proc_stack, &aos_loop_proc_task);
+  xTaskCreateStatic(spi_proc, (char *)"spi", SPI_STACK_SIZE, NULL, 20,
+                    spi_stack, &spi_task);
 
   /* Start tasks */
   vTaskStartScheduler();

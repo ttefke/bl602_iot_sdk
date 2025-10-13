@@ -11,8 +11,9 @@
 
 // CoAP includes
 #include <coap3/coap.h>
-#include "include/coap-common.h"
+
 #include "include/coap-client.h"
+#include "include/coap-common.h"
 #include "include/coap-log.h"
 
 // Local message processing variables
@@ -26,8 +27,9 @@ bool sendRequests = true;
 
 // Handle incoming messages
 coap_response_t message_handler([[gnu::unused]] coap_session_t *session,
-  [[gnu::unused]] const coap_pdu_t *sent, const coap_pdu_t *received,
-  [[gnu::unused]] const coap_mid_t id) {
+                                [[gnu::unused]] const coap_pdu_t *sent,
+                                const coap_pdu_t *received,
+                                [[gnu::unused]] const coap_mid_t id) {
   // 0. Variables
   const uint8_t *data;
   size_t len;
@@ -38,17 +40,17 @@ coap_response_t message_handler([[gnu::unused]] coap_session_t *session,
   if (coap_get_data_large(received, &len, &data, &offset, &total)) {
     // 2. Print payload
     if (firstPDU) {
-      printf("[%s] Received data: %*.*s", __func__,
-              (int) len, (int) len, (const char *) data);
+      printf("[%s] Received data: %*.*s", __func__, (int)len, (int)len,
+             (const char *)data);
       firstPDU = false;
     } else {
-      printf("%s", (const char *) data);
+      printf("%s", (const char *)data);
     }
 
     // Check if this is the last PDU of the data frame
     if (len + offset == total) {
-        printf("\r\n");
-        lastPDU = true;
+      printf("\r\n");
+      lastPDU = true;
     }
   }
 
@@ -57,11 +59,10 @@ coap_response_t message_handler([[gnu::unused]] coap_session_t *session,
 }
 
 // Handle errors (not acknowledged messages)
-void nack_handler(coap_session_t * session COAP_UNUSED,
-  const coap_pdu_t *sent COAP_UNUSED,
-  const coap_nack_reason_t reason,
-  const coap_mid_t id COAP_UNUSED) {
-
+void nack_handler(coap_session_t *session COAP_UNUSED,
+                  const coap_pdu_t *sent COAP_UNUSED,
+                  const coap_nack_reason_t reason,
+                  const coap_mid_t id COAP_UNUSED) {
   // Get reason and output it
   switch (reason) {
     case COAP_NACK_RST:
@@ -79,23 +80,22 @@ void nack_handler(coap_session_t * session COAP_UNUSED,
 }
 
 // Resolve address
-int resolve_address(const char *host, const char *service,
-  coap_address_t *dst, coap_proto_t *proto, int scheme) {
+int resolve_address(const char *host, const char *service, coap_address_t *dst,
+                    coap_proto_t *proto, int scheme) {
   // 0. Variables
   coap_addr_info_t *addr_info;
   int ret = 0;
 
   // 1. Get port
-  uint16_t port = service ? atoi(service): 0;
+  uint16_t port = service ? atoi(service) : 0;
 
   // 2. Define hostname
-  coap_str_const_t str_host =
-    { strlen(host), (const uint8_t *) host };
+  coap_str_const_t str_host = {strlen(host), (const uint8_t *)host};
 
   // 3. Get address information for the host
-  addr_info = coap_resolve_address_info(&str_host,
-    port, port, port, port, AF_UNSPEC, scheme,
-    COAP_RESOLVE_TYPE_REMOTE);
+  addr_info =
+      coap_resolve_address_info(&str_host, port, port, port, port, AF_UNSPEC,
+                                scheme, COAP_RESOLVE_TYPE_REMOTE);
 
   // 4. Set the variables we require (IP address + protocol)
   if (addr_info) {
@@ -130,14 +130,16 @@ void client_coap_init() {
 #endif
 
   // 3. Parse URI
-  len = coap_split_uri((const unsigned char *) uri_const, strlen(uri_const), &uri);
+  len =
+      coap_split_uri((const unsigned char *)uri_const, strlen(uri_const), &uri);
   LWIP_ASSERT("Failed to parse URI", len == 0);
 
   snprintf(portbuf, sizeof(portbuf), "%d", uri.port);
-  snprintf((char *) buf, sizeof(buf), "%*.*s", (int) uri.host.length,
-    (int) uri.host.length, (const char *) uri.host.s);
+  snprintf((char *)buf, sizeof(buf), "%*.*s", (int)uri.host.length,
+           (int)uri.host.length, (const char *)uri.host.s);
 
-  len = resolve_address((const char*) buf, portbuf, &dst, &proto, 1 << uri.scheme);
+  len = resolve_address((const char *)buf, portbuf, &dst, &proto,
+                        1 << uri.scheme);
   LWIP_ASSERT("Failed to resolve address", len > 0);
 
   // 4. Create CoAP context
@@ -155,16 +157,16 @@ void client_coap_init() {
 
     memset(&client_coaps_data, 0, sizeof(client_coaps_data));
     client_coaps_data.version = COAP_DTLS_CPSK_SETUP_VERSION;
-    snprintf(client_sni, sizeof(client_sni), "%*.*s",
-      (int) uri.host.length, (int) uri.host.length, uri.host.s);
+    snprintf(client_sni, sizeof(client_sni), "%*.*s", (int)uri.host.length,
+             (int)uri.host.length, uri.host.s);
     client_coaps_data.client_sni = client_sni;
-    client_coaps_data.psk_info.identity.s = (const uint8_t *) COAPS_ID;
+    client_coaps_data.psk_info.identity.s = (const uint8_t *)COAPS_ID;
     client_coaps_data.psk_info.identity.length = strlen(COAPS_ID);
-    client_coaps_data.psk_info.key.s = (const uint8_t *) COAPS_PSK;
+    client_coaps_data.psk_info.key.s = (const uint8_t *)COAPS_PSK;
     client_coaps_data.psk_info.key.length = strlen(COAPS_PSK);
 
-    session = coap_new_client_session_psk2(main_coap_context, NULL,
-        &dst, proto, &client_coaps_data);
+    session = coap_new_client_session_psk2(main_coap_context, NULL, &dst, proto,
+                                           &client_coaps_data);
   }
 #else
   session = coap_new_client_session(main_coap_context, NULL, &dst, proto);
@@ -187,10 +189,9 @@ void client_coap_send_pdu() {
   }
 
   // 1. Construct CoAP PDU
-  coap_pdu_t *pdu = coap_pdu_init(COAP_MESSAGE_CON,
-    COAP_REQUEST_CODE_GET,
-    coap_new_message_id(session),
-    coap_session_max_pdu_size(session));
+  coap_pdu_t *pdu = coap_pdu_init(COAP_MESSAGE_CON, COAP_REQUEST_CODE_GET,
+                                  coap_new_message_id(session),
+                                  coap_session_max_pdu_size(session));
   LWIP_ASSERT("Failed to create PDU", pdu != NULL);
 
   // 2. Create list of options
@@ -218,7 +219,7 @@ void task_coap_client([[gnu::unused]] void *pvParameters) {
   // Wait until WiFi is set up
   vTaskDelay(pdMS_TO_TICKS(3 * 1000));
 
-  // Initialize 
+  // Initialize
   client_coap_init();
   sendRequests = true;
 

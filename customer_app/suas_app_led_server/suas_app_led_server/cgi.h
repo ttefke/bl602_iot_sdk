@@ -25,7 +25,6 @@
 /* getters */
 #define GET_LED_STATUS_ENDPOINT "/led_state.json"
 
-
 /* initialization functions */
 void custom_files_init(void);
 void cgi_init(void);

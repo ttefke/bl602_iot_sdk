@@ -3,18 +3,17 @@
 #include <stdio.h>
 
 // Hardware abstraction layers
+#include <aos/yloop.h>
 #include <bl_wifi.h>
+#include <blog.h>
+#include <easyflash.h>
+#include <event_device.h>
 #include <hal_board.h>
 #include <hal_button.h>
 #include <hal_gpio.h>
 #include <hal_sys.h>
-#include <hal_wifi.h>
 #include <hal_uart.h>
-
-#include <aos/yloop.h>
-#include <event_device.h>
-#include <blog.h>
-#include <easyflash.h>
+#include <hal_wifi.h>
 #include <libfdt.h>
 #include <looprt.h>
 #include <loopset.h>
@@ -39,7 +38,7 @@ static StaticTask_t coap_task;
 
 /* WiFi configuration */
 static wifi_conf_t conf = {
-  .country_code = "EU",
+    .country_code = "EU",
 };
 
 /* Helper function to read device tree */
@@ -77,8 +76,7 @@ static void _configure_wifi(void) {
 }
 
 /* Start a WiFi access point */
-static void _start_ap_wifi(void)
-{
+static void _start_ap_wifi(void) {
   /* Start access point */
   uint8_t mac[6];
   char ssid_name[32];
@@ -101,8 +99,7 @@ static void _start_ap_wifi(void)
 }
 
 /* Connect to a WiFi access point */
-static void _connect_sta_wifi()
-{
+static void _connect_sta_wifi() {
   // Enable station mode
   wifi_interface_t wifi_interface = wifi_mgmr_sta_enable();
 
@@ -115,13 +112,12 @@ static void _connect_sta_wifi()
 }
 
 /* React to WiFi events */
-static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *private_data)
-{
+static void event_cb_wifi_event(input_event_t *event,
+                                [[gnu::unused]] void *private_data) {
   static char *ssid;
   static char *password;
 
-  switch (event->code)
-  {
+  switch (event->code) {
     case CODE_WIFI_ON_INIT_DONE:
       _configure_wifi();
       break;
@@ -136,8 +132,8 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
         _start_ap_wifi();
 
         // Start CoAP server
-        xTaskCreateStatic(task_coap_server, (char*)"coap server",
-          1024, NULL, 15, coap_stack, &coap_task);
+        xTaskCreateStatic(task_coap_server, (char *)"coap server", 1024, NULL,
+                          15, coap_stack, &coap_task);
       }
       break;
     case CODE_WIFI_ON_SCAN_DONE:
@@ -180,8 +176,8 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
       printf("[%s] Received an IP address\r\n", __func__);
       if (app_role == STA) {
         // Start CoAP client
-        xTaskCreateStatic(task_coap_client, (char*)"coap client",
-         1024, NULL, 15, coap_stack, &coap_task);
+        xTaskCreateStatic(task_coap_client, (char *)"coap client", 1024, NULL,
+                          15, coap_stack, &coap_task);
       }
       break;
     case CODE_WIFI_ON_AP_STA_ADD:
@@ -204,7 +200,8 @@ static void event_cb_wifi_event(input_event_t *event, [[gnu::unused]] void *priv
 }
 
 /* Listener for key events */
-void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data) {
+void event_cb_key_event(input_event_t *event,
+                        [[gnu::unused]] void *private_data) {
   switch (event->code) {
     // Start as AP
     case KEY_1:
@@ -223,7 +220,7 @@ void event_cb_key_event(input_event_t *event, [[gnu::unused]] void *private_data
     default:
       printf("[%s] Key press not recognized\r\n", __func__);
   }
-  
+
   /* Start wifi firmware if it is not started yet */
   if (!is_wifi_initialized) {
     printf("[%s] Starting WiFi stack\r\n", __func__);
@@ -256,7 +253,7 @@ void task_wifi([[gnu::unused]] void *pvParameters) {
   }
 
   if (get_dts_addr("gpio", &fdt, &offset) == 0) {
-    fdt_button_module_init((const void *)fdt, (int) offset);
+    fdt_button_module_init((const void *)fdt, (int)offset);
   }
 
   /* Initialize command line */

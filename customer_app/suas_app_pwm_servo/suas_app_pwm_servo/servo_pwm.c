@@ -18,14 +18,13 @@
 */
 
 /* Servo task */
-void task_servo_pwm([[gnu::unused]] void *pvParameters)
-{
+void task_servo_pwm([[gnu::unused]] void *pvParameters) {
   printf("Servo task started\r\n");
 
   /* 1. Create configuration for the servo driver */
   suas_servo_conf_t conf = {
-    .pin = 0, // Pin of the GPIO pin to use
-    .degrees = 0 // Initial degrees
+      .pin = 0,     // Pin of the GPIO pin to use
+      .degrees = 0  // Initial degrees
   };
 
   /* 2. Initializie servo */

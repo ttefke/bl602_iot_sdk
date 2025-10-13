@@ -363,6 +363,8 @@ CXXFLAGS := $(strip \
 	$(CXXFLAGS) \
 	$(E21_CPU_CFLAGS) \
 	-nostdlib \
+	-nostdinc++ \
+	-DETL_NO_STL \
 	-g3 \
 	-fms-extensions \
 	-ffunction-sections \

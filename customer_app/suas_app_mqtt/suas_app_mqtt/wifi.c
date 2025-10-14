@@ -75,9 +75,6 @@ static void _connect_sta_wifi() {
 /* React to WiFi events */
 static void event_cb_wifi_event(input_event_t *event,
                                 [[gnu::unused]] void *private_data) {
-  static char *ssid;
-  static char *password;
-
   switch (event->code) {
     case CODE_WIFI_ON_INIT_DONE:
       _configure_wifi();
@@ -94,25 +91,6 @@ static void event_cb_wifi_event(input_event_t *event,
     case CODE_WIFI_ON_EMERGENCY_MAC:
       hal_reboot();
       break;
-    case CODE_WIFI_ON_PROV_SSID:
-      if (ssid) {
-        vPortFree(ssid);
-        ssid = NULL;
-      }
-      ssid = (char *)event->value;
-      break;
-    case CODE_WIFI_ON_PROV_BSSID:
-      if (event->value) {
-        vPortFree((void *)event->value);
-      }
-      break;
-    case CODE_WIFI_ON_PROV_PASSWD:
-      if (password) {
-        vPortFree(password);
-        password = NULL;
-      }
-      password = (char *)event->value;
-      break;
     case CODE_WIFI_ON_PROV_CONNECT:
       _connect_sta_wifi();
       break;
@@ -128,6 +106,9 @@ static void event_cb_wifi_event(input_event_t *event,
       // Initialize MQTT connection
       my_mqtt_connect();
       break;
+    case CODE_WIFI_ON_PROV_SSID:
+    case CODE_WIFI_ON_PROV_BSSID:
+    case CODE_WIFI_ON_PROV_PASSWD:
     case CODE_WIFI_ON_SCAN_DONE_ONJOIN:
     case CODE_WIFI_ON_MGMR_DENOISE:
     case CODE_WIFI_ON_DISCONNECT:

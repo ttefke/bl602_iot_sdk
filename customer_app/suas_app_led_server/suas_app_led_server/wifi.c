@@ -57,9 +57,6 @@ static void _configure_wifi(void) {
 /* React to WiFi events */
 static void event_cb_wifi_event(input_event_t *event,
                                 [[gnu::unused]] void *private_data) {
-  static char *ssid;
-  static char *password;
-
   switch (event->code) {
     case CODE_WIFI_ON_INIT_DONE:
       _configure_wifi();
@@ -75,24 +72,8 @@ static void event_cb_wifi_event(input_event_t *event,
       hal_reboot();
       break;
     case CODE_WIFI_ON_PROV_SSID:
-      if (ssid) {
-        vPortFree(ssid);
-        ssid = NULL;
-      }
-      ssid = (char *)event->value;
-      break;
     case CODE_WIFI_ON_PROV_BSSID:
-      if (event->value) {
-        vPortFree((void *)event->value);
-      }
-      break;
     case CODE_WIFI_ON_PROV_PASSWD:
-      if (password) {
-        vPortFree(password);
-        password = NULL;
-      }
-      password = (char *)event->value;
-      break;
     case CODE_WIFI_ON_PROV_CONNECT:
     case CODE_WIFI_ON_SCAN_DONE_ONJOIN:
     case CODE_WIFI_ON_MGMR_DENOISE:

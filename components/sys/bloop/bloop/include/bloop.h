@@ -81,7 +81,7 @@ struct loop_ctx {
     uint32_t evt_type_map_sync[LOOP_TASK_MAX];
     struct utils_list list[LOOP_TASK_MAX];
     struct loop_evt_handler_statistic statistic[LOOP_TASK_MAX];
-    const struct loop_evt_handler *(handlers[LOOP_TASK_MAX]);
+    const struct loop_evt_handler *handlers[LOOP_TASK_MAX];
     /* List for timer */
     utils_dlist_t timer_dlist;
     utils_dlist_t timer_dued;

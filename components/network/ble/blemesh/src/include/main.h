@@ -21,8 +21,8 @@
 extern "C" {
 #endif
 
+#include "bl_port.h"
 #include "include/access.h"
-
 
 typedef enum {
     BT_MESH_NO_OUTPUT       = 0,

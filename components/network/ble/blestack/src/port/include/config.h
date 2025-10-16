@@ -1,6 +1,10 @@
 #ifndef BLE_CONFIG_H
 #define BLE_CONFIG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "FreeRTOSConfig.h"
 
 /**
@@ -562,6 +566,7 @@
 #ifdef CONFIG_BT_SETTINGS
 #define BFLB_BLE_PATCH_SETTINGS_LOAD
 #endif
+
 #if defined(__cplusplus)
 }
 #endif

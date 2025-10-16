@@ -671,7 +671,7 @@ extern const struct net_buf_data_cb net_buf_fixed_cb;
         NET_BUF_POOL_INITIALIZER(_name, &net_buf_fixed_alloc_##_name, \
                      net_buf_##_name, _count, _destroy)
 
-#if (!BFLB_BLE)
+#if 0
 extern const struct net_buf_data_cb net_buf_var_cb;
 
 /** @def NET_BUF_POOL_VAR_DEFINE

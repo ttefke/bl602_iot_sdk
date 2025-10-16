@@ -21,6 +21,7 @@
 extern "C" {
 #endif
 
+#include <zephyr/types.h>
 #include "mesh_config.h"
 #if defined(BFLB_BLE)
 #include "work_q.h"

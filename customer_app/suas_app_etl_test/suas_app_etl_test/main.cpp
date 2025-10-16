@@ -18,7 +18,7 @@ extern "C" {
 
 /* String example */
 void example_string() {
-  etl::string<32> myString = "Hello World";
+  auto myString = etl::string<32>("Hello World");
   myString += " from ETL";
 
   printf("String: \"%s\", len: %d, capacity: %d\r\n", myString.data(),
@@ -27,7 +27,7 @@ void example_string() {
 
 /* Array example */
 void example_array() {
-  etl::array<int, 3> arr = {1, 2, 3};
+  auto arr = etl::array<int, 3>{1, 2, 3};
 
   printf("Array: ");
   for (auto val : arr) {
@@ -40,7 +40,7 @@ void example_array() {
 
 /* Vector example */
 void example_vector() {
-  etl::vector<int, 5> vec;
+  auto vec = etl::vector<int, 5>();
   vec.push_back(-1);
   vec.push_back(-2);
   vec.push_back(-3);
@@ -63,15 +63,15 @@ struct SmartPointerExample {
 
 etl::unique_ptr<SmartPointerExample> example_pointer() {
   // Create a smart pointer that only lives within this function
-  etl::unique_ptr<SmartPointerExample> ptr1(new SmartPointerExample(1));
+  auto ptr1 = etl::unique_ptr<SmartPointerExample>(new SmartPointerExample(1));
   printf("Smart pointer 1 value: %d\r\n", ptr1->value);
 
   // Create a smart pointer that is returned (and transferred)
-  etl::unique_ptr<SmartPointerExample> ptr2(new SmartPointerExample(2));
+  auto ptr2 = etl::unique_ptr<SmartPointerExample>(new SmartPointerExample(2));
   printf("Smart pointer 2 value: %d\r\n", ptr2->value);
 
   // Transfer ownership
-  etl::unique_ptr<SmartPointerExample> ptr3 = etl::move(ptr2);
+  auto ptr3 = etl::unique_ptr<SmartPointerExample>(etl::move(ptr2));
   if (!ptr2) {
     printf("Original pointer 2 is now null\r\n");
   }
@@ -119,8 +119,8 @@ extern "C" void bfl_main(void) {
   static StackType_t examples_stack[STACK_SIZE];
   static StaticTask_t examples_task;
 
-  xTaskCreateStatic(examples, (char *)"examples", STACK_SIZE, NULL, 15,
-                    examples_stack, &examples_task);
+  xTaskCreateStatic(examples, etl::string_view("examples").data(), STACK_SIZE,
+                    nullptr, 15, examples_stack, &examples_task);
 
   /* Start task scheduler */
   vTaskStartScheduler();

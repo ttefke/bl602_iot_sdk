@@ -21,7 +21,9 @@ extern "C" {
 #include "lwip/opt.h"
 }
 
+#include <etl/array.h>
 #include <etl/memory.h>
+#include <etl/string.h>
 
 // Prototype
 static const char *cgi_handler_led(int iIndex, int iNumParams, char *pcParam[],
@@ -38,36 +40,43 @@ struct cJSONDeleter {
   }
 };
 
-static const char *cgi_handler_led(int iIndex, int iNumParams, char *pcParam[],
-                                   char *pcValue[]) {
-  printf("iIndex: %d, iNumParams: %d, pcParam: %s, pcValue: %s\r\n", iIndex,
-         iNumParams, pcParam[0], pcValue[0]);
+static const char *cgi_handler_led([[gnu::unused]] int iIndex, int iNumParams,
+                                   char *pcParam[], char *pcValue[]) {
   if (iNumParams == 2) {
-    enum selected_led led;
-    uint8_t state;
+    /* Use ETL data structures */
+    auto keys = etl::array{
+        etl::string_view(pcParam[0]),
+        etl::string_view(pcParam[1]),
+    };
 
-    /* check if valid led selected */
-    if (!strcmp(pcParam[0], "led")) {
-      if (!strcmp(pcValue[0], "red")) {
+    auto values = etl::array{
+        etl::string_view(pcValue[0]),
+        etl::string_view(pcValue[1]),
+    };
+
+    /* Get selected LED */
+    enum selected_led led;
+
+    if (etl::string_view("led") == keys[0]) {
+      if (etl::string_view("red") == values[0]) {
         led = LED_RED;
-      } else if (!strcmp(pcValue[0], "green")) {
+      } else if (etl::string_view("green") == values[0]) {
         led = LED_GREEN;
-      } else if (!strcmp(pcValue[0], "blue")) {
+      } else if (etl::string_view("blue") == values[0]) {
         led = LED_BLUE;
       } else {
         return ERROR_404_ENDPOINT;
       }
-
-      printf("Selected LED: %d\r\n", led);
+      printf("Selected LED: %s\r\n", values[0].data());
     } else {
       return ERROR_404_ENDPOINT;
     }
 
-    /* get wanted led state */
-    if (!strcmp(pcParam[1], "state")) {
-      // Convert character to uint
-      sscanf(pcValue[1], "%" PRIu8 "", &state);
-
+    /* Get desired LED state */
+    if (etl::string_view("state") == keys[1]) {
+      /* Obtain LED state*/
+      uint8_t state;
+      sscanf(values[1].data(), "%" PRIu8 "", &state);
       if (state == 0) {
         state = LED_OFF;
       } else {
@@ -91,7 +100,7 @@ static const char *cgi_handler_led(int iIndex, int iNumParams, char *pcParam[],
 
       printf("State: %d\r\n", state);
 
-      // Apply LED state by using GPIO pins
+      /* Apply LED state -> done with GPIO */
       apply_led_state();
     } else {
       return ERROR_404_ENDPOINT;
@@ -105,49 +114,63 @@ static const char *cgi_handler_led(int iIndex, int iNumParams, char *pcParam[],
 /* opening (creating) the in real-time created file (page) */
 extern "C" int fs_open_custom(struct fs_file *file, const char *name) {
   // Pointer to response object
-  etl::unique_ptr<char[]> response;
+  //  -> We need a pointer here, this outlives this function
+  auto response = etl::unique_ptr<char[]>();
+
+  // Requested route
+  auto route = etl::string_view(name);
 
   // Match response endpoints
-  if (!strcmp(name, LED_ENDPOINT)) {
-    // Initialize response: up to 350 chars
-    response.reset(new char[350]);
-    memset(response.get(), 0, 350);
+  // LED settings endpoint
+  if (route == LED_ENDPOINT) {
+    /* Create response buffer structure */
+    auto responseBuffer = etl::string<350>();
+
     /* Show links to control LEDs */
     if (led_state.state_led_red == LED_OFF) {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
-                             "?led=red&state=1\">Turn on red LED</a></br>");
+      responseBuffer += "<a href=\"" SET_LED_ENDPOINT
+                        "?led=red&state=1\">Turn on red LED</a></br>";
     } else {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
-                             "?led=red&state=0\">Turn off red LED</a></br>");
+      responseBuffer += "<a href=\"" SET_LED_ENDPOINT
+                        "?led=red&state=0\">Turn off red LED</a></br>";
     }
 
     if (led_state.state_led_green == LED_OFF) {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
-                             "?led=green&state=1\">Turn on green LED</a></br>");
+      responseBuffer += "<a href=\"" SET_LED_ENDPOINT
+                        "?led=green&state=1\">Turn on green LED</a></br>";
     } else {
-      strcat(response.get(),
-             "<a href=\"" SET_LED_ENDPOINT
-             "?led=green&state=0\">Turn off green LED</a></br>");
+      responseBuffer += "<a href=\"" SET_LED_ENDPOINT
+                        "?led=green&state=0\">Turn off green LED</a></br>";
     }
 
     if (led_state.state_led_blue == LED_OFF) {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
-                             "?led=blue&state=1\">Turn on blue LED</a></br>");
+      responseBuffer += "<a href=\"" SET_LED_ENDPOINT
+                        "?led=blue&state=1\">Turn on blue LED</a></br>";
     } else {
-      strcat(response.get(), "<a href=\"" SET_LED_ENDPOINT
-                             "?led=blue&state=0\">Turn off blue LED</a></br>");
+      responseBuffer += "<a href=\"" SET_LED_ENDPOINT
+                        "?led=blue&state=0\">Turn off blue LED</a></br>";
     }
-  } else if (!strcmp(name, GET_LED_STATUS_ENDPOINT)) {
+
+    // Copy response string from buffer into pointer
+    response.reset(new char[350]);
+    memset(response.get(), 0, 350);
+    memcpy(response.get(), responseBuffer.data(), responseBuffer.length());
+  }  // LED status endpoint
+  else if (route == GET_LED_STATUS_ENDPOINT) {
     // Initialize cJSON response
-    etl::unique_ptr<cJSON, cJSONDeleter> json_response(cJSON_CreateObject());
-    cJSON_AddNumberToObject(json_response.get(), "led_red",
+    auto json_response =
+        etl::unique_ptr<cJSON, cJSONDeleter>(cJSON_CreateObject());
+    cJSON_AddNumberToObject(json_response.get(),
+                            etl::string_view("led_red").data(),
                             led_state.state_led_red);
-    cJSON_AddNumberToObject(json_response.get(), "led_green",
+    cJSON_AddNumberToObject(json_response.get(),
+                            etl::string_view("led_green").data(),
                             led_state.state_led_green);
-    cJSON_AddNumberToObject(json_response.get(), "led_blue",
+    cJSON_AddNumberToObject(json_response.get(),
+                            etl::string_view("led_blue").data(),
                             led_state.state_led_blue);
 
-    // Reponse is now the formatted JSON string
+    // Copy response from formatted JSON string to pointer
     response.reset(cJSON_PrintUnformatted(json_response.get()));
   } else {
     /* send zero if unknown URI */
@@ -155,7 +178,7 @@ extern "C" int fs_open_custom(struct fs_file *file, const char *name) {
   }
 
   // Get the size of the response
-  int response_size = strlen(response.get());
+  auto response_size = etl::string_view(response.get()).length();
 
   /* Reset the response data structure */
   memset(file, 0, sizeof(struct fs_file));

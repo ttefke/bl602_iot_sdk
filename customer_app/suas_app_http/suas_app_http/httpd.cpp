@@ -17,34 +17,36 @@ extern "C" {
 }
 
 #include <etl/memory.h>
+#include <etl/string.h>
 
 /* Opening (creating) the in real-time created file (page) */
 extern "C" int fs_open_custom(struct fs_file *file, const char *name) {
   /* 1. Check if this is the supported custom endpoint
       You can use multiple comparisons to set up multiple endpoints
       (see LED server example) */
-  if (strcmp(name, CUSTOM_ENDPOINT) != 0) {
+  auto nameString = etl::string_view(name);
+  if (nameString != CUSTOM_ENDPOINT) {
     return 0;
   }
 
   /* 2. Create response */
-  char response[] = "Hello world!";
-  int response_size = strlen(response);
+  auto response = etl::string_view("Hello world!");
+  auto response_size = response.length();
 
   /* 3. Allocate memory */
   memset(file, 0, sizeof(struct fs_file));
 
-  // Copy response into response buffer
+  // Copy response into response buffer on heap
   auto data = etl::unique_ptr<char[]>(new char[response_size]);
   memset(data.get(), 0, response_size);
-  memcpy(data.get(), response, response_size);
+  memcpy(data.get(), response.data(), response_size);
 
   // Note: This creates a raw pointer from the smart pointer
   // We must delete that one manually!
   file->pextension = data.release();
 
   if (file->pextension != nullptr) {
-    file->data = (const char *)file->pextension;
+    file->data = static_cast<const char *>(file->pextension);
     file->len = response_size;
     file->index = file->len;
 
@@ -73,7 +75,7 @@ extern "C" int fs_read_custom([[gnu::unused]] struct fs_file *file,
 }
 
 /* HTTP server task */
-extern "C" void task_httpd([[gnu::unused]] void *pvParameters) {
+void task_httpd([[gnu::unused]] void *pvParameters) {
   // Start HTTP server
   printf("[HTTPD] Starting server\r\n");
 
@@ -86,5 +88,5 @@ extern "C" void task_httpd([[gnu::unused]] void *pvParameters) {
 
   /* Should never happen */
   printf("[HTTPD] Server stopped\r\n");
-  vTaskDelete(NULL);
+  vTaskDelete(nullptr);
 }

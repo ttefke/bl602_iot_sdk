@@ -1,6 +1,8 @@
 #ifndef LED_DEFS_H
 #define LED_DEFS_H
 
+#include <stdint.h>
+
 /* LED pins*/
 #define LED_R_PIN 17
 #define LED_G_PIN 14
@@ -21,5 +23,5 @@ struct led_state {
 extern struct led_state led_state;
 
 /* function to apply current led_state*/
-void apply_led_state();
+extern "C" void apply_led_state();
 #endif

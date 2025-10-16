@@ -8,4 +8,6 @@
 // Wifi modes
 enum app_wifi_role { UNINITIALIZED = 0, AP, STA };
 
+// Function prototype
+void task_wifi([[gnu::unused]] void *pvParameters);
 #endif /* __WIFI_H */

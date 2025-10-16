@@ -10,5 +10,5 @@
 enum app_wifi_role { UNINITIALIZED = 0, AP, STA };
 
 // Function prototypes
-void task_wifi(void *pvParameters);
+extern "C" void task_wifi([[gnu::unused]] void *pvParameters);
 #endif

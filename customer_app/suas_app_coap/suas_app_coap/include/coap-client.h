@@ -1,5 +1,5 @@
 #ifndef __COAP__CLIENT_H
 #define __COAP__CLIENT_H
 
-void task_coap_client(void *pvParameters);
+extern "C" void task_coap_client([[gnu::unused]] void *pvParameters);
 #endif

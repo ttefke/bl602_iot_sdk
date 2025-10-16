@@ -9,5 +9,5 @@
 enum app_wifi_role { AP = 1, STA };
 
 // Function prototypes
-void task_wifi(void *pvParameters);
+void task_wifi([[gnu::unused]] void *pvParameters);
 #endif

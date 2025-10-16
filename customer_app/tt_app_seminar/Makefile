@@ -11,9 +11,13 @@ export PROJECT_PATH PROJECT_BOARD
 
 -include ./proj_config.mk
 
-CFLAGS += -DLWIP_ALTCP_TLS
-CFLAGS += -DLWIP_ALTCP_TLS_MBEDTLS
-CFLAGS += -DREBOOT_ON_EXCEPTION
+PROJECT_FLAGS := -DLWIP_ALTCP_TLS
+PROJECT_FLAGS += -DLWIP_ALTCP_TLS_MBEDTLS
+PROJECT_FLAGS += -DREBOOT_ON_EXCEPTION
+
+CFLAGS += $(PROJECT_FLAGS)
+CPPFLAGS += $(PROJECT_FLAGS)
+CXXFLAGS += $(PROJECT_FLAGS)
 
 ifeq ($(origin BL60X_SDK_PATH), undefined)
 $(error ****** Please set SDK paths ******)
@@ -25,7 +29,7 @@ COMPONENTS_VFS     := romfs
 
 INCLUDE_COMPONENTS += freertos bl602 bl602_std bl602_wifi bl602_wifidrv hal_drv lwip lwip_dhcpd vfs yloop utils cli httpc netutils blog blog_testc mbedtls-bl602 cjson
 INCLUDE_COMPONENTS += easyflash4
-INCLUDE_COMPONENTS += suas_drivers
+INCLUDE_COMPONENTS += suas_drivers etl
 INCLUDE_COMPONENTS += $(COMPONENTS_NETWORK)
 INCLUDE_COMPONENTS += $(COMPONENTS_BLSYS)
 INCLUDE_COMPONENTS += $(COMPONENTS_VFS)

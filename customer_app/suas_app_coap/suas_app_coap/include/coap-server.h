@@ -7,5 +7,5 @@
 #define MEMP_NUM_COAPSESSION 2
 #endif
 
-void task_coap_server(void *pvParameters);
+extern "C" void task_coap_server([[gnu::unused]] void *pvParameters);
 #endif

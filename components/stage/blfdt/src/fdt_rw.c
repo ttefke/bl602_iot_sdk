@@ -73,16 +73,17 @@ static inline int fdt_data_size_(void *fdt)
     return fdt_off_dt_strings(fdt) + fdt_size_dt_strings(fdt);
 }
 
-static int fdt_splice_(void *fdt, void *splicepoint, int oldlen, int newlen)
+static int fdt_splice_(void *raw_fdt, void *splicepoint, int oldlen, int newlen)
 {
     char *p = splicepoint;
-    char *end = (char *)fdt + fdt_data_size_(fdt);
+    char *fdt = (char *) raw_fdt;
+    char *end = fdt + fdt_data_size_(raw_fdt);
 
-    if (((p + oldlen) < p) || ((p + oldlen) > end))
+    if ((oldlen < 0) || ((size_t) oldlen) > ((size_t) (end-p)))
         return -FDT_ERR_BADOFFSET;
-    if ((p < (char *)fdt) || ((end - oldlen + newlen) < (char *)fdt))
+    if ((p < fdt) || ((end - oldlen + newlen) < fdt))
         return -FDT_ERR_BADOFFSET;
-    if ((end - oldlen + newlen) > ((char *)fdt + fdt_totalsize(fdt)))
+    if ((end - oldlen + newlen) > (fdt + fdt_totalsize(raw_fdt)))
         return -FDT_ERR_NOSPACE;
     memmove(p + newlen, p + oldlen, end - p - oldlen);
     return 0;

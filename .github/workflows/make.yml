@@ -21,8 +21,8 @@ jobs:
     # 2. Set up Python venv
     - name: Setup Python virtual environment
       run: |
-        python3 -m venv venv --without-pip
-        . venv/bin/activate
+        python3 -m venv $GITHUB_WORKSPACE/venv --without-pip
+        . $GITHUB_WORKSPACE/venv/bin/activate
         curl -sS https://bootstrap.pypa.io/get-pip.py | python
         pip install --upgrade pip
         pip install "fdt>=0.2.0" "pycryptodomex>=3.9.8" "toml>=0.10.2" "configobj>=5.0.6"
@@ -33,17 +33,17 @@ jobs:
       with:
          submodules: recursive
 
-    # Step 4: Download and extract compiler
+    # 4. Download and extract compiler
     - name: Download and extract compiler
       run: |
         mkdir -p toolchain/compiler
-        wget -O /tmp/toolchain.tar.xz https://github.com/ttefke/riscv-gnu-toolchain/releases/download/2025.08.29/suas-gcc-15-1.tar.xz
+        wget -q -O /tmp/toolchain.tar.xz https://github.com/ttefke/riscv-gnu-toolchain/releases/download/2025.08.29/suas-gcc-15-1.tar.xz
         tar -xJf /tmp/toolchain.tar.xz -C toolchain/compiler
 
-    # Step 5: Build examples
+    # 5. Build examples
     - name: Build examples
       run:  |
-        . venv/bin/activate
+        . $GITHUB_WORKSPACE/venv/bin/activate
         export BL60X_SDK_PATH=$(pwd)
         export CONFIG_CHIP_NAME=BL602
         make

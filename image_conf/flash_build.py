@@ -1431,9 +1431,7 @@ if __name__ == '__main__':
         #找到device_tree
         # ro = bl_find_file(bl_factory_params_file_prefix, ".dts")
         ro = group[1]
-        xtal = ro.split("IoTKitA_")
-        xtal = xtal[1].split(".dts")
-        xtal = xtal[0]
+        xtal = ro.split(".dts")[0].split("_")[-1]
         dts_name = 'dts{}'.format(xtal)
 
         img_gen = bl_whole_img_generate()

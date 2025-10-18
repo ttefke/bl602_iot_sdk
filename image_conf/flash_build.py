@@ -1391,6 +1391,13 @@ if __name__ == '__main__':
     app_path = os.path.join(abs_path, "customer_app", sys.argv[1])
     demo_name = sys.argv[1]
     chip_name = sys.argv[2].lower()
+    flavor = "Pine"
+    if len(sys.argv) == 4:
+        flavor += sys.argv[3].lower().capitalize()
+    else:
+        flavor += "Cone"
+    
+    print(f"Using device tree source for {flavor}")
     default_conf_path = chip_name
     eflash_loader_cfg_org = bl_find_file("eflash_loader_cfg", ".conf")
     eflash_loader_cfg = os.path.join(app_path, bin_build_out_path, "eflash_loader_cfg.ini")
@@ -1407,7 +1414,11 @@ if __name__ == '__main__':
     flashid_list = flash_sele.bl_flash_loader_list(chip_name, chip_name, f)
 
     pt_file_list = bl_find_file_list("partition_cfg_", ".toml")
-    ro_list = bl_find_file_list(bl_factory_params_file_prefix, ".dts")
+    ro_list = bl_find_file_list(bl_factory_params_file_prefix + flavor, ".dts")
+
+    if len(ro_list) == 0:
+        print("No device tree source found, please check. Build output is invalid.")
+        
     img_boot2_file_list = bl_find_file_list("blsp_boot2_", ".bin")
 
     arrange_group_list = list(itertools.product(pt_file_list, ro_list, img_boot2_file_list, flashid_list))

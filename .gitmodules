@@ -14,3 +14,6 @@
 [submodule "components/3rdparty/etl"]
 	path = components/3rdparty/etl
 	url = git@github.com:ttefke/etl.git
+[submodule "tools/blflash"]
+	path = tools/blflash
+	url = git@github.com:ttefke/blflash.git

@@ -10,7 +10,7 @@ extern "C" {
 #include <suas_servo.h>
 }
 
-#define WAIT vTaskDelay(2000)
+#define WAIT vTaskDelay(pdMS_TO_TICKS(2000))
 
 /* Connection setup
     Servo   PineCone

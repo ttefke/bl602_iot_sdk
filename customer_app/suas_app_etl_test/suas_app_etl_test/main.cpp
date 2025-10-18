@@ -14,8 +14,6 @@ extern "C" {
 #include <etl/string.h>
 #include <etl/vector.h>
 
-#define STACK_SIZE 256
-
 /* String example */
 void example_string() {
   auto myString = etl::string<32>("Hello World");
@@ -116,8 +114,9 @@ extern "C" void bfl_main(void) {
       /* Baud rate */ 2 * 1000 * 1000);
 
   /* Create and start task to test */
-  static StackType_t examples_stack[STACK_SIZE];
-  static StaticTask_t examples_task;
+  constexpr uint16_t STACK_SIZE = 256;
+  constinit static StackType_t examples_stack[STACK_SIZE]{};
+  constinit static StaticTask_t examples_task{};
 
   xTaskCreateStatic(examples, etl::string_view("examples").data(), STACK_SIZE,
                     nullptr, 15, examples_stack, &examples_task);

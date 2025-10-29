@@ -1389,14 +1389,27 @@ class bl_flash_select():
 if __name__ == '__main__':
     abs_path = os.path.abspath('..')
     app_path = os.path.join(abs_path, "customer_app", sys.argv[1])
+    flavor = "Pine"
+    if len(sys.argv) >= 4:
+        if "/" in sys.argv[3]:
+            # We received an alternative path
+            app_path = os.path.abspath(sys.argv[3])
+
+            # Set flavor to PineCone
+            flavor += "Cone"
+        else:
+            # We received a flavor
+            flavor += sys.argv[3].lower().capitalize()
+
+            # Check if we also received an alternative path
+            if len(sys.argv) == 5:
+                app_path = os.path.abspath(sys.argv[4])
+    else:
+        # Set flavor to PineCone
+        flavor += "Cone"
+
     demo_name = sys.argv[1]
     chip_name = sys.argv[2].lower()
-    flavor = "Pine"
-    if len(sys.argv) == 4:
-        flavor += sys.argv[3].lower().capitalize()
-    else:
-        flavor += "Cone"
-    
     print(f"Using device tree source for {flavor}")
     default_conf_path = chip_name
     eflash_loader_cfg_org = bl_find_file("eflash_loader_cfg", ".conf")

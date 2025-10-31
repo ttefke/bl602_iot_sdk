@@ -43,15 +43,17 @@ extern "C" void bfl_main(void) {
 
       .with_master_reset = 1,
       .pin_master_reset = 4,
-      .number_of_registers = 2,
+      .number_of_registers = 1,
       .initialized = 0  // Set during initialization
   };
 
   suas_74hc595_config(&sr_config);
 
   // Shift out data
-  for (auto i = 0; i < 129; i++) {
-    bl_timer_delay_us(1 * 1000 * 1000);
-    suas_74hc595_store(&sr_config, i);
+  while (1) {
+    for (auto i = 0; i <= 255; i++) {
+      bl_timer_delay_us(1 * 1000 * 1000);
+      suas_74hc595_store(&sr_config, i);
+    }
   }
 }

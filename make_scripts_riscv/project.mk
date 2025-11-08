@@ -111,13 +111,9 @@ export COMPONENT_DIRS
 #
 # Use the "make list-components" target to debug this step.
 #ifndef COMPONENTS
-# Find all component names. The component names are the same as the
-# directories they're in, so /bla/components/mycomponent/bouffalo.mk -> mycomponent.
-# using by https://stackoverflow.com/questions/3774568/makefile-issue-smart-way-to-scan-directory-tree-for-c-files
-rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
-COMPONENTS_RAL_PATH :=  $(dir $(foreach cd,$(COMPONENT_DIRS),                       \
-						$(call rwildcard,$(cd)/,bouffalo.mk) 						\
-				))
+# Find all component names.
+
+COMPONENTS_RAL_PATH := $(dir $(shell find $(COMPONENT_DIRS) -type f -name bouffalo.mk 2> /dev/null))
 COMPONENTS := $(sort $(foreach comp,$(COMPONENTS_RAL_PATH),$(lastword $(subst /, ,$(comp)))))
 COMPONENTS_REAL_PATH := $(patsubst %/,%,$(COMPONENTS_RAL_PATH))
 #endif

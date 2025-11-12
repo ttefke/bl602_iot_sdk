@@ -3,17 +3,19 @@
 	url = https://github.com/pine64/bl602-docs.git
 [submodule "components/3rdparty/libcoap"]
 	path = components/3rdparty/libcoap
-	url = git@github.com:ttefke/libcoap.git
+	url = https://github.com/ttefke/libcoap.git
         branch = v4.3.5-bl602
 [submodule "components/security/mbedtls-bl602"]
 	path = components/security/mbedtls-bl602
-	url = git@github.com:ttefke/mbedtls.git
+	url = https://github.com/ttefke/mbedtls.git
+        branch = from-3.6.5
 [submodule "components/3rdparty/suas_drivers"]
 	path = components/3rdparty/suas_drivers
-	url = git@github.com:ttefke/bl602_suas_drivers.git
+	url = https://github.com/ttefke/bl602_suas_drivers.git
 [submodule "components/3rdparty/etl"]
 	path = components/3rdparty/etl
-	url = git@github.com:ttefke/etl.git
+	url = https://github.com/ttefke/etl.git
+        branch = from-20.44.0
 [submodule "tools/blflash"]
 	path = tools/blflash
-	url = git@github.com:ttefke/blflash.git
+	url = https://github.com/ttefke/blflash.git

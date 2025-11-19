@@ -45,7 +45,6 @@ void bl_sec_aes_IRQHandler(void);
 void bl_sec_sha_IRQHandler(void);
 void bl_sec_pka_IRQHandler(void);
 void bl_dma_IRQHandler(void);
-void intc_irq(void);//MAC IRQ
 void bl_irq_handler(void);//IPC host IRQ
 void bl_irq_register_with_ctx(int irqnum, void *handler, void *ctx);
 void bl_irq_register(int irqnum, void *handler);
